@@ -1,4 +1,4 @@
-# ChromeDino
+# Grades Manager
 
 |Titolo                   |Autori             |Responsabili         | Data Iniziale|Data finale|
 |:------------------------|:------------------|:---------------------|---------------|-------|
