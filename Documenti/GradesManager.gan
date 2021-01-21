@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2020-12-31" view-index="0" gantt-divider-location="413" resource-divider-location="300" version="2.8.11" locale="it_CH">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2020-12-24" view-index="0" gantt-divider-location="413" resource-divider-location="300" version="2.8.11" locale="it">
     <description/>
     <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd3" name="Nome" width="215" order="0"/>
-        <field id="tpd4" name="Data d'inizio" width="90" order="1"/>
-        <field id="tpd5" name="Data di fine" width="89" order="2"/>
+        <field id="tpd3" name="Nome" width="220" order="0"/>
+        <field id="tpd4" name="Data d'inizio" width="95" order="1"/>
+        <field id="tpd5" name="Data di fine" width="94" order="2"/>
         <option id="color.recent">
-            <![CDATA[#ff3333]]>
+            <![CDATA[#ff66ff #ff0099 #ffff33 #ffcc00 #33ff33 #00cc66 #ff6600 #cc3300 #ff3333]]>
         </option>
     </view>
     <view id="resource-table">
@@ -36,52 +36,60 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="1" name="Documentazione" color="#000000" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-15" thirdDate-constraint="0" expand="false">
-            <task id="3" name="Stesura diari" color="#ff3333" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-15" thirdDate-constraint="0" expand="true"/>
-            <task id="5" name="Documentazione" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-15" thirdDate-constraint="0" expand="true"/>
+        <task id="1" name="Documentazione" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-14" duration="19" complete="0" thirdDate="2021-01-21" thirdDate-constraint="0" expand="false">
+            <task id="3" name="Stesura diari" color="#8cb6ce" meeting="false" start="2021-01-14" duration="19" complete="0" thirdDate="2021-01-21" thirdDate-constraint="0" expand="true"/>
+            <task id="5" name="Documentazione" color="#8cb6ce" meeting="false" start="2021-01-14" duration="19" complete="0" thirdDate="2021-01-21" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="6" name="Fase Iniziale" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-07" thirdDate-constraint="0" expand="true">
-            <task id="7" name="Scelta progetto" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true"/>
-            <task id="8" name="Creazione Repository" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true"/>
-            <task id="9" name="Configurazione Repository" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true"/>
+        <task id="6" name="Fase Iniziale" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-07" thirdDate-constraint="0" expand="false">
+            <task id="7" name="Scelta progetto" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="8" name="Creazione Repository" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="9" name="Configurazione Repository" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="10" name="Analisi" color="#8cb6ce" meeting="false" start="2021-01-21" duration="1" complete="0" thirdDate="2021-01-15" thirdDate-constraint="0" expand="true">
-            <task id="11" name="Analisi requisiti" color="#8cb6ce" meeting="false" start="2021-01-21" duration="1" complete="0" thirdDate="2021-01-15" thirdDate-constraint="0" expand="true"/>
-            <task id="12" name="Stesura requisiti" color="#8cb6ce" meeting="false" start="2021-01-21" duration="1" complete="0" thirdDate="2021-01-15" thirdDate-constraint="0" expand="true"/>
+        <task id="10" name="Analisi" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-21" thirdDate-constraint="0" expand="false">
+            <task id="11" name="Analisi requisiti" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-21" thirdDate-constraint="0" expand="true"/>
+            <task id="12" name="Stesura requisiti" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-21" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="13" name="Pianificazione" color="#000000" meeting="false" start="2021-01-14" duration="1" complete="7" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true">
-            <task id="14" name="Costruzione Gantt" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="7" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true"/>
+        <task id="13" name="Pianificazione" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-14" duration="2" complete="7" thirdDate="2021-01-14" thirdDate-constraint="0" expand="false">
+            <task id="14" name="Costruzione Gantt" color="#8cb6ce" meeting="false" start="2021-01-14" duration="2" complete="7" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="16" name="Design" color="#000000" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true">
-            <task id="17" name="Linguaggio" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="18" name="Ambiente RunTime" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="19" name="Architettura generale" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="20" name="Design GUI" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
+        <task id="16" name="Design" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-14" duration="3" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true">
+            <task id="17" name="Linguaggio" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true">
+                <notes>
+                    <![CDATA[Il linguaggio da scegliere
+]]>
+                </notes>
+            </task>
+            <task id="18" name="Ambiente RunTime" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true">
+                <notes>
+                    <![CDATA[Node JS]]>
+                </notes>
+            </task>
+            <task id="19" name="Architettura generale" color="#8cb6ce" meeting="false" start="2021-01-21" duration="2" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="20" name="Design GUI" color="#8cb6ce" meeting="false" start="2021-01-21" duration="2" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="21" name="Informazioni" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true">
-            <task id="22" name="Ricerca Ldapjs" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="23" name="Apprendimento React" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="24" name="Apprendimento TypeScript" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="25" name="Ricerca LDAP" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
+        <task id="21" name="Informazioni" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true">
+            <task id="22" name="Ricerca Ldapjs" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="23" name="Apprendimento React" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="24" name="Apprendimento TypeScript" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="25" name="Ricerca LDAP" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="26" name="Set up spazio di lavoro" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true">
-            <task id="27" name="Setup VM" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="28" name="Installazione OS" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="29" name="Installazione programmi utili" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
-            <task id="30" name="Configurazione VS Code" color="#8cb6ce" meeting="false" start="2021-01-14" duration="1" complete="0" thirdDate="2021-01-12" thirdDate-constraint="0" expand="true"/>
+        <task id="26" name="Set up spazio di lavoro" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-02-04" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="false">
+            <task id="27" name="Setup VM" color="#8cb6ce" meeting="false" start="2021-02-04" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="28" name="Installazione OS" color="#8cb6ce" meeting="false" start="2021-02-04" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="29" name="Installazione programmi utili" color="#8cb6ce" meeting="false" start="2021-02-04" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+            <task id="30" name="Configurazione VS Code" color="#8cb6ce" meeting="false" start="2021-02-04" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="31" name="Pianificazione" color="#000000" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true">
-            <task id="32" name="Costruzione Gantt" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" expand="true"/>
-            <task id="33" name="Progettazione" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" expand="true"/>
+        <task id="31" name="Pianificazione" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-14" duration="2" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="false">
+            <task id="32" name="Costruzione Gantt" color="#8cb6ce" meeting="false" start="2021-01-14" duration="2" complete="0" thirdDate="2021-01-28" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="34" name="Implementazione" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true"/>
-        <task id="35" name="Fase Finale" color="#000000" meeting="false" start="2021-02-04" duration="1" complete="0" expand="true">
-            <task id="36" name="Testing" color="#8cb6ce" meeting="false" start="2021-02-04" duration="1" complete="0" expand="true"/>
-            <task id="37" name="Consegna" color="#8cb6ce" meeting="false" start="2021-02-04" duration="1" complete="0" expand="true"/>
+        <task id="34" name="Implementazione" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+        <task id="35" name="Fase Finale" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-05-06" duration="3" complete="0" thirdDate="2021-05-06" thirdDate-constraint="0" expand="false">
+            <task id="36" name="Testing" color="#8cb6ce" meeting="false" start="2021-05-06" duration="3" complete="0" thirdDate="2021-02-04" thirdDate-constraint="0" expand="true"/>
+            <task id="37" name="Consegna" color="#8cb6ce" meeting="true" start="2021-05-20" duration="0" complete="0" thirdDate="2021-02-04" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="38" name="Conclusione" color="#000000" meeting="false" start="2021-02-11" duration="1" complete="0" expand="true">
-            <task id="39" name="Realizzazione presentazione" color="#8cb6ce" meeting="false" start="2021-02-11" duration="1" complete="0" expand="true"/>
-            <task id="40" name="Presentazione" color="#8cb6ce" meeting="false" start="2021-02-11" duration="1" complete="0" thirdDate="2021-01-11" thirdDate-constraint="0" expand="true"/>
+        <task id="38" name="Conclusione" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-05-20" duration="1" complete="0" thirdDate="2021-05-20" thirdDate-constraint="0" expand="false">
+            <task id="39" name="Realizzazione presentazione" color="#8cb6ce" meeting="false" start="2021-05-20" duration="1" complete="0" thirdDate="2021-02-11" thirdDate-constraint="0" expand="true"/>
+            <task id="40" name="Presentazione" color="#8cb6ce" meeting="false" start="2021-05-20" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
         </task>
     </tasks>
     <resources>
