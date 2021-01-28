@@ -1,0 +1,25 @@
+
+
+Nota
+	- value : number
+	- data_test : Date
+	- peso : number
+
+Materia
+	- nome : string
+	- docente : string
+	- media : number
+	- note : Nota[]
+
+
+Allievo
+	- nome : string
+	- cognome: string
+	- classe : string
+	- materie : Materia[]
+
+
+	
+
+
+	
