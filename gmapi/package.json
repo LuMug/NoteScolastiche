@@ -1,0 +1,22 @@
+{
+  "name": "gmapi",
+  "version": "0.0.1",
+  "description": "grades manager api",
+  "main": "ts-node ./src/index.ts",
+  "scripts": {
+    "start": "ts-node ./src",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Aris Previtali",
+  "license": "ISC",
+  "files": [
+    "lib/**/*",
+    "README.MD"
+  ],
+  "devDependencies": {
+    "@types/node": "^14.14.22",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
+}
