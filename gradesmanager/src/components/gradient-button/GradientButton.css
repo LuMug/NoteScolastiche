@@ -1,0 +1,62 @@
+.gb-button-wrapper,
+.gb-button-border,
+.gb-login-button {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.gb-button-wrapper {
+  height: 100%;
+  width: 50%;
+  outline: none;
+}
+.gb-button-border {
+  width: 160px;
+  height: 160px;
+  background: linear-gradient(
+    197deg,
+    rgba(0, 126, 255, 1) 0%,
+    rgba(0, 234, 255, 1) 100%
+  );
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 0.15rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 90ms ease-in-out;
+  outline: none;
+}
+
+.gb-button-border:hover .login-button,
+.gb-button-border:focus .login-button {
+  background: linear-gradient(
+    197deg,
+    rgba(0, 126, 255, 1) 0%,
+    rgba(0, 234, 255, 1) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.gb-button-border:active {
+  transform: scale(0.91);
+  outline: none;
+}
+
+.gb-login-button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  background-color: var(--card-gray);
+  font-size: 34px;
+  transition: all 120ms ease-in-out;
+}
+
+.gb-login-button:focus {
+  outline: none;
+}

@@ -1,0 +1,76 @@
+.about-button-wrapper,
+.about-button-border,
+.about-button {
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+.about-button-wrapper {
+  height: 100%;
+  width: 100%;
+  outline: none;
+}
+.about-button-border {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(
+    197deg,
+    rgba(0, 126, 255, 1) 0%,
+    rgba(0, 234, 255, 1) 100%
+  );
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 0.15rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 90ms ease-in-out;
+  outline: none;
+}
+
+.about-button-border:hover .login-button,
+.about-button-border:focus .login-button {
+  background: linear-gradient(
+    197deg,
+    rgba(0, 126, 255, 1) 0%,
+    rgba(0, 234, 255, 1) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.about-button-border:active {
+  transform: scale(0.91);
+  outline: none;
+}
+
+.about-button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  background-color: var(--card-gray);
+  font-size: 34px;
+  transition: all 120ms ease-in-out;
+}
+
+.about-button:focus {
+  outline: none;
+}
+
+.ab-content {
+  display: none;
+  position: relative;
+  color: black;
+  padding-top: 100px;
+  border: black;
+}
+
+.ab-content h1 {
+  color: black;
+  padding-top: 100px;
+}
