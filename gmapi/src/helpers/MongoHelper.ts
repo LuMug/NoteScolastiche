@@ -18,7 +18,7 @@ const DB_NAME: string = 'gradesmanager';
  * use MongoHelper.connect().
  * 
  * @author Ismael Trentin
- * @version 2020.01.28
+ * @version 2020.02.04
  */
 export class MongoHelper {
 
@@ -48,6 +48,9 @@ export class MongoHelper {
     }
 
     private static is<T extends CollectionTypes = IUser>(input: any, model: Omit<T, 'uid'>): boolean {
+        if (input == null) {
+            return false;
+        }
         let ks: string[] = Object.keys(input);
         let modelKs: string[] = Object.keys(model);//.filter(e => e != 'uid')
         if (ks.length != modelKs.length) {
@@ -90,6 +93,10 @@ export class MongoHelper {
 
     private static async update<T extends CollectionTypes>(collName: Collections, uid: number, data: Partial<Omit<T, 'uid'>>): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
+            if (data == null) {
+                reject('Data cannot be null');
+                return;
+            }
             if (Object.keys(data).length == 0) {
                 reject(`Invalid data. Cannot be an empty object`);
                 return;
