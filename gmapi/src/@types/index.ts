@@ -74,7 +74,7 @@ export interface ITeacher {
  * The grade.
  * 
  * @author Nicola Ambrosetti
- * @version 2021.01.28
+ * @version 2021.02.04
  */
 export interface IGrade {
 
@@ -86,7 +86,7 @@ export interface IGrade {
     /**
      * The date.
      */
-    date: Date;
+    date: string;
 
     /**
      * The weight.
