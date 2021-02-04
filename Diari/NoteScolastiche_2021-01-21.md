@@ -1,6 +1,6 @@
 # Gestione Note Scolastiche | Diario di lavoro
 ##### Aris Previtali, Francisco Viola, Ismael Trentin e Nicola Ambrosetti.
-### Scuola Arti e Mestieri Trevano, 14 Gennaio 2021
+### Scuola Arti e Mestieri Trevano, 21 Gennaio 2021
 
 ## Lavori svolti
 
