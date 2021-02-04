@@ -2,10 +2,11 @@
   "name": "gmapi",
   "version": "0.0.1",
   "description": "grades manager api",
-  "main": "ts-node ./src/index.ts",
+  "main": "./lib/server.js",
   "scripts": {
-    "start": "ts-node ./src",
-    "build": "tsc"
+    "start": "cls & ts-node ./src/server.ts",
+    "build": "tsc",
+    "dev": "tsc -w & nodemon src/server.ts"
   },
   "keywords": [],
   "author": "Aris Previtali",
@@ -15,8 +16,19 @@
     "README.MD"
   ],
   "devDependencies": {
+    "@types/cors": "^2.8.9",
+    "@types/express": "^4.17.11",
+    "@types/mongodb": "^3.6.3",
+    "@types/morgan": "^1.9.2",
     "@types/node": "^14.14.22",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.3",
+    "morgan": "^1.10.0"
   }
 }
