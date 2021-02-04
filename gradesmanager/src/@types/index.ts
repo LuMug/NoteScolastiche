@@ -86,7 +86,7 @@ export interface IGrade {
     /**
      * The date.
      */
-    date: Date;
+    date: string;
 
     /**
      * The weight.
