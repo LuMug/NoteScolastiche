@@ -1,10 +1,11 @@
-import GradientButton from './components/gradient-button/GradientButton';
+import AboutButton from './components/about-button/AboutButton';
+import AboutPage from './components/AboutPage/AboutPage';
+import LoginPage from './components/LoginPage/LoginPage';
 
 function App() {
   return (
     <div className="root">
-      <h1 className="app">APP</h1>
-      <GradientButton  message="dsadsads"/>
+      <AboutPage/>
     </div>
   );
 }
