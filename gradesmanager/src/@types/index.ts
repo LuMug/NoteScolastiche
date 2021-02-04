@@ -9,7 +9,7 @@ export interface IGroup {
     /**
      * The group id.
      */
-    id: number;
+    uid: number;
 
     /**
      * The group name.
@@ -28,12 +28,17 @@ export interface ISubject {
     /**
      * The subject id.
      */
-    id: number;
+    uid: number;
 
     /**
      * The subject name.
      */
     name: string;
+
+    /**
+     * The id of the teacher.
+     */
+    teacherId: number;
 }
 
 /**
@@ -47,7 +52,7 @@ export interface ITeacher {
     /**
      * The teacher id.
      */
-    id: number;
+    uid: number;
 
     /**
      * The teacher name.
@@ -103,11 +108,6 @@ export interface IUserSubject {
     subjectId: number;
 
     /**
-     * The id of the teacher.
-     */
-    teacherId: number;
-
-    /**
      * All grades.
      */
     grades: IGrade[];
@@ -121,9 +121,9 @@ export interface IUserSubject {
  */
 export enum UserType {
 
-     STUDENT,
-    TEACHER,
-    ADMIN
+    STUDENT = 'student',
+    TEACHER = 'teacher',
+    ADMIN = 'admin'
 }
 
 /**
@@ -137,7 +137,7 @@ export interface IUser {
     /**
      * The user id.
      */
-    id: number;
+    uid: number;
 
     /**
      * The user name.
@@ -165,3 +165,11 @@ export interface IUser {
     type: UserType;
 }
 
+export interface IError {
+
+    message: string;
+}
+
+export type Collections = 'users' | 'teachers' | 'subjects' | 'groups';
+
+export type CollectionTypes = IUser | ITeacher | ISubject | IGroup;
