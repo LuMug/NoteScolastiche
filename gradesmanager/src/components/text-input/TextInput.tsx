@@ -15,7 +15,7 @@ export default class TextInput extends Component<ITextInputProps> {
 
     render() {
         return (
-            <div className="input">
+            <div className="ti-input">
                 <input
                     type={this.props.inputType}
                     autoComplete="off"
@@ -23,7 +23,7 @@ export default class TextInput extends Component<ITextInputProps> {
                     title={this.props.toolTipText}
                     tabIndex={1}
                 />
-                <label className="label">
+                <label className="ti-label">
                     <span>{this.props.placeHolder}</span>
                 </label>
             </div>

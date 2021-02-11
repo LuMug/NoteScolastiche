@@ -14,22 +14,29 @@ export default class AboutButton extends Component<IAboutButtonProps> {
 
     render() {
         return (
-            <div className="about-button-wrapper">
-                <div className="about-button-border">
+            <div className="ab-about-button-wrapper">
+                <div className="ab-about-button-border">
                     <input
                         type="submit"
-                        className="about-button"
+                        className="ab-about-button"
                         tabIndex={3}
                         value="?"
                         onClick={() => {
-                            let el = document.getElementById('content');
+                            let el = document.getElementById('ab-content');
                             if(el){
-                                el.style.display = 'block';
+                                let display = el.style.display;
+                                if(el && display == 'none'){
+                                    el.style.display = 'block';
+                                    el.style.visibility = 'visible';
+                                }else{
+                                    el.style.display = 'none';
+                                    el.style.visibility = 'hidden';
+                                }
                             }
                         }}
                     />
                 </div>
-                <div className="ab-popup" id="content">
+                <div className="ab-popup" id="ab-content">
                     <p>Progetto svolto da: Ambrosetti Nicola, Previtali Aris, Trentin Ismael e Viola Francisco</p>
                 </div>
             </div>
