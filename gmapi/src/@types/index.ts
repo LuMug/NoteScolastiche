@@ -23,23 +23,23 @@ export interface IGroup {
  * @author Nicola Ambrosetti
  * @version 2021.01.28
  */
-export interface ISubject {
+// export interface ISubject {
 
-    /**
-     * The subject id.
-     */
-    uid: number;
+//     /**
+//      * The subject id.
+//      */
+//     uid: number;
 
-    /**
-     * The subject name.
-     */
-    name: string;
+//     /**
+//      * The subject name.
+//      */
+//     name: string;
 
-    /**
-     * The id of the teacher.
-     */
-    teacherId: number;
-}
+//     /**
+//      * The id of the teacher.
+//      */
+//     teacherId: number;
+// }
 
 /**
  * The teacher.
@@ -105,7 +105,12 @@ export interface IUserSubject {
     /**
      * The id of the subject.
      */
-    subjectId: number;
+    name: string;
+
+    /**
+     * The teacher uid.
+     */
+    teacherId: number;
 
     /**
      * All grades.
@@ -170,6 +175,6 @@ export interface IError {
     message: string;
 }
 
-export type Collections = 'users' | 'teachers' | 'subjects' | 'groups';
+export type Collections = 'users' | 'teachers' | 'groups';
 
-export type CollectionTypes = IUser | ITeacher | ISubject | IGroup;
+export type CollectionTypes = IUser | ITeacher | IGroup;

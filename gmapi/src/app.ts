@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import TeachersRoute from './routes/teachers';
 import UsersRoute from './routes/users';
-import SubjectsRoute from './routes/subjects';
+// import SubjectsRoute from './routes/subjects';
 import GroupsRoute from './routes/groups';
 
 const MAIN_ROUTE: string = '/api/v1/';
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(MAIN_ROUTE, TeachersRoute);
 app.use(MAIN_ROUTE, UsersRoute);
 app.use(MAIN_ROUTE, GroupsRoute);
-app.use(MAIN_ROUTE, SubjectsRoute);
+// app.use(MAIN_ROUTE, SubjectsRoute);
 
 app.get(`${MAIN_ROUTE}cringe`, (req, res) => {
     res.send("POG");
