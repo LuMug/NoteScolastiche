@@ -1,0 +1,21 @@
+.lp-main {
+  width: 100%;
+  height: 100vh;
+  background-color: var(--bg-gray);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp-loading-bar {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.lp-loading-bar::after {
+  content: url('../../public/svg/loading.svg');
+  width: 20px;
+  height: 20px;
+}
