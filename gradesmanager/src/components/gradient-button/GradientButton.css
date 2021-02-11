@@ -30,8 +30,8 @@
   outline: none;
 }
 
-.gb-button-border:hover .login-button,
-.gb-button-border:focus .login-button {
+.gb-button-border:hover .gb-login-button,
+.gb-button-border:focus .gb-login-button {
   background: linear-gradient(
     197deg,
     rgba(0, 126, 255, 1) 0%,
