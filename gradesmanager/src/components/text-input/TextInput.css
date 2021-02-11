@@ -1,18 +1,18 @@
-.left-bottom .input {
+.left-bottom .ti-input {
   margin-bottom: 16px;
 }
 
-.input {
+.ti-input {
   position: relative;
   width: 100%;
   height: 55px;
   overflow: hidden;
 }
 
-.input input {
+.ti-input input {
   width: 100%;
   height: 100%;
-  padding-top: 20px;
+  padding-top: 1.4rem;
   outline: none;
   border: none;
   /* background-color: var(--dark-gray); */
@@ -20,36 +20,36 @@
   font-size: 18px;
 }
 
-.input input:focus {
+.ti-input input:focus {
   outline: none;
 }
 
-.input input:focus + .label::after,
-.input input:valid + .label::after {
+.ti-input input:focus + .ti-label::after,
+.ti-input input:valid + .ti-label::after {
   transform: translateX(0%);
 }
 
-.input input:focus + .label span,
-.input input:valid + .label span {
+.ti-input .ti-input:focus + .ti-label span,
+.ti-input .ti-input:valid + .ti-label span {
   transform: translateY(-130%);
   font-size: 18px;
 }
 
-.input .label {
+.ti-input .ti-label {
   position: absolute;
-  bottom: 0px;
-  left: 0%;
+  bottom: 0rem;
+  left: 0rem;
   width: 100%;
   height: 100%;
   pointer-events: none;
   border-bottom: 1px solid var(--gray);
 }
 
-.input .label::after {
+.ti-input .ti-label::after {
   content: "";
   position: absolute;
-  left: 0px;
-  bottom: -1px;
+  left: 0rem;
+  bottom: -0.07rem;
   height: 100%;
   width: 100%;
   border-bottom: 2px solid #007eff;
@@ -57,11 +57,11 @@
   transition: all 180ms ease-in-out;
 }
 
-.input .label span {
+.ti-input .ti-label span {
   position: absolute;
-  bottom: 4px;
-  left: 0px;
+  bottom: 0.3rem;
+  left: 0rem;
   transition: all 180ms ease;
   color: var(--gray);
-  font-size: 20px;
+  font-size: 1.4rem;
 }
