@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from 'express';
-import { IError, IUser } from '../@types';
+import { IError, IUser, IUserSubject } from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
@@ -100,6 +100,30 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
         }
         return res.status(400).json({ error: err });
     }
+    return res.status(204).json();
+});
+
+router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
+    let uid: number = parseInt(req.params.uid);
+    if (isNaN(uid)) {
+        let err: IError = {
+            message: 'Not a valid user id.'
+        };
+        return res.status(400).json({ error: err });
+    }
+    let input: IUserSubject = req.body.subject as IUserSubject;
+    //if (input.isUserSubject()) {
+    try {
+        await MongoHelper.addUserSubject(uid, input);
+    } catch (err) {
+        return res.status(400).json({ error: { message: err } });
+    }
+    // } else {
+    //     let err: IError = {
+    //         message: "Invalid input. Must be a valid array for IUserSubject"
+    //     }
+    //     return res.status(400).json({ error: err });
+    // }
     return res.status(204).json();
 });
 
