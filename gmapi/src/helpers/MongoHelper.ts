@@ -1,11 +1,13 @@
 import { MongoClient, Collection } from 'mongodb';
+import { resolve } from 'path';
 import {
     ITeacher,
     IUser,
     IGroup,
     Collections,
     CollectionTypes,
-    UserType
+    UserType,
+    IUserSubject
 } from '../@types';
 import mongonnect from './Mongonnect';
 
@@ -17,6 +19,7 @@ const DB_NAME: string = 'gradesmanager';
  * use MongoHelper.connect().
  * 
  * @author Ismael Trentin
+ * @author Aris Previtali
  * @version 2020.02.04
  */
 export class MongoHelper {
@@ -448,6 +451,26 @@ export class MongoHelper {
                 }
                 teacher.subjectsIds = teacher.subjectsIds.concat(ids);
                 await this.updateTeacher(teacherUID, { subjectsIds: teacher.subjectsIds });
+            } catch (err) {
+                reject(err);
+                return;
+            }
+            resolve();
+            return;
+        });
+    }
+
+
+    public static async addUserSubject(userId: number, subject: Omit<IUserSubject, 'uid'>): Promise<void> {
+        return new Promise<void>(async (resole, reject) => {
+            try {
+                let user: IUser | null = await this.getUser(userId);
+                if (!user) {
+                    reject(`Could not find a teacher with uid ${userId}`);
+                    return;
+                }
+                user.subjects = user.subjects.concat(subject);
+                await this.updateUser(userId, { subjects: user.subjects });
             } catch (err) {
                 reject(err);
                 return;
