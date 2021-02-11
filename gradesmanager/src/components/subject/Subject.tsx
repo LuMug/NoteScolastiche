@@ -1,16 +1,17 @@
 import { Component, ReactNode } from 'react';
-import { IGrade, IUserSubject } from '../../@types';
+import { IGrade, ITeacher, IUserSubject } from '../../@types';
+import { API_URL } from '../../util/constants';
 import Grade from './Grade';
 import './Subject.css';
 
 interface ISubjectProps {
 
-    name: string;
-    teacherName: string;
-    subjectObj: IUserSubject;
+    subject: IUserSubject;
 }
 
 interface SubjectState {
+
+    teacherName: string;
 
     avg: number;
 }
@@ -20,43 +21,57 @@ class Subject extends Component<ISubjectProps, SubjectState> {
     constructor(props: ISubjectProps) {
         super(props);
         let avg: number = 0;
-        props.subjectObj.grades.map((g: IGrade) => { avg += g.value; });
-        avg /= Math.max(1, props.subjectObj.grades.length);
+        props.subject.grades.map((g: IGrade) => { avg += g.value; });
+        avg /= Math.max(1, props.subject.grades.length);
         this.state = {
-            avg: avg
+            avg: avg,
+            teacherName: ''
         };
     }
 
+    public async componentDidMount() {
+        const url = `${API_URL}/teachers/${this.props.subject.teacherId}`;
+        const res = await fetch(url);
+        const data = await res.json() as ITeacher;
+        this.setState({
+            teacherName: `${data.surname} ${data.name}`
+        });
+    }
+
     render(): ReactNode {
+        let sData;
+        if (this.props.subject.grades.length != 0) {
+            sData = <div className="s-subject-data">
+                <div className="s-subject-grades">
+                    {this.props.subject.grades.map((g: IGrade) => {
+                        return <Grade gradeObj={g} editable={false} />
+                    })}
+                </div>
+                <div className="s-subject-avg-wrapper">
+                    <div className="s-subject-avg-border">
+                        <div className="s-subject-avg">{this.state.avg.toFixed(1)}</div>
+                    </div>
+                </div>
+            </div>;
+        }
         return (
-            <div className="card s-subject">
+            <div className="hp-card s-subject">
                 <div className="s-subject-top">
                     <input
                         type="text"
                         className="editable-p s-subject-title"
-                        value={this.props.name}
+                        value={this.props.subject.name}
                         disabled
                     />
                     <input
                         type="text"
                         className="editable-p s-subject-teacher"
-                        value={this.props.teacherName}
+                        value={this.state.teacherName}
                         disabled
                     />
                 </div>
                 <div className="s-subject-separator"></div>
-                <div className="s-subject-data">
-                    <div className="s-subject-grades">
-                        {this.props.subjectObj.grades.map((g: IGrade) => {
-                            return <Grade gradeObj={g} editable={false} />
-                        })}
-                    </div>
-                    <div className="s-subject-avg-wrapper">
-                        <div className="s-subject-avg-border">
-                            <div className="s-subject-avg">{this.state.avg.toFixed(1)}</div>
-                        </div>
-                    </div>
-                </div>
+                {sData}
                 <div className="s-subject-add-grade-wrapper noselect">
                     <div className="s-subject-add-grade">+</div>
                 </div>
