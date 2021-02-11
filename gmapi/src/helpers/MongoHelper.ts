@@ -1,6 +1,5 @@
 import { MongoClient, Collection } from 'mongodb';
 import {
-    ISubject,
     ITeacher,
     IUser,
     IGroup,
@@ -165,9 +164,9 @@ export class MongoHelper {
      * 
      * @param input the object input
      */
-    public static isSubject(input: any): boolean {
-        return this.is<ISubject>(input, { name: '', teacherId: -1 });
-    }
+    // public static isSubject(input: any): boolean {
+    //     return this.is<ISubject>(input, { name: '', teacherId: -1 });
+    // }
 
     /**
      * Returns `true` if `input` is a valid `IGroup` object,
@@ -196,9 +195,9 @@ export class MongoHelper {
     /**
      * Returns the subjects collection.
      */
-    public static getSubjects(): Collection<ISubject> {
-        return this.getCollection('subjects');
-    }
+    // public static getSubjects(): Collection<ISubject> {
+    //     return this.getCollection('subjects');
+    // }
 
     /**
      * Returns the groups collection.
@@ -246,17 +245,17 @@ export class MongoHelper {
      * 
      * @param uid the subject unique id
      */
-    public static async getSubject(uid: number): Promise<ISubject | null> {
-        return new Promise<ISubject | null>(async (resolve, reject) => {
-            try {
-                resolve(await this.getSubjects().findOne({ uid: uid }));
-                return;
-            } catch (err) {
-                reject(err);
-                return;
-            }
-        });
-    }
+    // public static async getSubject(uid: number): Promise<ISubject | null> {
+    //     return new Promise<ISubject | null>(async (resolve, reject) => {
+    //         try {
+    //             resolve(await this.getSubjects().findOne({ uid: uid }));
+    //             return;
+    //         } catch (err) {
+    //             reject(err);
+    //             return;
+    //         }
+    //     });
+    // }
 
     /**
      * Returns the group with the unique id `uid`.
@@ -316,17 +315,17 @@ export class MongoHelper {
      * 
      * @param name the subject name
      */
-    public static async getSubjectByName(name: string): Promise<ISubject | null> {
-        return new Promise<ISubject | null>(async (resolve, reject) => {
-            try {
-                resolve(await this.getSubjects().findOne({ name: name }));
-                return;
-            } catch (err) {
-                reject(err);
-                return;
-            }
-        });
-    }
+    // public static async getSubjectByName(name: string): Promise<ISubject | null> {
+    //     return new Promise<ISubject | null>(async (resolve, reject) => {
+    //         try {
+    //             resolve(await this.getSubjects().findOne({ name: name }));
+    //             return;
+    //         } catch (err) {
+    //             reject(err);
+    //             return;
+    //         }
+    //     });
+    // }
 
     /**
      * Returns the group by its name.
@@ -351,9 +350,9 @@ export class MongoHelper {
      * 
      * @param collection the collection from wich to get the value
      */
-    public static async getNextUIDFor(collection: 'users' | 'teachers' | 'subjects' | 'groups'): Promise<number> {
+    public static async getNextUIDFor(collection: Collections): Promise<number> {
         return new Promise<number>(async (resolve, reject) => {
-            let coll: Collection<IUser | ITeacher | ISubject> = this.getCollection(collection);
+            let coll: Collection<CollectionTypes> = this.getCollection(collection);
             try {
                 resolve(await coll.countDocuments({}));
             } catch (err) {
@@ -407,18 +406,18 @@ export class MongoHelper {
      * 
      * @param subject the new subject to be added
      */
-    public static async addSubject(subject: Omit<ISubject, 'uid'>): Promise<void> {
-        return new Promise<void>(async (resolve, reject) => {
-            try {
-                await this.add<ISubject>('subjects', subject);
-            } catch (err) {
-                reject(err);
-                return;
-            }
-            resolve();
-            return;
-        });
-    }
+    // public static async addSubject(subject: Omit<ISubject, 'uid'>): Promise<void> {
+    //     return new Promise<void>(async (resolve, reject) => {
+    //         try {
+    //             await this.add<ISubject>('subjects', subject);
+    //         } catch (err) {
+    //             reject(err);
+    //             return;
+    //         }
+    //         resolve();
+    //         return;
+    //     });
+    // }
 
     /**
      * Adds a new group to the groups collection. It automatically
@@ -502,18 +501,18 @@ export class MongoHelper {
      * @param uid the uid of the subject that needs to be updated
      * @param subjectData the new data
      */
-    public static async updateSubject(uid: number, subjectData: Partial<Omit<ISubject, 'uid'>>): Promise<void> {
-        return new Promise<void>(async (resolve, reject) => {
-            try {
-                await this.update<ISubject>('subjects', uid, subjectData);
-            } catch (err) {
-                reject(err);
-                return;
-            }
-            resolve();
-            return;
-        });
-    }
+    // public static async updateSubject(uid: number, subjectData: Partial<Omit<ISubject, 'uid'>>): Promise<void> {
+    //     return new Promise<void>(async (resolve, reject) => {
+    //         try {
+    //             await this.update<ISubject>('subjects', uid, subjectData);
+    //         } catch (err) {
+    //             reject(err);
+    //             return;
+    //         }
+    //         resolve();
+    //         return;
+    //     });
+    // }
 
     /**
      * Updates the group by its `uid` with the given `groupData` data.
