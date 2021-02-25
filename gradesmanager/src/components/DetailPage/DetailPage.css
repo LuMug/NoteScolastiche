@@ -1,0 +1,12 @@
+.filter-text {
+  background: var(--card-gray);
+  color: var(--dark-gray);
+  border: none;
+  height: 30px;
+  width: 100%;
+}
+
+.dp-buttons-content {
+  width: 100%;
+  border: solid green;
+}
