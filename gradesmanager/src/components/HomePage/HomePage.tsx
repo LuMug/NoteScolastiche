@@ -1,17 +1,25 @@
+import AddSubject from '../add-subject/AddSubject';
+import LoadingPage from '../LoadingPage/LoadingPage';
+import Subject from '../subject/Subject';
+import SubjectPage from '../SubjectPage/SubjectPage';
+import { API_URL } from './../../util/constants';
 import { Component, ReactNode } from 'react';
 import { IUser, IUserSubject } from '../../@types';
-import Subject from '../subject/Subject';
-import './home-page.css'
-import { API_URL } from './../../util/constants';
-import LoadingPage from '../LoadingPage/LoadingPage';
-import { Router, withRouter } from 'react-router-dom';
-import AddSubject from '../add-subject/AddSubject';
+import { parseConfigFileTextToJson } from 'typescript';
+import { Redirect, Route, withRouter } from 'react-router-dom';
+import './home-page.css';
 
 interface IHomePageState {
 
     loading: boolean;
 
+    unavailable: boolean;
+
     user: IUser | null;
+
+    displayDetails: boolean;
+
+    displaySuid?: number;
 }
 
 class HomePage extends Component<{}, IHomePageState> {
@@ -20,23 +28,101 @@ class HomePage extends Component<{}, IHomePageState> {
         super(props);
         this.state = {
             loading: true,
-            user: null
+            user: null,
+            unavailable: false,
+            displayDetails: false
         };
     }
 
     async componentDidMount() {
         const url: string = `${API_URL}users/0`;
-        const response = await fetch(url);
-        const data = await response.json();
+        let res;
+        try {
+            res = await fetch(url);
+        } catch {
+            this.setState({
+                unavailable: true
+            })
+            return;
+        }
+        const data = await res.json();
         this.setState({
             loading: false,
             user: data
         });
     }
 
+    private async updateUser(state: IHomePageState, updated: IUser) {
+        const url = `${API_URL}users/${state.user?.uid}`;
+        delete (updated as any)._id;
+        const body = JSON.stringify({ user: updated });
+        const reqOpts = {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: body
+        };
+        try {
+            await fetch(url, reqOpts);
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+        this.setState({
+            user: updated
+        });
+    }
+
+    private async onSubjectAdd(state: IHomePageState) {
+        const url = `${API_URL}users/${state.user?.uid}/subjects`;
+        const newSub: IUserSubject = {
+            name: "Subject",
+            teacherId: 0,
+            grades: []
+        }
+        const body = JSON.stringify({ subject: newSub }, null, '  ');
+        const reqOpts = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: body
+        };
+        try {
+            await fetch(url, reqOpts);
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+        let updated = Object.assign({}, state.user);
+        updated.subjects.push(newSub);
+        this.setState({
+            user: updated
+        });
+    }
+
+    private async onSubjectDelete(state: IHomePageState, index: number) {
+        let updated = Object.assign({}, state).user;
+        if (!updated) {
+            return;
+        }
+        updated.subjects = updated.subjects.filter((us, i) => i != index);
+        await this.updateUser(state, updated);
+    }
+
+    private async onSubjectEdit(state: IHomePageState, index: number) {
+        // return new Promise<void>((resolve, reject) => {
+        //     this.setState({
+        //         displayDetails: true,
+        //         displaySuid: index
+        //     }, () => resolve());
+        // });
+        this.setState({
+            displayDetails: true,
+            displaySuid: index
+        });
+    }
+
     render(): ReactNode {
         if (this.state.loading || this.state.user == null) {
-            return <LoadingPage />;
+            return <LoadingPage unavailable={this.state.unavailable} />;
         }
         return (
             <div className="hp-main-content">
@@ -49,8 +135,9 @@ class HomePage extends Component<{}, IHomePageState> {
                     <div className="hp-side-panel-separator"></div>
                     <div id="hp-subjects-list-panel" className="hp-side-panel-section">
                         <p className="hp-side-panel-section-title">Materie</p>
-                        {this.state.user.subjects.map((us: IUserSubject) => {
-                            return <div className="hp-subject-wrap">
+                        {this.state.user.subjects.map((us: IUserSubject, i: number) => {
+                            <Redirect to={`/subjects/${i}`} />
+                            return <div className="hp-subject-wrap" key={i} onClick={() => this.onSubjectEdit(this.state, i)}>
                                 <p className="hp-subject-el">{us.name}</p>
                             </div>
                         })}
@@ -98,17 +185,23 @@ class HomePage extends Component<{}, IHomePageState> {
                         </div>
                     </div>
                     <div className="hp-subjects">
-                        {this.state.user.subjects.map((s: IUserSubject) => {
-                            return <Subject subject={s} />
+                        {this.state.user.subjects.map((s: IUserSubject, i: number) => {
+                            return <Subject
+                                subject={s}
+                                key={i}
+                                onDelete={() => this.onSubjectDelete(this.state, i)}
+                                onEdit={() => this.onSubjectEdit(this.state, i)}
+                            />
                         })}
-                        <AddSubject />
+                        <AddSubject onClick={() => this.onSubjectAdd(this.state)} />
                     </div>
+                </div>
+                <div onClick={() => { this.setState({ displayDetails: false }) }} id="subject-details" className={`hp-subject-detail ${(this.state.displayDetails) ? '' : 'hidden'}`}>
+                    <SubjectPage suid={(this.state.displaySuid) ? this.state.displaySuid : 0} uuid={this.state.user.uid} />
                 </div>
             </div>
         );
     }
 }
-
-
 
 export default HomePage;

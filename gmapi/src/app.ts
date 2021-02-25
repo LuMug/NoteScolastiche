@@ -1,12 +1,12 @@
-import express, { NextFunction, Request, Response } from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
+import express, { NextFunction, Request, Response } from 'express';
+import GroupsRoute from './routes/groups';
+import morgan from 'morgan';
 import TeachersRoute from './routes/teachers';
 import UsersRoute from './routes/users';
 // import SubjectsRoute from './routes/subjects';
-import GroupsRoute from './routes/groups';
 
-const MAIN_ROUTE: string = '/api/v1/';
+const MAIN_ROUTE: string = '/api/v1';
 const app = express();
 
 app.use(morgan('dev'));
@@ -19,7 +19,7 @@ app.use(MAIN_ROUTE, UsersRoute);
 app.use(MAIN_ROUTE, GroupsRoute);
 // app.use(MAIN_ROUTE, SubjectsRoute);
 
-app.get(`${MAIN_ROUTE}cringe`, (req, res) => {
+app.get(`${MAIN_ROUTE}/cringe`, (req, res) => {
     res.send("POG");
 });
 

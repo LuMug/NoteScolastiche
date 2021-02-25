@@ -1,10 +1,6 @@
-html {
-  height: 100%;
-}
-
-body {
-  width: 100%;
-  height: 100%;
+.lp-page {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,6 +54,24 @@ body {
 .lp-left-top {
   width: 100%;
   height: 50%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.lp-left-title {
+  /* text-transform: uppercase; */
+  width: 90%;
+  padding-top: 1.12rem;
+  text-align: center;
+  border-bottom: 1px solid var(--dark-gray);
+}
+
+.lp-left-title h1 {
+  color: #fff;
+  letter-spacing: 0.2rem;
+  font-size: 3.2rem;
 }
 
 .lp-left-bottom {
@@ -105,6 +119,7 @@ body {
 }
 
 .lp-right-title h1 {
+  color: #fff;
   letter-spacing: 0.2rem;
   font-size: 3.2rem;
 }
