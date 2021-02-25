@@ -7,7 +7,8 @@ import {
 	Collections,
 	CollectionTypes,
 	UserType,
-	IUserSubject
+	IUserSubject,
+	IGrade
 } from '../@types';
 import mongonnect from './Mongonnect';
 
@@ -49,7 +50,7 @@ export class MongoHelper {
 		return await coll.find({}).toArray();
 	}
 
-	private static is<T extends CollectionTypes | IUserSubject = IUser>(input: any, model: Omit<T, 'uid'>): boolean {
+	private static is<T extends CollectionTypes | IUserSubject | IGrade = IUser>(input: any, model: Omit<T, 'uid'>): boolean {
 		if (input == null) {
 			return false;
 		}
@@ -183,6 +184,10 @@ export class MongoHelper {
 
 	public static isUserSubject(input: any): boolean {
 		return this.is<IUserSubject>(input, { teacherId: -1, grades: [], name: '' });
+	}
+
+	public static isGrade(input: any): boolean {
+		return this.is<IGrade>(input, { value: -1, date: "", weight: -1 });
 	}
 
 	/**
@@ -466,7 +471,7 @@ export class MongoHelper {
 
 
 	public static async addUserSubject(userId: number, subject: IUserSubject): Promise<void> {
-		return new Promise<void>(async (resole, reject) => {
+		return new Promise<void>(async (resolve, reject) => {
 			try {
 				let user: IUser | null = await this.getUser(userId);
 				if (!user) {
@@ -474,6 +479,44 @@ export class MongoHelper {
 					return;
 				}
 				user.subjects = user.subjects.concat(subject);
+				await this.updateUser(userId, { subjects: user.subjects });
+			} catch (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+			return;
+		});
+	}
+
+	public static async addGrade(userId: number, subjectId: number, grade: IGrade): Promise<void> {
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				let user: IUser | null = await this.getUser(userId);
+				if (!user) {
+					reject(`Could not find an user with uid ${userId}`);
+					return;
+				}
+				user.subjects[subjectId].grades.push(grade);
+				await this.updateUser(userId, { subjects: user.subjects });
+			} catch (err) {
+				reject(err);
+				return;
+			}
+			resolve();
+			return;
+		});
+	}
+
+	public static async updateGrade(userId: number, subjectId: number, gradeId: number, grade: IGrade) {
+		return new Promise<void>(async (resolve, reject) => {
+			try {
+				let user: IUser | null = await this.getUser(userId);
+				if (!user) {
+					reject(`Could not find an user with uid ${userId}`);
+					return;
+				}
+				user.subjects[subjectId].grades[gradeId] = grade;
 				await this.updateUser(userId, { subjects: user.subjects });
 			} catch (err) {
 				reject(err);
