@@ -49,7 +49,7 @@ export class MongoHelper {
         return await coll.find({}).toArray();
     }
 
-    private static is<T extends CollectionTypes = IUser>(input: any, model: Omit<T, 'uid'>): boolean {
+    private static is<T extends CollectionTypes | IUserSubject = IUser>(input: any, model: Omit<T, 'uid'>): boolean {
         if (input == null) {
             return false;
         }
@@ -179,6 +179,10 @@ export class MongoHelper {
      */
     public static isGroup(input: any): boolean {
         return this.is<IGroup>(input, { name: '' });
+    }
+
+    public static isUserSubject(input: any): boolean {
+        return this.is<IUserSubject>(input, { teacherId: -1, grades: [], name: '' });
     }
 
     /**
@@ -461,7 +465,7 @@ export class MongoHelper {
     }
 
 
-    public static async addUserSubject(userId: number, subject: Omit<IUserSubject, 'uid'>): Promise<void> {
+    public static async addUserSubject(userId: number, subject: IUserSubject): Promise<void> {
         return new Promise<void>(async (resole, reject) => {
             try {
                 let user: IUser | null = await this.getUser(userId);
@@ -470,6 +474,25 @@ export class MongoHelper {
                     return;
                 }
                 user.subjects = user.subjects.concat(subject);
+                await this.updateUser(userId, { subjects: user.subjects });
+            } catch (err) {
+                reject(err);
+                return;
+            }
+            resolve();
+            return;
+        });
+    }
+
+    public static async updateUserSubject(userId: number, subject: IUserSubject, subjectId: number): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
+            try {
+                let user: IUser | null = await this.getUser(userId);
+                if (!user) {
+                    reject(`Could not find a teacher with uid ${userId}`);
+                    return;
+                };
+                user.subjects[subjectId] = subject;
                 await this.updateUser(userId, { subjects: user.subjects });
             } catch (err) {
                 reject(err);
