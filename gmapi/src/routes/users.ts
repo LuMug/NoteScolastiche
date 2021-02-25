@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { IError, IUser, IUserSubject } from '../@types';
+import { IError, IGrade, IUser, IUserSubject } from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
@@ -126,7 +126,7 @@ router.patch('/users/:uid', async (req: Request, res: Response) => {
 		}
 		return res.status(400).json(error);
 	}
-	return res.status(204).json();
+	return res.status(204).json({});
 });
 
 router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
@@ -158,7 +158,7 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 		}
 		return res.status(400).json({ error: err });
 	}
-	return res.status(204).json();
+	return res.status(204).json({});
 });
 
 router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
@@ -187,12 +187,14 @@ router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
 });
 
 router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) => {
-	let uuid: number = req.body.uuid;
-	let suid: number = req.body.suid;
+	let uuid: number = parseInt(req.params.uuid);
+	let suid: number = parseInt(req.params.suid);
 	let userSubject: IUserSubject = req.body.subject;
 	//let user: IUser = MongoHelper.getUser(userUid);
 	//user.subjects = req.body.subject;
 	if (isNaN(uuid)) {
+		console.log(uuid);
+
 		let err: IError = {
 			message: 'Not a valid User id.'
 		};
@@ -217,11 +219,80 @@ router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) 
 		}
 		return res.status(400).json(error);
 	}
-	return res.status(204).json();
+	return res.status(204).json({});
 });
 
-router.get('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Response) => {
+router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Response) => {
+	let uuid: number = parseInt(req.params.uuid);
+	let suid: number = parseInt(req.params.suid);
+	let grade: IGrade = req.body.grade;
+	if (isNaN(uuid)) {
+		let err: IError = {
+			message: 'Not a valid User id.'
+		};
+		console.log(uuid);
+		return res.status(400).json({ error: err });
+	}
+	if (isNaN(suid)) {
+		let err: IError = {
+			message: 'Not a valid UserSubject id.'
+		};
+		return res.status(400).json({ error: err });
+	}
+	try {
+		await MongoHelper.addGrade(uuid, suid, grade);
+	} catch (err) {
+		let error: IError;
+		if (typeof err == 'string') {
+			error = {
+				message: err
+			};
+		} else {
+			error = err;
+		}
+		return res.status(400).json(error);
+	}
+	return res.status(204).json({});
+});
 
+router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, res: Response) => {
+	let uuid: number = parseInt(req.params.uuid);
+	let suid: number = parseInt(req.params.suid);
+	let guid: number = parseInt(req.params.guid);
+	let grade: IGrade = req.body.grade;
+	if (isNaN(uuid)) {
+		let err: IError = {
+			message: 'Not a valid User id.'
+		};
+		console.log(uuid);
+		return res.status(400).json({ error: err });
+	}
+	if (isNaN(suid)) {
+		let err: IError = {
+			message: 'Not a valid UserSubject id.'
+		};
+		return res.status(400).json({ error: err });
+	}
+	if (isNaN(guid)) {
+		let err: IError = {
+			message: 'Not a valid Grade id.'
+		};
+		return res.status(400).json({ error: err });
+	}
+	try {
+		await MongoHelper.updateGrade(uuid, suid, guid, grade);
+	} catch (err) {
+		let error: IError;
+		if (typeof err == 'string') {
+			error = {
+				message: err
+			};
+		} else {
+			error = err;
+		}
+		return res.status(400).json(error);
+	}
+	return res.status(204).json({});
 });
 
 export default router;
