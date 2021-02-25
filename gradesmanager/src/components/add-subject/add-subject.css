@@ -1,0 +1,33 @@
+.as-main {
+  position: relative;
+  min-width: 266px;
+  max-width: 266px;
+  min-height: 186px;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--dark-gray);
+  border-radius: 3px;
+  margin: 6px;
+  padding: 18px;
+  opacity: 0;
+  cursor: pointer;
+  transition: all 50ms;
+  animation: opacity-in 220ms 170ms ease-in-out forwards;
+}
+
+.as-main:hover {
+  background-color: var(--card-gray);
+}
+
+.as-main:active {
+  transform: scale(0.966, 0.966);
+}
+
+.as-icon {
+  font-family: Roboto;
+  color: var(--dark-gray);
+  font-size: 2.7rem;
+  font-weight: 300;
+}

@@ -1,10 +1,15 @@
-interface Props { }
+import './add-subject.css';
 
-function AddSubject(props: Props) {
+interface IAddSubject {
+
+    onClick: () => void;
+}
+
+function AddSubject(props: IAddSubject) {
 
     return (
-        <div className="as-main">
-            <div className="as-icon">+</div>
+        <div className="as-main" onClick={() => props.onClick()}>
+            <div className="as-icon noselect">+</div>
         </div>
     );
 }
