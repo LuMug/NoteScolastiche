@@ -1,12 +1,17 @@
-import { Component, ReactNode } from 'react';
-import { IGrade, ITeacher, IUserSubject } from '../../@types';
-import { API_URL } from '../../util/constants';
 import Grade from './Grade';
+import React, { Component, ReactNode } from 'react';
+import { API_URL } from '../../util/constants';
+import { IGrade, ITeacher, IUserSubject } from '../../@types';
+import { Redirect } from 'react-router-dom';
 import './Subject.css';
 
 interface ISubjectProps {
 
     subject: IUserSubject;
+
+    onDelete: () => void;
+
+    onEdit: () => void;
 }
 
 interface SubjectState {
@@ -14,6 +19,8 @@ interface SubjectState {
     teacherName: string;
 
     avg: number;
+
+    isEditing: boolean;
 }
 
 class Subject extends Component<ISubjectProps, SubjectState> {
@@ -25,12 +32,13 @@ class Subject extends Component<ISubjectProps, SubjectState> {
         avg /= Math.max(1, props.subject.grades.length);
         this.state = {
             avg: avg,
-            teacherName: ''
+            teacherName: '',
+            isEditing: false
         };
     }
 
     public async componentDidMount() {
-        const url = `${API_URL}/teachers/${this.props.subject.teacherId}`;
+        const url = `${API_URL}teachers/${this.props.subject.teacherId}`;
         const res = await fetch(url);
         const data = await res.json() as ITeacher;
         this.setState({
@@ -43,8 +51,8 @@ class Subject extends Component<ISubjectProps, SubjectState> {
         if (this.props.subject.grades.length != 0) {
             sData = <div className="s-subject-data">
                 <div className="s-subject-grades">
-                    {this.props.subject.grades.map((g: IGrade) => {
-                        return <Grade gradeObj={g} editable={false} />
+                    {this.props.subject.grades.map((g, i) => {
+                        return <Grade key={i} gradeObj={g} editable={false} />
                     })}
                 </div>
                 <div className="s-subject-avg-wrapper">
@@ -69,6 +77,13 @@ class Subject extends Component<ISubjectProps, SubjectState> {
                         value={this.state.teacherName}
                         disabled
                     />
+                    <div className="s-edit-btn-wrapper">
+                        <div className="s-edit-btn noselect"> </div>
+                        <div className="s-edit-btn-content">
+                            <div className="s-edit-btn-el s-edit-btn-el-edit noselect" onClick={() => this.props.onEdit()}> </div>
+                            <div className="s-edit-btn-el s-edit-btn-el-trash noselect" onClick={() => this.props.onDelete()}></div>
+                        </div>
+                    </div>
                 </div>
                 <div className="s-subject-separator"></div>
                 {sData}
