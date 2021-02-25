@@ -1,10 +1,10 @@
 .lp-main {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   background-color: var(--bg-gray);
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -14,8 +14,41 @@
   text-align: center;
 }
 
-.lp-loading-bar::after {
+.lp-loading-bar::before {
   content: url('../../public/svg/loading.svg');
   width: 20px;
   height: 20px;
+}
+
+.lp-hidden {
+  opacity: 0;
+}
+
+.lp-msg-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  animation: fade-in 230ms forwards ease-in;
+}
+
+.lp-msg {
+  color: #fff;
+  font-size: 1.8rem;
+  transform: translateY(1.5rem);
+}
+
+.lp-msg-hint {
+  color: #b3b3b3af;
+  font-size: 1rem;
+  margin-top: 1.8rem;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
