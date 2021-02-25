@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './TextInput.css';
 
 export interface ITextInputProps {
-    inputType: string;
+    inputType: 'text' | 'password';
     placeHolder: string;
     toolTipText: string;
 }
@@ -22,6 +22,7 @@ export default class TextInput extends Component<ITextInputProps> {
                     spellCheck="false"
                     title={this.props.toolTipText}
                     tabIndex={1}
+                    pattern=""
                 />
                 <label className="ti-label">
                     <span>{this.props.placeHolder}</span>
