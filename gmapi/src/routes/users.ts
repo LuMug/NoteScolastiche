@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { IError, IUser, IUserSubject } from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
@@ -21,6 +21,64 @@ router.get('/users/:uid', async (req: Request, res: Response) => {
     let user: IUser | null = await MongoHelper.getUser(uid);
     if (user) {
         return res.status(201).json(user);
+    } else {
+        res.status(400).json({
+            error: {
+                message: `No user with id: ${uid}`
+            }
+        });
+    }
+});
+
+router.get('/users/:uid/subjects', async (req: Request, res: Response) => {
+    let uid: number = parseInt(req.params.uid);
+    if (isNaN(uid)) {
+        return res.status(400).json({
+            error: {
+                message: 'Not a valid user id.'
+            }
+        });
+    }
+    let user: IUser | null = await MongoHelper.getUser(uid);
+    if (user) {
+        return res.status(201).json(user.subjects);
+    } else {
+        res.status(400).json({
+            error: {
+                message: `No user with id: ${uid}`
+            }
+        });
+    }
+});
+
+router.get('/users/:uid/subjects/:suid', async (req: Request, res: Response) => {
+    let uid: number = parseInt(req.params.uid);
+    let suid: number = parseInt(req.params.suid);
+    if (isNaN(uid)) {
+        return res.status(400).json({
+            error: {
+                message: 'Not a valid user id.'
+            }
+        });
+    }
+    if (isNaN(suid) || suid < 0) {
+        return res.status(400).json({
+            error: {
+                message: 'Not a valid subject id.'
+            }
+        });
+    }
+    let user: IUser | null = await MongoHelper.getUser(uid);
+    if (user) {
+        let len = user.subjects.length;
+        if (suid < len) {
+            return res.status(201).json(user.subjects[suid]);
+        }
+        return res.status(400).json({
+            error: {
+                message: `Not a valid subject id. Out of bounds for length ${len}`
+            }
+        });
     } else {
         res.status(400).json({
             error: {
@@ -112,19 +170,20 @@ router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
         return res.status(400).json({ error: err });
     }
     let input: IUserSubject = req.body.subject as IUserSubject;
-    //if (input.isUserSubject()) {
+    console.log(input);
+
+    if (!MongoHelper.isUserSubject(input)) {
+        let err: IError = {
+            message: "Invalid input. Must be a valid IUserSubject"
+        }
+        return res.status(400).json({ error: err });
+    }
     try {
         await MongoHelper.addUserSubject(uid, input);
     } catch (err) {
         return res.status(400).json({ error: { message: err } });
     }
-    // } else {
-    //     let err: IError = {
-    //         message: "Invalid input. Must be a valid array for IUserSubject"
-    //     }
-    //     return res.status(400).json({ error: err });
-    // }
-    return res.status(204).json();
+    return res.status(204).json({});
 });
 
 export default router;
