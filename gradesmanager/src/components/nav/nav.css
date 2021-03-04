@@ -1,0 +1,131 @@
+.n-side-panel {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  max-width: 260px;
+  /* min-width: 250px; */
+  height: 100%;
+  background-color: #111111;
+  overflow: hidden;
+}
+
+.n-side-panel-section {
+  padding: 5px 20px;
+}
+
+.n-side-panel-entries-section {
+  overflow: auto;
+}
+
+.n-side-panel-routes-section {
+  width: 100%;
+  padding: 5px 0;
+}
+
+/* width */
+.n-side-panel-section::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.n-side-panel-section::-webkit-scrollbar-track {
+  background: #333;
+}
+
+/* Handle */
+.n-side-panel-section::-webkit-scrollbar-thumb {
+  background: #474747;
+}
+
+/* Handle on hover */
+.n-side-panel-section::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.n-side-panel-separator {
+  width: 70%;
+  height: 1px;
+  margin: 10px auto;
+  background-color: #b3b3b336;
+}
+
+.n-side-panel-section-title {
+  font-weight: lighter;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gray);
+  text-align: center;
+  padding: 0;
+  margin: 8px 0 18px;
+  font-size: 1.1rem;
+}
+
+.n-ruote-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: all 120ms ease-out;
+}
+
+.n-ruote-wrapper:active {
+  background-color: #1f1f1f;
+}
+
+.n-route-el {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray);
+  /* font-weight: bold; */
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.n-route-el::before {
+  content: url('../../public/svg/whiteboard.svg');
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+  margin-right: 15px;
+}
+
+/* .n-route-el:nth-child(2):before {
+  content: url('../../public/svg/whiteboard.svg');
+} */
+
+.n-subject-wrap {
+  transform: translateX(-10vw);
+  display: flex;
+  align-items: center;
+  padding: 0 0;
+  margin: -6px 0 2px;
+  height: 33px;
+  cursor: pointer;
+  opacity: 0.55;
+  /* transition: all 80ms ease-in; */
+  animation: hp-subject-wrap-slide-in 200ms forwards ease-in-out;
+}
+
+.n-subject-wrap:hover {
+  opacity: 1;
+}
+
+.n-subject-wrap .n-mock-text {
+  width: 100%;
+}
+
+.n-subject-el {
+  color: var(--gray);
+}
+
+.n-subject-el::before {
+  content: '•';
+  color: var(--dark-gray);
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+}
