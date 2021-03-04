@@ -2,7 +2,6 @@ import Grade from './Grade';
 import React, { Component, ReactNode } from 'react';
 import { API_URL } from '../../util/constants';
 import { IGrade, ITeacher, IUserSubject } from '../../@types';
-import { Redirect } from 'react-router-dom';
 import './Subject.css';
 
 interface ISubjectProps {

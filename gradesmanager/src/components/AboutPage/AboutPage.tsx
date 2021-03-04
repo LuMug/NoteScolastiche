@@ -6,7 +6,7 @@ function AboutPage() {
         <div className="ap-page">
             <div className="ap-main-content">
                 <h1 className="ap-title">ABOUT</h1>
-                <p className="ap-text">Questo progetto è stato svolto sul arco del secondo semstre del anno scolastico 2020-2021. In esso sono stati convolti gli allievi: Ambrosetti Nicola, Previtali Aris, Trentin Ismael e Viola Francisco.</p>
+                <p className="ap-text">Questo progetto è stato svolto sull'arco del secondo semestre dell'anno scolastico 2020-2021. In esso sono stati coinvolti gli allievi: Ambrosetti Nicola, Previtali Aris, Trentin Ismael e Viola Francisco.</p>
             </div>
         </div>
     );
