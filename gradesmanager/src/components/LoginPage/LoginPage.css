@@ -33,7 +33,6 @@
 }
 
 .lp-main-content {
-  z-index: 1001;
   transition: all 180ms ease-in-out;
 }
 
@@ -48,7 +47,6 @@
   flex-flow: column nowrap;
   padding: 1.2rem;
   padding-bottom: 2rem;
-  z-index: 1000;
 }
 
 .lp-left-top {
