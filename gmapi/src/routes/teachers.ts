@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { IError, ITeacher } from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
@@ -33,7 +33,9 @@ router.get('/teachers/:uid', async (req: Request, res: Response) => {
 router.post('/teachers', async (req: Request, res: Response) => {
   if (!MongoHelper.isTeacher(req.body.teacher)) {
     let err: IError = {
-      message: 'Bad JSON.'
+      error: {
+        message: 'Bad JSON.'
+      }
     };
     return res.status(400).json({ error: err });
   }
@@ -51,7 +53,9 @@ router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) =>
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
     let err: IError = {
-      message: 'Not a valid teacher id.'
+      error: {
+        message: 'Not a valid teacher id.'
+      }
     };
     return res.status(400).json({ error: err });
   }
@@ -71,7 +75,9 @@ router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) =>
     }
   } else {
     let err: IError = {
-      message: 'Invalid input. Must be an array of positive numbers.'
+      error: {
+        message: 'Invalid input. Must be an array of positive numbers.'
+      }
     }
     return res.status(400).json({ error: err });
   }
@@ -83,7 +89,9 @@ router.patch('/teachers/:uid', async (req: Request, res: Response) => {
   let teacher: Partial<Omit<ITeacher, 'uid'>> = req.body.teacher;
   if (isNaN(uid)) {
     let err: IError = {
-      message: 'Invalid uid.'
+      error: {
+        message: 'Invalid uid.'
+      }
     }
     return res.status(400).json(err);
   }
@@ -93,7 +101,9 @@ router.patch('/teachers/:uid', async (req: Request, res: Response) => {
     let error: IError;
     if (typeof err == 'string') {
       error = {
-        message: err
+        error: {
+          message: err
+        }
       };
     } else {
       error = err;
