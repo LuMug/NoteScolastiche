@@ -1,7 +1,8 @@
 .s-subject {
   position: relative;
   min-width: 266px;
-  max-width: 266px;
+  max-width: 290px;
+  width: 290px;
   min-height: 150px;
   margin: 6px;
   padding: 18px;
@@ -14,7 +15,7 @@
 .s-subject-top {
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -23,9 +24,31 @@
   width: 100%;
 }
 
-.s-subject-teacher {
-  margin: 0.2rem 0 0.2rem 0.2rem;
+.s-subject-teacher-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.s-subject-teacher-warning {
+  content: url('./../../public/svg/warning.svg');
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
   opacity: 0.5;
+  cursor: pointer;
+}
+
+.s-subject-teacher-warning:hover {
+  opacity: 1;
+}
+
+.s-subject-teacher {
+  margin: 0.2rem 0;
+  padding-left: 0.1rem;
+  color: #999999 !important;
   font-weight: lighter;
   font-size: 16px;
   width: 100%;
@@ -33,7 +56,7 @@
 
 .s-edit-btn-wrapper {
   position: absolute;
-  width: 35px;
+  width: 40px;
   min-height: 35px;
   display: flex;
   flex-flow: column nowrap;
@@ -44,7 +67,7 @@
   right: 0px;
   /* padding: 0.3rem; */
   letter-spacing: 0.2rem;
-  border-radius: 2px;
+  border-radius: 2px var(--card-radius) 2px 2px;
 }
 
 .s-edit-btn-wrapper:hover {
@@ -79,7 +102,7 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 6.5px;
+  padding: 10px;
   cursor: pointer;
   transition: all 90ms;
 }
@@ -90,7 +113,7 @@
 
 .s-edit-btn-el-edit {
   content: url('./../../public/svg/wrench.svg');
-  padding: 5.5px;
+  padding: 9px;
 }
 
 .s-edit-btn-el-trash {
@@ -113,6 +136,15 @@
   margin: 0 0 20px;
 }
 
+.s-subject-teachers-warning {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 5rem;
+  padding-top: 0.5rem;
+  z-index: 1;
+}
+
 .s-subject-data {
   display: flex;
   flex-flow: row nowrap;
@@ -133,6 +165,38 @@
 
 .s-subject-grades input {
   text-align: center;
+}
+
+.s-subject-grade-wrapper {
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.s-subject-grade-wrapper:hover .s-subject-grade-delete {
+  display: block;
+}
+
+.s-subject-grade-delete {
+  content: url('./../../public/svg/x.svg');
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  opacity: 0.2;
+  display: none;
+  cursor: pointer;
+  transition: all 50ms ease-in;
+  transform: translateY(2px);
+}
+
+.s-subject-grade-delete:hover {
+  opacity: 0.5;
+}
+
+.s-subject-grade-delete:active {
+  transform: scale(0.9) translateY(2px);
 }
 
 .s-subject-grade {
@@ -188,7 +252,8 @@
   padding: 0 0.917rem;
 }
 
-.s-subject-add-grade-wrapper {
+.s-subject-add-grade-wrapper,
+.s-subject-apply-wrapper {
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -197,7 +262,8 @@
   margin-top: 60px;
 }
 
-.s-subject-add-grade {
+.s-subject-add-grade,
+.s-subject-apply {
   position: absolute;
   display: flex;
   flex-flow: row nowrap;
@@ -209,20 +275,52 @@
   border-radius: 50%;
   text-align: center;
   background-color: var(--dark-gray);
-  /* background: var(--blue-grad-titled); */
+  /* background: var(--blue-grad-tilted); */
   /* background-color: #007eff; */
   font-size: 24px;
   font-family: Roboto;
   font-weight: 300;
   color: #fff;
   box-shadow: 0px 8px 15px #00000033;
-  animation: btn-click-out ease-in-out 100ms forwards;
+}
+
+/* .s-subject-add-grade {
+  animation: s-subject-apply-in ease-in-out 220ms forwards;
+} */
+
+.s-subject-apply {
+  background: var(--green-grad-tilted);
+  content: url('./../../public/svg/tick.svg');
+  width: 42px;
+  height: 42px;
+  padding: 10px;
+  transform: scale(0.9);
+  opacity: 0;
+  animation: s-subject-apply-in ease-in-out 220ms forwards;
+}
+
+.s-subject-apply:active {
+  opacity: 1;
 }
 
 .s-subject-add-grade-wrapper :hover {
-  background: var(--blue-grad-titled);
+  background: var(--blue-grad-tilted);
 }
 
-.s-subject-add-grade-wrapper :active {
+.s-subject-add-grade-wrapper :active,
+.s-subject-apply-wrapper :active {
   animation: btn-click-in ease-in-out 100ms forwards;
+}
+
+.s-input-editing {
+  background-color: #00000049 !important;
+  border-radius: 4px;
+  padding: 0.2rem;
+}
+
+@keyframes s-subject-apply-in {
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
