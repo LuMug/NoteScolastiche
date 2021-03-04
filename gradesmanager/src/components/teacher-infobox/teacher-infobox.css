@@ -1,0 +1,125 @@
+.tib-main {
+  /* background-color: var(--bg-gray); */
+  width: 50%;
+  max-height: 420px;
+  height: 420px;
+  background-color: #111111;
+  border-radius: var(--card-radius);
+  padding: 1.2rem;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(+50%);
+  animation: tib-slide-in 220ms forwards ease-out;
+}
+
+.tib-abort {
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  content: url('./../../public/svg/x.svg');
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: all 90ms ease-in-out;
+}
+
+.tib-abort:hover {
+  opacity: 1;
+}
+
+.tib-head {
+  color: #b3b3b3cb;
+  width: 96%;
+  text-align: justify;
+  font-size: 1.4rem;
+}
+
+.tib-head span {
+  color: #fff;
+}
+
+.tib-input {
+  color: var(--gray);
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #b3b3b37e;
+  font-size: 1.1rem;
+  margin: 0.9rem 0;
+  padding: 0.1rem;
+}
+
+.tib-input:focus {
+  outline: none;
+  border-bottom: 1px solid var(--dark-blue);
+}
+
+.tib-input::placeholder {
+  opacity: 0.5;
+  font-size: 1.1rem;
+}
+
+.tib-teachers-wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  overflow-y: auto;
+  background-color: var(--bg-gray);
+  border-radius: 5px 0 0 5px;
+}
+
+/* width */
+.tib-teachers-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.tib-teachers-wrapper::-webkit-scrollbar-track {
+  background: #333;
+  border-radius: 8px;
+}
+
+/* Handle */
+.tib-teachers-wrapper::-webkit-scrollbar-thumb {
+  background: #474747;
+  border-radius: 8px;
+}
+
+/* Handle on hover */
+.tib-teachers-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.tib-loading {
+  width: 100%;
+}
+
+.tib-loading div {
+  content: url('./../../public/svg/loading.svg');
+  width: 40px;
+  height: 40px;
+  margin: auto;
+}
+
+.tib-teacher {
+  width: 100%;
+  color: #b3b3b394;
+  padding: 0.3rem 0.3rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.tib-teacher:nth-last-child(odd) {
+  background-color: var(--card-gray);
+}
+
+@keyframes tib-slide-in {
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
