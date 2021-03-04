@@ -359,7 +359,7 @@ router.delete('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, r
 				message: 'Not a valid User id.'
 			}
 		};
-		console.log(uuid);
+		//console.log(uuid);
 		return res.status(400).json({ error: err });
 	}
 	if (isNaN(suid)) {
@@ -380,6 +380,61 @@ router.delete('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, r
 	}
 	try {
 		await MongoHelper.removeGrade(uuid, suid, guid);
+	} catch (err) {
+		let error: IError = {
+			error: {
+				message: err
+			}
+		};
+		return res.status(400).json(error);
+	}
+	return res.status(200).json({});
+});
+
+router.delete('/users/:uid', async (req: Request, res: Response) => {
+	let uid: number = parseInt(req.params.uid);
+	if (isNaN(uid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid user id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	try {
+		await MongoHelper.removeUser(uid);
+	} catch (err) {
+		let error: IError = {
+			error: {
+				message: err
+			}
+		};
+		return res.status(400).json(error);
+	}
+	return res.status(200).json({});
+});
+
+router.delete('/users/:uid/subjects/:suid', async (req: Request, res: Response) => {
+	let uid: number = parseInt(req.params.uid);
+	let suid: number = parseInt(req.params.suid);
+	if (isNaN(uid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid user id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	if (isNaN(suid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid userSubject id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	try {
+		await MongoHelper.removeUserSubject(uid, suid);
 	} catch (err) {
 		let error: IError = {
 			error: {

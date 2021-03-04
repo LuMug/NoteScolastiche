@@ -10,7 +10,6 @@ import {
 	IUserSubject,
 	UserType
 	} from '../@types';
-import { resolve } from 'path';
 
 const DB_NAME: string = 'gradesmanager';
 
@@ -662,6 +661,33 @@ export class MongoHelper {
 			await this.updateUser(uuid, user);
 		} catch (err) {
 			throw err;
+		}
+	}
+
+	public static async removeUser(uid: number) {
+		let user;
+		try {
+			user = await this.getUser(uid);
+			if (!user) {
+				throw 'Invalid user id';
+			}
+			this.getUsers().deleteOne({ uid: uid });
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	public static async removeUserSubject(uid: number, suid: number) {
+		let user;
+		try {
+			user = await this.getUser(uid);
+			if (!user) {
+				throw 'Invalid user id';
+			}
+			let sName = user.subjects[suid].name;
+			this.getUsers().updateOne({}, { $pull: { subjects: { 'name': 'Progetti' } } })
+		} catch (err) {
+			throw (err);
 		}
 	}
 }
