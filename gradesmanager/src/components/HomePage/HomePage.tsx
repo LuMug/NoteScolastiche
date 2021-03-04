@@ -1,12 +1,20 @@
+import * as CONSTANTS from './../../util/constants';
 import AddSubject from '../add-subject/AddSubject';
+import FetchHelper from '../../helpers/FetchHelper';
+import GradePrompt from '../grade-prompt/GradePrompt';
 import LoadingPage from '../LoadingPage/LoadingPage';
+import Nav from './../nav/Nav';
+import React, { Component, ReactNode } from 'react';
 import Subject from '../subject/Subject';
 import SubjectPage from '../SubjectPage/SubjectPage';
-import { API_URL } from './../../util/constants';
-import { Component, ReactNode } from 'react';
-import { IUser, IUserSubject } from '../../@types';
+import TeacherInfobox from '../teacher-infobox/TeacherInfobox';
+import {
+  IGrade,
+  ITeacher,
+  IUser,
+  IUserSubject
+  } from '../../@types';
 import './home-page.css';
-import { Redirect, } from 'react-router-dom';
 
 interface IHomePageState {
 
@@ -18,7 +26,13 @@ interface IHomePageState {
 
   displayDetails: boolean;
 
-  displaySuid?: number;
+  displayGradePrompt: boolean;
+
+  currentSubject: IUserSubject | null;
+
+  teachersCache: ITeacher[];
+
+  displayTIB: boolean;
 }
 
 class HomePage extends Component<{}, IHomePageState> {
@@ -29,72 +43,64 @@ class HomePage extends Component<{}, IHomePageState> {
       loading: true,
       user: null,
       unavailable: false,
-      displayDetails: false
+      displayDetails: false,
+      displayGradePrompt: false,
+      currentSubject: null,
+      teachersCache: [],
+      displayTIB: false
     };
   }
 
   async componentDidMount() {
-    const url: string = `${API_URL}users/0`;
-    let res;
+    let data: IUser;
+    let teachers: ITeacher[];
     try {
-      res = await fetch(url);
+      data = await FetchHelper.fetchUser(0);
+      teachers = await FetchHelper.fetchAllTeachers();
     } catch {
       this.setState({
-        unavailable: true
-      })
+        unavailable: true,
+        user: null
+      });
       return;
     }
-    const data = await res.json();
     this.setState({
       loading: false,
-      user: data
+      user: data,
+      teachersCache: teachers
     });
   }
 
-  private async updateUser(state: IHomePageState, updated: IUser) {
-    const url = `${API_URL}users/${state.user?.uid}`;
-    delete (updated as any)._id;
-    const body = JSON.stringify({ user: updated });
-    const reqOpts = {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: body
-    };
-    try {
-      await fetch(url, reqOpts);
-    } catch (err) {
-      console.error(err);
-      return;
-    }
+  private async updateUser(updated: IUser) {
     this.setState({
       user: updated
     });
+    try {
+      await FetchHelper.patchUser(updated.uid, updated);
+    } catch (err) {
+      return;
+    }
   }
 
   private async onSubjectAdd(state: IHomePageState) {
-    const url = `${API_URL}users/${state.user?.uid}/subjects`;
+    if (!state.user) {
+      return;
+    }
     const newSub: IUserSubject = {
-      name: "Subject",
-      teacherId: 0,
+      name: 'Subject',
+      teacherName: 'Surname Name',
       grades: []
     }
-    const body = JSON.stringify({ subject: newSub });
-    const reqOpts = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: body
-    };
     try {
-      await fetch(url, reqOpts);
+      await FetchHelper.postUserSubject(state.user?.uid, newSub);
     } catch (err) {
-      console.error(err);
       return;
     }
     let updated = Object.assign({}, state.user);
     updated.subjects.push(newSub);
     this.setState({
       user: updated
-    }, () => console.log('dsad'));
+    });
   }
 
   private async onSubjectDelete(state: IHomePageState, index: number) {
@@ -102,46 +108,131 @@ class HomePage extends Component<{}, IHomePageState> {
     if (!updated) {
       return;
     }
-    updated.subjects = updated.subjects.filter((us, i) => i != index);
-    await this.updateUser(state, updated);
+    updated.subjects.splice(index, 1);
+    this.updateUser(updated);
   }
 
-  private async onSubjectEdit(state: IHomePageState, index: number) {
-    // return new Promise<void>((resolve, reject) => {
-    //     this.setState({
-    //         displayDetails: true,
-    //         displaySuid: index
-    //     }, () => resolve());
-    // });
+  private async onSubjectAddGrade(us: IUserSubject) {
     this.setState({
-      displayDetails: true,
-      displaySuid: index
+      displayGradePrompt: true,
+      currentSubject: us
     });
+  }
+
+  private async onSubjectRemoveGrade(state: IHomePageState, sIndex: number, gIndex: number) {
+    if (!state.user) {
+      return;
+    }
+    let updated;
+    try {
+      await FetchHelper.deleteSubjectGrade(state.user.uid, sIndex, gIndex);
+      updated = await FetchHelper.fetchUser(state.user.uid);
+    } catch (err) {
+      return;
+    }
+    this.setState({
+      user: updated
+    });
+  }
+
+  private async onSubjectApply(state: IHomePageState, subjectState: IUserSubject, index: number) {
+    // let updated = Object.assign({}, this.state.user);
+    // updated.subjects[index] = subjectState;
+    if (!state.user) {
+      return;
+    }
+    try {
+      await FetchHelper.patchUserSubject(state.user.uid, index, subjectState);
+      this.setState({ user: await FetchHelper.fetchUser(state.user.uid) });
+    } catch (err) {
+      console.error(err);
+      return;
+    }
+  }
+
+  private async onGradePromptSubmit(state: IHomePageState, value: number, weight: number, date: Date) {
+    if (!state.user) {
+      return;
+    }
+    // Will be casted with no error because currentSubject will
+    // never be null since onGradePromptSubmit is called by
+    // interacting with a subject. Therefore a subject must exist.
+    let index = state.user.subjects.indexOf(state.currentSubject as IUserSubject);
+    const newGrade: IGrade = {
+      value: value,
+      weight: weight,
+      date: date.toISOString()
+    }
+    try {
+      await FetchHelper.postSubjectGrade(state.user?.uid, index, newGrade);
+    } catch (err) {
+      return;
+    }
+    let updated = Object.assign({}, state.user);
+    updated.subjects[index].grades.push(newGrade);
+    this.setState({
+      user: updated
+    });
+  }
+
+  private toggleTIB() {
+    this.setState({
+      displayTIB: !this.state.displayTIB
+    });
+  }
+
+  private toggleSP() {
+    this.setState({
+      displayDetails: !this.state.displayDetails
+    });
+  }
+
+  private async onListSubjectClick(state: IHomePageState, index: number) {
+    if (state.user) {
+      let us = state.user.subjects[index];
+      this.setState({
+        displayDetails: true,
+        currentSubject: us
+      });
+    }
   }
 
   render(): ReactNode {
     if (this.state.loading || this.state.user == null) {
       return <LoadingPage unavailable={this.state.unavailable} />;
     }
+    let subjectPage;
+    if (this.state.currentSubject) {
+      subjectPage =
+        <div className={`hp-prompt ${(this.state.displayDetails) ? '' : 'hidden'}`}>
+          <SubjectPage
+            subject={this.state.currentSubject}
+            onAbort={() => this.toggleSP()} />
+        </div>;
+    }
+    let gradePrompt = <div className={`hp-prompt ${(this.state.displayGradePrompt) ? '' : 'hidden'}`}>
+      <GradePrompt
+        title={`${this.state.currentSubject?.name}`}
+        onAbort={() => {
+          this.setState({ displayGradePrompt: false });
+        }}
+        onSubmit={
+          (value, weight, date) => this.onGradePromptSubmit(this.state, value, weight, date)
+        }
+      />
+    </div>;
+    let tib = <div className={`hp-prompt ${(this.state.displayTIB) ? '' : 'hidden'}`}>
+      <TeacherInfobox
+        teachers={this.state.teachersCache}
+        onAbort={() => this.toggleTIB()} />
+    </div>;
     return (
       <div className="hp-main-content">
-        <div className="hp-side-panel">
-          <div className="hp-side-panel-section">
-            <p className="hp-route-el">Home</p>
-            <p className="hp-route-el">Materie</p>
-            <p className="hp-route-el">Route X</p>
-          </div>
-          <div className="hp-side-panel-separator"></div>
-          <div id="hp-subjects-list-panel" className="hp-side-panel-section">
-            <p className="hp-side-panel-section-title">Materie</p>
-            {this.state.user.subjects.map((us: IUserSubject, i: number) => {
-              <Redirect to={`/subjects/${i}`} />
-              return <div className="hp-subject-wrap" key={i} onClick={() => this.onSubjectEdit(this.state, i)}>
-                <p className="hp-subject-el">{us.name}</p>
-              </div>
-            })}
-          </div>
-        </div>
+        <Nav
+          routes={CONSTANTS.ROUTES}
+          entries={this.state.user.subjects.map(s => s.name)}
+          onEntryClick={(i) => this.onListSubjectClick(this.state, i)}
+        />
         <div className="hp-content-page">
           <div className="hp-welcome-panel">
             <h1 className="hp-welcome-text">Benvenuto, <span>{this.state.user.name}</span></h1>
@@ -189,15 +280,18 @@ class HomePage extends Component<{}, IHomePageState> {
                 subject={s}
                 key={i}
                 onDelete={() => this.onSubjectDelete(this.state, i)}
-                onEdit={() => this.onSubjectEdit(this.state, i)}
+                onAddGrade={() => this.onSubjectAddGrade(s)}
+                onRemoveGrade={(g, gi) => this.onSubjectRemoveGrade(this.state, i, gi)}
+                onApply={(state) => this.onSubjectApply(this.state, state, i)}
+                onTIBDisplay={() => this.toggleTIB()}
               />
             })}
             <AddSubject onClick={() => this.onSubjectAdd(this.state)} />
           </div>
         </div>
-        <div onClick={() => { this.setState({ displayDetails: false }) }} id="subject-details" className={`hp-subject-detail ${(this.state.displayDetails) ? '' : 'hidden'}`}>
-          <SubjectPage suid={(this.state.displaySuid) ? this.state.displaySuid : 0} uuid={this.state.user.uid} />
-        </div>
+        {subjectPage}
+        {gradePrompt}
+        {tib}
       </div>
     );
   }
