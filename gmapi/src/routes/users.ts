@@ -1,5 +1,11 @@
 import express, { Request, Response, Router } from 'express';
-import { IError, IGrade, IUser, IUserSubject } from '../@types';
+import {
+	IError,
+	IGrade,
+	ITeacher,
+	IUser,
+	IUserSubject
+} from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
@@ -22,7 +28,7 @@ router.get('/users/:uid', async (req: Request, res: Response) => {
 	if (user) {
 		return res.status(201).json(user);
 	} else {
-		res.status(400).json({
+		res.status(404).json({
 			error: {
 				message: `No user with id: ${uid}`
 			}
@@ -91,9 +97,11 @@ router.get('/users/:uid/subjects/:suid', async (req: Request, res: Response) => 
 router.post('/users', async (req: Request, res: Response) => {
 	if (!MongoHelper.isUser(req.body.user)) {
 		let err: IError = {
-			message: 'Bad JSON.'
+			error: {
+				message: 'Bad JSON.'
+			}
 		};
-		return res.status(400).json({ error: err });
+		return res.status(400).json(err);
 	}
 	let user: IUser = req.body.user as IUser;
 	try {
@@ -109,21 +117,20 @@ router.patch('/users/:uid', async (req: Request, res: Response) => {
 	let user: Partial<Omit<IUser, 'uid'>> = req.body.user;
 	if (isNaN(uid)) {
 		let err: IError = {
-			message: 'Invalid uid.'
+			error: {
+				message: 'Invalid uid.'
+			}
 		}
 		return res.status(400).json(err);
 	}
 	try {
 		await MongoHelper.updateUser(uid, user);
 	} catch (err) {
-		let error: IError;
-		if (typeof err == 'string') {
-			error = {
+		let error: IError = {
+			error: {
 				message: err
-			};
-		} else {
-			error = err;
-		}
+			}
+		};
 		return res.status(400).json(error);
 	}
 	return res.status(204).json({});
@@ -134,7 +141,9 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	if (isNaN(uid)) {
 		let err: IError = {
-			message: 'Not a valid subject id.'
+			error: {
+				message: 'Not a valid subject id.'
+			}
 		};
 		return res.status(400).json({ error: err });
 	}
@@ -154,7 +163,9 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 		}
 	} else {
 		let err: IError = {
-			message: 'Invalid input. Must be an array of positive numbers.'
+			error: {
+				message: 'Invalid input. Must be an array of positive numbers.'
+			}
 		}
 		return res.status(400).json({ error: err });
 	}
@@ -165,20 +176,45 @@ router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	if (isNaN(uid)) {
 		let err: IError = {
-			message: 'Not a valid user id.'
+			error: {
+				message: 'Not a valid user id.'
+			}
 		};
 		return res.status(400).json({ error: err });
 	}
 	let input: IUserSubject = req.body.subject as IUserSubject;
-	//console.log(input);
-
 	if (!MongoHelper.isUserSubject(input)) {
 		let err: IError = {
-			message: "Invalid input. Must be a valid IUserSubject"
+			error: {
+				message: "Invalid input. Must be a valid IUserSubject"
+			}
 		}
 		return res.status(400).json({ error: err });
 	}
+	let teacher: ITeacher | null = null;
 	try {
+		if (input.teacherId && (!input.teacherName || input.teacherName.trim() == '')) {
+			teacher = await MongoHelper.getTeacher(input.teacherId);
+			if (teacher) {
+				input.teacherName = `${teacher?.surname} ${teacher?.name}`;
+			} else {
+				input.teacherName = `???`;
+			}
+		}
+		if (!input.teacherId && input.teacherName && input.teacherName.trim() != '') {
+			let fullname = input.teacherName.split(' ');
+			teacher = await MongoHelper.getTeacherByFullName(fullname[1], fullname[0]);
+			if (teacher) {
+				input.teacherName = `${teacher.surname} ${teacher.name}`;
+				input.teacherId = teacher.uid;
+			} else {
+				teacher = await MongoHelper.getTeacherByFullName(fullname[0], fullname[1]);
+				if (teacher) {
+					input.teacherName = `${teacher.surname} ${teacher.name}`;
+					input.teacherId = teacher.uid;
+				}
+			}
+		}
 		await MongoHelper.addUserSubject(uid, input);
 	} catch (err) {
 		return res.status(400).json({ error: { message: err } });
@@ -193,16 +229,18 @@ router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) 
 	//let user: IUser = MongoHelper.getUser(userUid);
 	//user.subjects = req.body.subject;
 	if (isNaN(uuid)) {
-		console.log(uuid);
-
 		let err: IError = {
-			message: 'Not a valid User id.'
+			error: {
+				message: 'Not a valid User id.'
+			}
 		};
 		return res.status(400).json({ error: err });
 	}
 	if (isNaN(suid)) {
 		let err: IError = {
-			message: 'Not a valid UserSubject id.'
+			error: {
+				message: 'Not a valid UserSubject id.'
+			}
 		};
 		return res.status(400).json({ error: err });
 	}
@@ -212,7 +250,9 @@ router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) 
 		let error: IError;
 		if (typeof err == 'string') {
 			error = {
-				message: err
+				error: {
+					message: err
+				}
 			};
 		} else {
 			error = err;
@@ -228,14 +268,18 @@ router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Resp
 	let grade: IGrade = req.body.grade;
 	if (isNaN(uuid)) {
 		let err: IError = {
-			message: 'Not a valid User id.'
+			error: {
+				message: 'Not a valid User id.'
+			}
 		};
 		console.log(uuid);
 		return res.status(400).json({ error: err });
 	}
 	if (isNaN(suid)) {
 		let err: IError = {
-			message: 'Not a valid UserSubject id.'
+			error: {
+				message: 'Not a valid UserSubject id.'
+			}
 		};
 		return res.status(400).json({ error: err });
 	}
@@ -245,7 +289,9 @@ router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Resp
 		let error: IError;
 		if (typeof err == 'string') {
 			error = {
-				message: err
+				error: {
+					message: err
+				}
 			};
 		} else {
 			error = err;
@@ -262,20 +308,26 @@ router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, re
 	let grade: IGrade = req.body.grade;
 	if (isNaN(uuid)) {
 		let err: IError = {
-			message: 'Not a valid User id.'
+			error: {
+				message: 'Not a valid User id.'
+			}
 		};
 		console.log(uuid);
 		return res.status(400).json({ error: err });
 	}
 	if (isNaN(suid)) {
 		let err: IError = {
-			message: 'Not a valid UserSubject id.'
+			error: {
+				message: 'Not a valid UserSubject id.'
+			}
 		};
 		return res.status(400).json({ error: err });
 	}
 	if (isNaN(guid)) {
 		let err: IError = {
-			message: 'Not a valid Grade id.'
+			error: {
+				message: 'Not a valid Grade id.'
+			}
 		};
 		return res.status(400).json({ error: err });
 	}
@@ -285,7 +337,9 @@ router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, re
 		let error: IError;
 		if (typeof err == 'string') {
 			error = {
-				message: err
+				error: {
+					message: err
+				}
 			};
 		} else {
 			error = err;
@@ -293,6 +347,103 @@ router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, re
 		return res.status(400).json(error);
 	}
 	return res.status(204).json({});
+});
+
+router.delete('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, res: Response) => {
+	let uuid: number = parseInt(req.params.uuid);
+	let suid: number = parseInt(req.params.suid);
+	let guid: number = parseInt(req.params.guid);
+	if (isNaN(uuid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid User id.'
+			}
+		};
+		//console.log(uuid);
+		return res.status(400).json({ error: err });
+	}
+	if (isNaN(suid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid UserSubject id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	if (isNaN(guid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid Grade id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	try {
+		await MongoHelper.removeGrade(uuid, suid, guid);
+	} catch (err) {
+		let error: IError = {
+			error: {
+				message: err
+			}
+		};
+		return res.status(400).json(error);
+	}
+	return res.status(200).json({});
+});
+
+router.delete('/users/:uid', async (req: Request, res: Response) => {
+	let uid: number = parseInt(req.params.uid);
+	if (isNaN(uid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid user id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	try {
+		await MongoHelper.removeUser(uid);
+	} catch (err) {
+		let error: IError = {
+			error: {
+				message: err
+			}
+		};
+		return res.status(400).json(error);
+	}
+	return res.status(200).json({});
+});
+
+router.delete('/users/:uid/subjects/:suid', async (req: Request, res: Response) => {
+	let uid: number = parseInt(req.params.uid);
+	let suid: number = parseInt(req.params.suid);
+	if (isNaN(uid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid user id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	if (isNaN(suid)) {
+		let err: IError = {
+			error: {
+				message: 'Not a valid userSubject id.'
+			}
+		};
+		return res.status(400).json({ error: err });
+	}
+	try {
+		await MongoHelper.removeUserSubject(uid, suid);
+	} catch (err) {
+		let error: IError = {
+			error: {
+				message: err
+			}
+		};
+		return res.status(400).json(error);
+	}
+	return res.status(200).json({});
 });
 
 export default router;
