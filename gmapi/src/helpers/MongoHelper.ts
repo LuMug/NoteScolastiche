@@ -1,16 +1,16 @@
-import { MongoClient, Collection } from 'mongodb';
-import { resolve } from 'path';
+import mongonnect from './Mongonnect';
+import { Collection, MongoClient } from 'mongodb';
 import {
-	ITeacher,
-	IUser,
-	IGroup,
 	Collections,
 	CollectionTypes,
-	UserType,
+	IGrade,
+	IGroup,
+	ITeacher,
+	IUser,
 	IUserSubject,
-	IGrade
-} from '../@types';
-import mongonnect from './Mongonnect';
+	UserType
+	} from '../@types';
+import { resolve } from 'path';
 
 const DB_NAME: string = 'gradesmanager';
 
@@ -183,7 +183,7 @@ export class MongoHelper {
 	}
 
 	public static isUserSubject(input: any): boolean {
-		return this.is<IUserSubject>(input, { teacherId: -1, grades: [], name: '' });
+		return this.is<IUserSubject>(input, { teacherName: '', grades: [], name: '' });
 	}
 
 	public static isGrade(input: any): boolean {
@@ -226,7 +226,9 @@ export class MongoHelper {
 	public static async getUser(uid: number): Promise<IUser | null> {
 		return new Promise<IUser | null>(async (resolve, reject) => {
 			try {
-				resolve(await this.getUsers().findOne({ uid: uid }));
+				let data = await this.getUsers().findOne({ uid: uid });
+				delete (data as any)._id;
+				resolve(data);
 				return;
 			} catch (err) {
 				reject(err);
@@ -527,15 +529,42 @@ export class MongoHelper {
 		});
 	}
 
-	public static async updateUserSubject(userId: number, subject: IUserSubject, subjectId: number): Promise<void> {
+	public static async updateUserSubject(userId: number, subject: IUserSubject, subjectIndex: number): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
 				let user: IUser | null = await this.getUser(userId);
 				if (!user) {
-					reject(`Could not find a teacher with uid ${userId}`);
+					reject(`Could not find a user with uid ${userId}`);
 					return;
 				};
-				user.subjects[subjectId] = subject;
+
+				let teacher;
+				if (subject.teacherId && (!subject.teacherName || subject.teacherName.trim() == '')) {
+					teacher = await MongoHelper.getTeacher(subject.teacherId);
+					if (teacher) {
+						subject.teacherName = `${teacher?.surname} ${teacher?.name}`;
+					} else {
+						subject.teacherName = `???`;
+					}
+				}
+				if (!subject.teacherId && subject.teacherName && subject.teacherName.trim() != '') {
+					let fullname = subject.teacherName.split(' ');
+					teacher = await MongoHelper.getTeacherByFullName(fullname[1], fullname[0]);
+					if (teacher) {
+						subject.teacherName = `${teacher.surname} ${teacher.name}`;
+						subject.teacherId = teacher.uid;
+					} else {
+						teacher = await MongoHelper.getTeacherByFullName(fullname[0], fullname[1]);
+						if (teacher) {
+							subject.teacherName = `${teacher.surname} ${teacher.name}`;
+							subject.teacherId = teacher.uid;
+						} else {
+							delete subject.teacherId;
+						}
+					}
+				}
+
+				user.subjects[subjectIndex] = subject;
 				await this.updateUser(userId, { subjects: user.subjects });
 			} catch (err) {
 				reject(err);
@@ -620,5 +649,19 @@ export class MongoHelper {
 			resolve();
 			return;
 		});
+	}
+
+	public static async removeGrade(uuid: number, sIndex: number, gIndex: number) {
+		let user;
+		try {
+			user = await this.getUser(uuid);
+			if (!user) {
+				throw 'Invalid user uid';
+			}
+			user.subjects[sIndex].grades.splice(gIndex, 1);
+			await this.updateUser(uuid, user);
+		} catch (err) {
+			throw err;
+		}
 	}
 }
