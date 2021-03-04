@@ -108,9 +108,14 @@ export interface IUserSubject {
     name: string;
 
     /**
+     * The teacher name.
+     */
+    teacherName: string;
+
+    /**
      * The teacher uid.
      */
-    teacherId: number;
+    teacherId?: number;
 
     /**
      * All grades.
@@ -173,6 +178,15 @@ export interface IUser {
 export interface IError {
 
     message: string;
+}
+
+export interface IRouteDescritor {
+
+    name: string;
+
+    path: string;
+
+    iconURL?: string;
 }
 
 export type Collections = 'users' | 'teachers' | 'groups';
