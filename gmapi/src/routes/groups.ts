@@ -1,4 +1,4 @@
-import express, { Router, Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { IError, IGroup } from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
@@ -35,7 +35,9 @@ router.get('/groups/:uid', async (req: Request, res: Response) => {
 router.post('/groups', async (req: Request, res: Response) => {
   if (!MongoHelper.isGroup(req.body.group)) {
     let err: IError = {
-      message: 'Bad JSON.'
+      error: {
+        message: 'Bad JSON.'
+      }
     };
     return res.status(400).json({ error: err });
   }
@@ -53,7 +55,9 @@ router.patch('/groups/:uid', async (req: Request, res: Response) => {
   let group: Partial<Omit<IGroup, 'uid'>> = req.body.group;
   if (isNaN(uid)) {
     let err: IError = {
-      message: 'Invalid uid.'
+      error: {
+        message: 'Invalid uid.'
+      }
     }
     return res.status(400).json(err);
   }
@@ -63,7 +67,9 @@ router.patch('/groups/:uid', async (req: Request, res: Response) => {
     let error: IError;
     if (typeof err == 'string') {
       error = {
-        message: err
+        error: {
+          message: err
+        }
       };
     } else {
       error = err;
