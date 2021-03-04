@@ -3,18 +3,6 @@
 ### Scuola Arti e Mestieri Trevano, 25 febbraio 2021
 
 ## Lavori svolti
-Aris
--route
--mongo helper
-  interfacciare con il database
-
-Nicola Ambrosetti
-- path dell'ad
-- aiuttocon ldap
-
-- Francisco
-- parsing di ldap
-- 
 |Aris        |Lavoro svolto                 |
 |-----------------------------|-------------------------------|
 |8.20 - 9.50  |Nelle prime ore di lavoro Aris si è occupato delle route dell'API. Più precisamente si è occupato di implementare l'aggiunta delle materie e delle note scolastiche. Inoltre ha aggiunto dei metodi essenziali del MongoHelper in modo da interfacciare con il database.|
