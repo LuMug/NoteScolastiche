@@ -1,8 +1,9 @@
 .as-main {
   position: relative;
   min-width: 266px;
-  max-width: 266px;
-  min-height: 186px;
+  max-width: 290px;
+  width: 290px;
+  min-height: 170px;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
