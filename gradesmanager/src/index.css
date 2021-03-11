@@ -3,9 +3,11 @@
   --dark-gray: #b3b3b31e;
   --bg-gray: #181818;
   --card-gray: #1f1f1f;
+  --bg-nav: #111;
   --blue: #007eff;
   --light-blue: #00eaff;
   --dark-blue: #0061c2;
+  --red: #df0025;
   --blue-grad: linear-gradient(197deg, #007eff 0%, #00eaff 100%);
   --blue-grad-tilted: linear-gradient(222deg, #007eff 20%, #00eaff 100%);
   --green-grad-tilted: linear-gradient(222deg, #00eaff 20%, #00ff9d 100%);
