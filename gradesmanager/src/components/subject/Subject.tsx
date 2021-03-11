@@ -1,3 +1,4 @@
+import AddGradeButton from '../add-grade-btn/AddGradeButton';
 import FetchHelper from '../../helpers/FetchHelper';
 import Grade from './Grade';
 import React, { Component, ReactNode } from 'react';
@@ -45,6 +46,51 @@ class Subject extends Component<ISubjectProps, ISubjectState> {
             isEditing: false,
             hasCustomTeacher: false
         };
+    }
+
+    async componentDidMount() {
+        await this.setUp();
+    }
+
+    async componentDidUpdate(prevProps: ISubjectProps, prevState: ISubjectState) {
+        if (prevState.name != this.props.subject.name && !this.state.isEditing) {
+            this.setState({
+                name: this.props.subject.name
+            });
+        }
+        if (this.getAvg() != this.state.avg) {
+            this.setState({
+                avg: this.getAvg()
+            });
+        }
+        if (prevProps.subject.teacherName != this.props.subject.teacherName) {
+            await this.setUp();
+        }
+    }
+
+    private async setUp() {
+        let teacher: ITeacher | null = null;
+        try {
+            if (this.props.subject.teacherId != undefined) {
+                teacher = await FetchHelper.fetchTeacher(this.props.subject.teacherId);
+            }
+        } catch (err) {
+            // console.error(err);
+            return;
+        }
+        if (teacher) {
+            this.setState({
+                teacherName: `${teacher.surname} ${teacher.name}`,
+                hasCustomTeacher: false,
+                name: this.props.subject.name
+            });
+        } else {
+            this.setState({
+                teacherName: this.props.subject.teacherName,
+                hasCustomTeacher: true,
+                name: this.props.subject.name
+            });
+        }
     }
 
     private onEdit() {
@@ -98,50 +144,16 @@ class Subject extends Component<ISubjectProps, ISubjectState> {
         });
     }
 
-    async componentDidMount() {
-        let teacher: ITeacher | null = null;
-        try {
-            if (this.props.subject.teacherId != undefined) {
-                teacher = await FetchHelper.fetchTeacher(this.props.subject.teacherId);
-            }
-        } catch (err) {
-            // console.error(err);
-            return;
+    public static getSubjectAvg(subject: IUserSubject): number {
+        let avg = 0;
+        for (let g of subject.grades) {
+            avg += g.value * g.weight;
         }
-        if (teacher) {
-            this.setState({
-                teacherName: `${teacher.surname} ${teacher.name}`,
-                hasCustomTeacher: false,
-                name: this.props.subject.name
-            });
-        } else {
-            this.setState({
-                teacherName: this.props.subject.teacherName,
-                hasCustomTeacher: true,
-                name: this.props.subject.name
-            });
-        }
-    }
-
-    componentDidUpdate(prevProps: ISubjectProps, prevState: ISubjectState) {
-        if (prevState.name != this.props.subject.name && !this.state.isEditing) {
-            this.setState({
-                name: this.props.subject.name
-            });
-        }
-        if (this.getAvg() != this.state.avg) {
-            this.setState({
-                avg: this.getAvg()
-            });
-        }
+        return avg / Math.max(1, subject.grades.length);
     }
 
     public getAvg(): number {
-        let avg = 0;
-        for (let g of this.props.subject.grades) {
-            avg += g.value * g.weight;
-        }
-        return avg / Math.max(1, this.props.subject.grades.length);
+        return Subject.getSubjectAvg(this.props.subject);
     }
 
     render(): ReactNode {
