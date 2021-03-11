@@ -1,6 +1,8 @@
 import * as CONSTANTS from './../../util/constants';
 import AddSubject from '../add-subject/AddSubject';
+import AvgChart from '../avg-chart/AvgChart';
 import FetchHelper from '../../helpers/FetchHelper';
+import GradeHelper from '../../helpers/GradeHelper';
 import GradePrompt from '../grade-prompt/GradePrompt';
 import LoadingPage from '../LoadingPage/LoadingPage';
 import Nav from './../nav/Nav';
@@ -8,6 +10,7 @@ import React, { Component, ReactNode } from 'react';
 import Subject from '../subject/Subject';
 import SubjectPage from '../SubjectPage/SubjectPage';
 import TeacherInfobox from '../teacher-infobox/TeacherInfobox';
+import TrendChart from '../trend-chart/TrendChart';
 import {
   IGrade,
   ITeacher,
@@ -131,8 +134,18 @@ class HomePage extends Component<{}, IHomePageState> {
       return;
     }
     this.setState({
-      user: updated
+      user: updated,
+      currentSubject: updated.subjects[sIndex]
     });
+  }
+
+  private async onSPRemoveGrade(state: IHomePageState, grade: IGrade, gIndex: number) {
+    if (!state.currentSubject || !state.user) {
+      return;
+    }
+    // FIX UPDATE
+    let sIndex = state.user.subjects.indexOf(this.state.currentSubject as IUserSubject);
+    await this.onSubjectRemoveGrade(state, sIndex, gIndex);
   }
 
   private async onSubjectApply(state: IHomePageState, subjectState: IUserSubject, index: number) {
@@ -175,6 +188,25 @@ class HomePage extends Component<{}, IHomePageState> {
     });
   }
 
+  private async onTIBTeacherClick(state: IHomePageState, teacher: ITeacher) {
+    if (!state.user || !state.currentSubject) {
+      return;
+    }
+    let sIndex = state.user.subjects.indexOf(state.currentSubject);
+    let data = Object.assign({}, state.currentSubject);
+    data.teacherId = teacher.uid;
+    data.teacherName = `${teacher.surname} ${teacher.name}`;
+    try {
+      await FetchHelper.patchUserSubject(state.user.uid, sIndex, data);
+      this.setState({
+        displayTIB: false,
+        user: await FetchHelper.fetchUser(state.user.uid)
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   private toggleTIB() {
     this.setState({
       displayTIB: !this.state.displayTIB
@@ -203,11 +235,18 @@ class HomePage extends Component<{}, IHomePageState> {
     }
     let subjectPage;
     if (this.state.currentSubject) {
+      // This variable is useless but typescript is dumb
+      // and for some reason cant assure that `currentSubject`
+      // will never be null. By doing this the error goes away.
+      let subject = this.state.currentSubject;
       subjectPage =
         <div className={`hp-prompt ${(this.state.displayDetails) ? '' : 'hidden'}`}>
           <SubjectPage
-            subject={this.state.currentSubject}
-            onAbort={() => this.toggleSP()} />
+            subject={subject}
+            onAbort={() => this.toggleSP()}
+            onAddGrade={() => this.onSubjectAddGrade(subject)}
+            onRemoveGrade={(g, i) => this.onSPRemoveGrade(this.state, g, i)}
+          />
         </div>;
     }
     let gradePrompt = <div className={`hp-prompt ${(this.state.displayGradePrompt) ? '' : 'hidden'}`}>
@@ -224,7 +263,9 @@ class HomePage extends Component<{}, IHomePageState> {
     let tib = <div className={`hp-prompt ${(this.state.displayTIB) ? '' : 'hidden'}`}>
       <TeacherInfobox
         teachers={this.state.teachersCache}
-        onAbort={() => this.toggleTIB()} />
+        onAbort={() => this.toggleTIB()}
+        onTeacherClick={(t) => this.onTIBTeacherClick(this.state, t)}
+      />
     </div>;
     return (
       <div className="hp-main-content">
@@ -241,7 +282,26 @@ class HomePage extends Component<{}, IHomePageState> {
           <div className="hp-card trend-panel hp-rise-opacity-in">
             <div className="hp-chart-wrapper">
               <div className="hp-chart">
-                <canvas id="hp-chartCanvas"></canvas>
+                {/* <canvas id="hp-chartCanvas"></canvas> */}
+                <AvgChart
+                  color="#007eff"
+                  dataset={{
+                    label: 'Media',
+                    backgroundColor: '#007eff',
+                    data: GradeHelper.getAllAvgs(this.state.user.subjects)
+                  }}
+                  labels={this.state.user.subjects.map(s => s.name)}
+                />
+                <TrendChart
+                  color="#007eff"
+                  dataset={{
+                    label: 'Andamento',
+                    backgroundColor: '#007eff',
+                    data: GradeHelper.getAllGradesByDate(this.state.user.subjects)
+                  }}
+                  labels={['Note']}
+                />
+
               </div>
             </div>
             <div className="hp-trend-data">
@@ -283,7 +343,12 @@ class HomePage extends Component<{}, IHomePageState> {
                 onAddGrade={() => this.onSubjectAddGrade(s)}
                 onRemoveGrade={(g, gi) => this.onSubjectRemoveGrade(this.state, i, gi)}
                 onApply={(state) => this.onSubjectApply(this.state, state, i)}
-                onTIBDisplay={() => this.toggleTIB()}
+                onTIBDisplay={() => {
+                  this.setState({
+                    currentSubject: s
+                  });
+                  this.toggleTIB();
+                }}
               />
             })}
             <AddSubject onClick={() => this.onSubjectAdd(this.state)} />
