@@ -62,7 +62,7 @@ export class LDAPClient {
   /**
    * The password used for the connection.
    */
-  readonly pw: string = "Baloo-2003";
+  readonly pw: string = "password";
 
   /**
    * Method for initialize the LDAP comunication. Call it at 
