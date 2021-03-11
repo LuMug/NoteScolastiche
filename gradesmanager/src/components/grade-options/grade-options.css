@@ -1,0 +1,60 @@
+.gp-main-content {
+  width: 100%;
+  max-width: 110px;
+  height: 30px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-gray);
+  border: 1px solid var(--dark-gray);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.gp-option-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+  background-color: var(--bg-gray);
+  text-align: center;
+  overflow: hidden;
+  cursor: pointer;
+  border-left: 1px solid var(--dark-gray);
+}
+
+.gp-option-wrapper:hover {
+  background-color: var(--dark-gray);
+}
+
+.gp-option-wrapper:active .gp-option {
+  transform: rotate(90deg);
+}
+
+.gp-option-wrapper:active .gp-option-delete {
+  transform: none;
+}
+
+.gp-option-wrapper:first-child {
+  border: none;
+}
+
+.gp-option-wrapper:nth-child(2):hover {
+  background-color: var(--red);
+}
+
+.gp-option {
+  width: 100%;
+  height: 100%;
+  transition: all 140ms ease-in-out;
+  content: url('./../../public/svg/gear.svg');
+}
+
+.gp-option:first-child {
+  border: none;
+}
+
+.gp-option-delete {
+  content: url('./../../public/svg/x.svg');
+  padding: 2px;
+}
