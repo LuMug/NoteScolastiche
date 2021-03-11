@@ -9,6 +9,8 @@ interface ITeacherInfoboxProps {
     teachers: ITeacher[];
 
     onAbort: () => void;
+
+    onTeacherClick: (teacher: ITeacher) => void;
 }
 
 interface ITeacherInfoboxState {
@@ -65,7 +67,11 @@ class TeacherInfobox extends Component<ITeacherInfoboxProps, ITeacherInfoboxStat
             content = <div className="tib-teachers-wrapper">
                 <div>
                     {teachers.map((t, i) => {
-                        return <div className="tib-teacher" key={i}>{t.surname} {t.name}</div>;
+                        return <div
+                            className="tib-teacher"
+                            key={i}
+                            onClick={() => this.props.onTeacherClick(t)}
+                        >{t.surname} {t.name}</div>;
                     })}
                 </div>
             </div>;
