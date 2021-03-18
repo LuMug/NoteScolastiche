@@ -2,7 +2,10 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["es6", "ES2015"],
+    "lib": [
+      "es6",
+      "ES2015"
+    ],
     "declaration": true,
     "outDir": "lib",
     "rootDir": "src",
@@ -16,6 +19,13 @@
     "noImplicitThis": true,
     "pretty": true
   },
-  "include": ["src", "src/index.ts"],
-  "exclude": ["lib", "node_modules", "**/__tests__/*"]
+  "include": [
+    "src",
+    "src/index.ts"
+  ],
+  "exclude": [
+    "lib",
+    "node_modules",
+    "**/__tests__/*"
+  ]
 }
