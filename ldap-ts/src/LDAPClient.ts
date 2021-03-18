@@ -36,14 +36,6 @@ export class LDAPClient {
     };
   }
 
-<<<<<<< HEAD
-=======
-  /**
-   * The password used for the connection.
-   */
-  readonly pw: string = "password";
->>>>>>> 25e4d13e3c19d5590efa3046f030b5fac36039be
-
   /**
    * Method for initialize the LDAP comunication. Call it at 
    * the beginning of the requests.
