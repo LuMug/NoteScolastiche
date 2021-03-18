@@ -279,12 +279,10 @@ class HomePage extends Component<{}, IHomePageState> {
             <h1 className="hp-welcome-text">Benvenuto, <span>{this.state.user.name}</span></h1>
           </div>
           <div className="hp-welcome-separator"></div>
-          <div className="hp-card trend-panel hp-rise-opacity-in">
+          <div className="hp-card hp-trend-panel hp-rise-opacity-in">
             <div className="hp-chart-wrapper">
               <div className="hp-chart">
-                {/* <canvas id="hp-chartCanvas"></canvas> */}
                 <AvgChart
-                  color="#007eff"
                   dataset={{
                     label: 'Media',
                     backgroundColor: '#007eff',
@@ -292,19 +290,18 @@ class HomePage extends Component<{}, IHomePageState> {
                   }}
                   labels={this.state.user.subjects.map(s => s.name)}
                 />
+              </div>
+              <div className="hp-chart">
                 <TrendChart
-                  color="#007eff"
                   dataset={{
                     label: 'Andamento',
-                    backgroundColor: '#007eff',
-                    data: GradeHelper.getAllGradesByDate(this.state.user.subjects)
+                    data: GradeHelper.getAllGradesValuesByDate(this.state.user.subjects)
                   }}
-                  labels={['Note']}
+                  labels={GradeHelper.getAllGradesByDate(this.state.user.subjects).map(g => GradeHelper.getDate(g))}
                 />
-
               </div>
             </div>
-            <div className="hp-trend-data">
+            {/* <div className="hp-trend-data">
               <div id="hp-section1" className="hp-trend-data-column">
                 <div className="hp-trend-data-column-title">Section 1</div>
                 <div className="hp-trend-data-mock"></div>
@@ -332,7 +329,7 @@ class HomePage extends Component<{}, IHomePageState> {
             <div className="hp-trend-data-page-switcher">
               <div id="hp-left"></div>
               <div id="hp-right"></div>
-            </div>
+            </div> */}
           </div>
           <div className="hp-subjects">
             {this.state.user.subjects.map((s: IUserSubject, i: number) => {
