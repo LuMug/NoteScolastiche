@@ -1,5 +1,5 @@
 import * as ldap from 'ldapjs';
-
+import { ILdapOptions } from './ILdapOptions';
 /**
  * This class represents an abstract model of a LDAP Client
  * which connects to an AD. Contains many methods useful
@@ -9,70 +9,43 @@ import * as ldap from 'ldapjs';
  * @version 04.03.2021
  */
 
-export class LDAPClient { 
+export class LDAPClient {
 
-  /**
-   * The possible paths of the AD.
-   */
-  readonly possiblePaths: string[] = [
-    "OU=docenti,DC=CPT,DC=local",
-    "OU=1,OU=LC,OU=C,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=2,OU=LC,OU=C,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=3,OU=LC,OU=C,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=1,OU=EM,OU=EM,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=2,OU=EM,OU=EM,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=3,OU=EM,OU=EM,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=4,OU=EM,OU=EM,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=1,OU=I,OU=IN,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=2,OU=I,OU=IN,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=3,OU=I,OU=IN,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=4,OU=I,OU=IN,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=1,OU=DA,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=2,OU=DA,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=3,OU=DA,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=4,OU=DA,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=1,OU=DEGC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=2,OU=DEGC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=3,OU=DEGC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=4,OU=DEGC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=1,OU=DI,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=2,OU=DI,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=3,OU=DI,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=4,OU=DI,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=1,OU=DIC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=2,OU=DIC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=3,OU=DIC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-    "OU=4,OU=DIC,OU=DT,OU=SAM,OU=allievi,DC=CPT,DC=local",
-  ];
+  private bindPath: string;
 
-  /**
-   * The LDAP client.
-   */
-  client: ldap.Client = ldap.createClient({
-    url: "ldap://sv-108-dc:389",
-  });
+  private bindPw: string;
 
-  /**
-   * The options for LDAP client.
-   */
-  opts = {
-    attributes: ["cn", "ou"],
-  };
+  private possiblePaths: string[];
 
-  /**
-   * The password used for the connection.
-   */
-  readonly pw: string = "Baloo-2003";
+  private bindURL: string;
+
+  private client: ldap.Client;
+
+  private opts: ldap.SearchOptions;
+
+  constructor(options: ILdapOptions) {
+    this.bindPath = options.bindPath;
+    this.bindPw = options.bindPw;
+    this.possiblePaths = options.possiblePaths;
+    this.bindURL = options.bindURL;
+    this.client = ldap.createClient({
+      url: this.bindURL
+    });
+    this.opts = {
+      attributes: ["cn", "ou"],
+    };
+  }
+
 
   /**
    * Method for initialize the LDAP comunication. Call it at 
    * the beginning of the requests.
    */
-  public start(): Promise<void> { 
-    return new Promise((resolve, reject) => {
+  public start(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
       this.client.bind(
-        "CN=nicola.ambrosetti,OU=3,OU=I,OU=IN,OU=SAM,OU=allievi,DC=CPT,DC=local",
-        this.pw,
+        this.bindPath,
+        this.bindPw,
         function (error) {
           if (error) {
             console.log("Error while connecting");
@@ -92,7 +65,7 @@ export class LDAPClient {
    * Method for end LDAP requests. Call it 
    * at the end of the requests.
    */
-  public end() { 
+  public end() {
     this.client.unbind();
   }
 
@@ -106,7 +79,7 @@ export class LDAPClient {
    * @param pw the password of the user
    */
   public _bind = async (client: ldap.Client, path: string, pw: string) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<boolean>((resolve, reject) => {
       client.bind(
         path,
         pw,
@@ -130,8 +103,8 @@ export class LDAPClient {
    * @param query the active active directory path
    * @param opts the options to be searched
    */
-  public queryAD = async (query: string, opts) => {
-    return new Promise((resolve, reject) => {
+  public queryAD = async (query: string, opts: ldap.SearchOptions) => {
+    return new Promise<string>((resolve, reject) => {
       //console.log(`input: ${query}`);
       this.client.search(query, opts, (err, res) => {
         if (err) {
@@ -150,7 +123,7 @@ export class LDAPClient {
           reject(null);
           return;
         });
-        res.on("end", function (result) {});
+        res.on("end", function (result) { });
       });
     });
   };
@@ -166,12 +139,12 @@ export class LDAPClient {
     let opts = {};
     let out = null;
     //console.log(this.possiblePaths.length);
-    
+
     for (let i = 0; i < this.possiblePaths.length; i++) {
       let cn = `CN=${name},`;
       let query = cn + this.possiblePaths[i];
       //console.log(query);
-      
+
       try {
         out = await this.queryAD(query, opts);
         if (out == undefined) {
@@ -201,34 +174,34 @@ export class LDAPClient {
    * @param password the password of the user
    */
   public checkUserCredentials = async (nome: string, password: string) => {
-  let userclient: ldap.Client;
-  if (nome.trim() != '' && password.trim() != '') {
-    //name and password existing
-    userclient = ldap.createClient({
-      url: "ldap://sv-108-dc:389",
-    });
-    
-    let user = await this.getUserPath(nome);
-    console.log("user: " + user)
-    if (user != undefined) {
-      //user exists in AD
-      let __out;
-      try {
-        __out = await this._bind(userclient, user, password);
-      } catch (err) {
-        //console.log(3);
+    let userclient: ldap.Client;
+    if (nome.trim() != '' && password.trim() != '') {
+      //name and password existing
+      userclient = ldap.createClient({
+        url: this.bindURL,
+      });
+
+      let user = await this.getUserPath(nome);
+      console.log("user: " + user)
+      if (user != undefined) {
+        //user exists in AD
+        let __out;
+        try {
+          __out = await this._bind(userclient, user, password);
+        } catch (err) {
+          //console.log(3);
+          userclient.unbind();
+          return false;
+        }
+        userclient.unbind();
+        return __out;
+      } else {
         userclient.unbind();
         return false;
       }
-      userclient.unbind();
-      return __out;
-    }else {
-      userclient.unbind();
+    } else {
+      //username or password equals ""
       return false;
     }
-  }else {
-    //username or password equals ""
-    return false;
-  }
-};
+  };
 }
