@@ -103,30 +103,29 @@ h1 {
 .hp-trend-panel {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  /* max-height: 450px; */
-  height: 450px;
+  height: 350px;
   max-width: 1763px;
   margin: 0 auto;
 }
 
 .hp-chart-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
-  max-width: 630px;
-  max-height: 430px;
   padding: 15px;
+  overflow: hidden;
 }
 
 .hp-chart {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+  width: 50%;
   height: 100%;
+  max-height: 450px;
 }
 
 .hp-trend-data {
@@ -229,15 +228,6 @@ h1 {
 }
 
 @media (max-width: 1600px) {
-  .hp-trend-panel {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
-    max-height: 800px;
-    height: 800px;
-  }
-
   .hp-trend-data {
     height: 56%;
   }
