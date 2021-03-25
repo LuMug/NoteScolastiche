@@ -20,7 +20,7 @@ router.get('/groups/:uid', async (req: Request, res: Response) => {
   }
   let group: IGroup | null = await MongoHelper.getGroup(uid);
   if (group) {
-    return res.status(201).json(group);
+    return res.status(200).json(group);
   } else {
     res.status(400).json({
       error: {
@@ -45,7 +45,7 @@ router.post('/groups', async (req: Request, res: Response) => {
   try {
     await MongoHelper.addGroup(group);
   } catch (err) {
-    return res.status(409).json(err);
+    return res.status(500).json(err);
   }
   res.status(201).json(group);
 });

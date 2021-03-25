@@ -20,7 +20,7 @@ router.get('/teachers/:uid', async (req: Request, res: Response) => {
   }
   let teacher: ITeacher | null = await MongoHelper.getTeacher(uid);
   if (teacher) {
-    return res.status(201).json(teacher);
+    return res.status(200).json(teacher);
   } else {
     res.status(400).json({
       error: {
@@ -65,13 +65,13 @@ router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) =>
     try {
       await MongoHelper.addSubjectId(uid, ...input);
     } catch (err) {
-      return res.status(400).json({ error: { message: err } });
+      return res.status(500).json({ error: { message: err } });
     }
   } else if (!isNaN(parseInt(input))) {
     try {
       await MongoHelper.addSubjectId(uid, input);
     } catch (err) {
-      return res.status(400).json({ error: { message: err } });
+      return res.status(500).json({ error: { message: err } });
     }
   } else {
     let err: IError = {
@@ -81,7 +81,7 @@ router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) =>
     }
     return res.status(400).json({ error: err });
   }
-  return res.status(204).json();
+  return res.status(201).json();
 });
 
 router.patch('/teachers/:uid', async (req: Request, res: Response) => {
