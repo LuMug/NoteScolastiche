@@ -6,6 +6,7 @@ import TeachersRoute from './routes/teachers';
 import UsersRoute from './routes/users';
 import AuthenticationUser from './routes/authentications';
 // import SubjectsRoute from './routes/subjects';
+import authMiddleware, { isLoggedIn } from './middlewares/auth';
 
 const MAIN_ROUTE: string = '/api/v1';
 const app = express();
@@ -14,6 +15,9 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(authMiddleware);
+app.use(isLoggedIn);
 
 app.use(MAIN_ROUTE, TeachersRoute);
 app.use(MAIN_ROUTE, UsersRoute);
