@@ -1,5 +1,7 @@
+import GradeHelper from '../../helpers/GradeHelper';
 import React, { Component, ReactNode } from 'react';
 import SimpleTextInput from '../simple-text-input/SimpleTextInput';
+import { IGrade } from '../../@types';
 import './grade-prompt.css';
 
 interface IGradePromptProps {

@@ -11,8 +11,8 @@ export default class GradeHelper {
         if (!separator) {
             separator = '.';
         }
-        let d = date.getDay().toString();
-        let m = date.getMonth().toString();
+        let d = date.getDate().toString();
+        let m = (date.getMonth() + 1).toString();
         let y = date.getFullYear().toString();
         d = (d.length == 1) ? `0${d}` : d;
         m = (m.length == 1) ? `0${m}` : m;
@@ -36,8 +36,6 @@ export default class GradeHelper {
         subjects.forEach(s => {
             s.grades.forEach(g => { grades.push(g.value); });
         });
-        console.log(grades);
-
         return grades;
     }
 
@@ -53,7 +51,11 @@ export default class GradeHelper {
                     ? -1
                     : 0
         });
-        return grades.map(g => g.value);
+        return grades;
+    }
+
+    public static getAllGradesValuesByDate(subjects: IUserSubject[]) {
+        return GradeHelper.getAllGradesByDate(subjects).map(g => g.value);
     }
 
     public static getAllAvgs(subjects: IUserSubject[]) {

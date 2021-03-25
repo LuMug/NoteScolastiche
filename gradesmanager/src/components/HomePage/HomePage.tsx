@@ -1,23 +1,28 @@
-import * as CONSTANTS from './../../util/constants';
 import AddSubject from '../add-subject/AddSubject';
 import AvgChart from '../avg-chart/AvgChart';
 import FetchHelper from '../../helpers/FetchHelper';
 import GradeHelper from '../../helpers/GradeHelper';
 import GradePrompt from '../grade-prompt/GradePrompt';
 import LoadingPage from '../LoadingPage/LoadingPage';
-import Nav from './../nav/Nav';
-import React, { Component, ReactNode } from 'react';
+import Page from '../Page/Page';
 import Subject from '../subject/Subject';
 import SubjectPage from '../SubjectPage/SubjectPage';
 import TeacherInfobox from '../teacher-infobox/TeacherInfobox';
 import TrendChart from '../trend-chart/TrendChart';
+import { Component, ReactNode, useState } from 'react';
 import {
   IGrade,
   ITeacher,
   IUser,
   IUserSubject
   } from '../../@types';
+import { RouterProps } from 'react-router';
 import './home-page.css';
+
+interface IHomePageProps {
+
+  uuid: number;
+}
 
 interface IHomePageState {
 
@@ -38,9 +43,10 @@ interface IHomePageState {
   displayTIB: boolean;
 }
 
-class HomePage extends Component<{}, IHomePageState> {
 
-  constructor(props: {}) {
+class HomePage extends Component<IHomePageProps, IHomePageState> {
+
+  constructor(props: IHomePageProps) {
     super(props);
     this.state = {
       loading: true,
@@ -58,7 +64,7 @@ class HomePage extends Component<{}, IHomePageState> {
     let data: IUser;
     let teachers: ITeacher[];
     try {
-      data = await FetchHelper.fetchUser(0);
+      data = await FetchHelper.fetchUser(this.props.uuid);
       teachers = await FetchHelper.fetchAllTeachers();
     } catch {
       this.setState({
@@ -219,12 +225,12 @@ class HomePage extends Component<{}, IHomePageState> {
     });
   }
 
-  private async onListSubjectClick(state: IHomePageState, index: number) {
+  private async onListSubjectClick(state: IHomePageState, us: IUserSubject, index?: number) {
     if (state.user) {
-      let us = state.user.subjects[index];
+      let userSub = (!us && index) ? state.user.subjects[index] : us;
       this.setState({
         displayDetails: true,
-        currentSubject: us
+        currentSubject: userSub
       });
     }
   }
@@ -233,6 +239,7 @@ class HomePage extends Component<{}, IHomePageState> {
     if (this.state.loading || this.state.user == null) {
       return <LoadingPage unavailable={this.state.unavailable} />;
     }
+
     let subjectPage;
     if (this.state.currentSubject) {
       // This variable is useless but typescript is dumb
@@ -240,16 +247,14 @@ class HomePage extends Component<{}, IHomePageState> {
       // will never be null. By doing this the error goes away.
       let subject = this.state.currentSubject;
       subjectPage =
-        <div className={`hp-prompt ${(this.state.displayDetails) ? '' : 'hidden'}`}>
-          <SubjectPage
-            subject={subject}
-            onAbort={() => this.toggleSP()}
-            onAddGrade={() => this.onSubjectAddGrade(subject)}
-            onRemoveGrade={(g, i) => this.onSPRemoveGrade(this.state, g, i)}
-          />
-        </div>;
+        <SubjectPage
+          subject={subject}
+          onAbort={() => this.toggleSP()}
+          onAddGrade={(v, w, d) => this.onGradePromptSubmit(this.state, v, w, d)}
+          onRemoveGrade={(g, i) => this.onSPRemoveGrade(this.state, g, i)}
+        />;
     }
-    let gradePrompt = <div className={`hp-prompt ${(this.state.displayGradePrompt) ? '' : 'hidden'}`}>
+    let gradePrompt =
       <GradePrompt
         title={`${this.state.currentSubject?.name}`}
         onAbort={() => {
@@ -258,22 +263,15 @@ class HomePage extends Component<{}, IHomePageState> {
         onSubmit={
           (value, weight, date) => this.onGradePromptSubmit(this.state, value, weight, date)
         }
-      />
-    </div>;
-    let tib = <div className={`hp-prompt ${(this.state.displayTIB) ? '' : 'hidden'}`}>
+      />;
+    let tib =
       <TeacherInfobox
         teachers={this.state.teachersCache}
         onAbort={() => this.toggleTIB()}
         onTeacherClick={(t) => this.onTIBTeacherClick(this.state, t)}
-      />
-    </div>;
-    return (
+      />;
+    let content =
       <div className="hp-main-content">
-        <Nav
-          routes={CONSTANTS.ROUTES}
-          entries={this.state.user.subjects.map(s => s.name)}
-          onEntryClick={(i) => this.onListSubjectClick(this.state, i)}
-        />
         <div className="hp-content-page">
           <div className="hp-welcome-panel">
             <h1 className="hp-welcome-text">Benvenuto, <span>{this.state.user.name}</span></h1>
@@ -301,35 +299,6 @@ class HomePage extends Component<{}, IHomePageState> {
                 />
               </div>
             </div>
-            {/* <div className="hp-trend-data">
-              <div id="hp-section1" className="hp-trend-data-column">
-                <div className="hp-trend-data-column-title">Section 1</div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-              </div>
-              <div className="hp-trend-data-separator"></div>
-              <div id="hp-section2" className="hp-trend-data-column">
-                <div className="hp-trend-data-column-title">Section 2</div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-                <div className="hp-trend-data-mock"></div>
-              </div>
-            </div>
-            <div className="hp-trend-data-page-switcher">
-              <div id="hp-left"></div>
-              <div id="hp-right"></div>
-            </div> */}
           </div>
           <div className="hp-subjects">
             {this.state.user.subjects.map((s: IUserSubject, i: number) => {
@@ -351,10 +320,30 @@ class HomePage extends Component<{}, IHomePageState> {
             <AddSubject onClick={() => this.onSubjectAdd(this.state)} />
           </div>
         </div>
-        {subjectPage}
-        {gradePrompt}
-        {tib}
-      </div>
+
+      </div>;
+    let activePrompt;
+    if (this.state.displayDetails) {
+      activePrompt = subjectPage;
+    } else if (this.state.displayGradePrompt) {
+      activePrompt = gradePrompt;
+    } else if (this.state.displayTIB) {
+      activePrompt = tib;
+    } else {
+      activePrompt = gradePrompt;
+    }
+
+    return (
+      <Page
+        displayPrompt={
+          this.state.displayDetails
+          || this.state.displayGradePrompt
+          || this.state.displayTIB}
+        user={this.state.user}
+        promptElement={activePrompt}
+        content={content}
+        onListSubjectClick={(us) => this.onListSubjectClick(this.state, us)}
+      />
     );
   }
 }

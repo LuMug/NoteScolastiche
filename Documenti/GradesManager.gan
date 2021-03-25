@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2020-12-24" view-index="0" gantt-divider-location="413" resource-divider-location="300" version="2.8.11" locale="it">
+<?xml version="1.0" encoding="UTF-8"?><project name="Untitled Gantt Project" company="" webLink="http://" view-date="2021-01-01" view-index="0" gantt-divider-location="276" resource-divider-location="300" version="2.8.11" locale="it">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd3" name="Nome" width="220" order="0"/>
-        <field id="tpd4" name="Data d'inizio" width="95" order="1"/>
-        <field id="tpd5" name="Data di fine" width="94" order="2"/>
+    <view zooming-state="default:8" id="gantt-chart">
+        <field id="tpd3" name="Nome" width="143" order="0"/>
+        <field id="tpd4" name="Data d'inizio" width="65" order="1"/>
+        <field id="tpd5" name="Data di fine" width="64" order="2"/>
         <option id="color.recent">
             <![CDATA[#ff66ff #ff0099 #ffff33 #ffcc00 #33ff33 #00cc66 #ff6600 #cc3300 #ff3333]]>
         </option>
@@ -82,7 +82,7 @@
         <task id="31" name="Pianificazione" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-01-14" duration="2" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="false">
             <task id="32" name="Costruzione Gantt" color="#8cb6ce" meeting="false" start="2021-01-14" duration="2" complete="0" thirdDate="2021-01-28" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="34" name="Implementazione" color="#8cb6ce" meeting="false" start="2021-01-28" duration="1" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
+        <task id="34" name="Implementazione" color="#8cb6ce" meeting="false" start="2021-01-28" duration="16" complete="0" thirdDate="2021-01-14" thirdDate-constraint="0" expand="true"/>
         <task id="35" name="Fase Finale" color="#8cb6ce" shape="1,0,1,0,0,1,0,1,1,0,1,0,0,1,0,1" meeting="false" start="2021-05-06" duration="3" complete="0" thirdDate="2021-05-06" thirdDate-constraint="0" expand="false">
             <task id="36" name="Testing" color="#8cb6ce" meeting="false" start="2021-05-06" duration="3" complete="0" thirdDate="2021-02-04" thirdDate-constraint="0" expand="true"/>
             <task id="37" name="Consegna" color="#8cb6ce" meeting="true" start="2021-05-20" duration="0" complete="0" thirdDate="2021-02-04" thirdDate-constraint="0" expand="true"/>

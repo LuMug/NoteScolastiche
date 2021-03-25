@@ -1,0 +1,46 @@
+.pa-main-content {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.pa-content-page {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-gray);
+  /* background-color: #fff; */
+  overflow: auto;
+  padding: 20px;
+  /* padding-bottom: 0px; */
+}
+
+/* width */
+.pa-content-page::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.pa-content-page::-webkit-scrollbar-track {
+  background: #343434;
+}
+
+/* Handle */
+.pa-content-page::-webkit-scrollbar-thumb {
+  background: #505050;
+}
+
+/* Handle on hover */
+.pa-content-page::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.pa-prompt {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.777);
+}

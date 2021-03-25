@@ -8,6 +8,8 @@ export interface ITextInputProps {
     placeHolder: string;
 
     toolTipText: string;
+
+    onChange: (text: string) => void;
 }
 
 export default function TextInput(props: ITextInputProps) {
@@ -17,6 +19,7 @@ export default function TextInput(props: ITextInputProps) {
         spellCheck="false"
         title={props.toolTipText}
         pattern=""
+        onChange={(e) => props.onChange(e.target.value)}
     />
     return (
         <div className="ti-input">

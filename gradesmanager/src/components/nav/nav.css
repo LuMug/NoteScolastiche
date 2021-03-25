@@ -69,6 +69,7 @@
   padding: 8px 15px;
   cursor: pointer;
   transition: all 120ms ease-out;
+  text-decoration: none;
 }
 
 .n-ruote-wrapper:active {

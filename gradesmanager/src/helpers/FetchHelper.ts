@@ -12,22 +12,23 @@ export default class FetchHelper {
 
     private static URL = API_URL.substr(0, API_URL.length - 1);
 
-    public static async fetch(route: string, method: Methods = 'GET', body?: any) {
-        if (route.charAt(0) != '/') {
-            throw 'Invalid route. Must begin with /';
-        }
-        route = route.replace(FetchHelper.URL, '');
-        const url = FetchHelper.URL + route;
+    public static async fetchGlobal(url: string, method: Methods = 'GET', body?: RequestInit, withToken?: boolean) {
+        withToken = (withToken != undefined) ? false : withToken;
         let res;
+        let headers: any;
         let opts: RequestInit = {
             method: method
         };
         if (body) {
             opts.body = JSON.stringify(body);
-            opts.headers = {
+            headers = {
                 'Content-Type': 'application/json'
             }
         }
+        if (withToken) {
+            headers["Authorization"] = process.env.AUTH_TOKEN;
+        }
+        opts.headers = headers;
         try {
             res = await fetch(url, opts);
         } catch (err) {
@@ -40,6 +41,19 @@ export default class FetchHelper {
             throw data;
         }
         return data;
+    }
+
+    public static async fetch(route: string, method: Methods = 'GET', body?: any) {
+        if (route.charAt(0) != '/') {
+            throw 'Invalid route. Must begin with /';
+        }
+        route = route.replace(FetchHelper.URL, '');
+        const url = FetchHelper.URL + route;
+        try {
+            return await FetchHelper.fetchGlobal(url, method, body, true);
+        } catch (err) {
+            throw err;
+        }
     }
 
     public static async fetchUser(uid: number) {

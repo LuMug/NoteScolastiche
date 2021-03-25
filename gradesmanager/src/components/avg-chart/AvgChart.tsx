@@ -12,8 +12,6 @@ export type AvgChartDataSet = {
 
 interface IAvgChartProps {
 
-    color: string;
-
     labels: string[];
 
     dataset: AvgChartDataSet;
@@ -23,15 +21,25 @@ class AvgChart extends Component<IAvgChartProps> {
 
     private chartRef: any;
 
-    private myChart?: Chart;
+    private chart: Chart | null;
 
     constructor(props: IAvgChartProps) {
         super(props);
         this.chartRef = React.createRef();
+        this.chart = null;
+    }
+
+    componentDidUpdate() {
+        this.chart = this.buildChart();
+        this.chart.update();
     }
 
     componentDidMount() {
-        this.myChart = new Chart(this.chartRef.current, {
+        this.chart = this.buildChart();
+    }
+
+    private buildChart() {
+        return new Chart(this.chartRef.current, {
             type: 'bar',
             data: {
                 labels: this.props.labels,
@@ -46,8 +54,11 @@ class AvgChart extends Component<IAvgChartProps> {
                                 max: 6
                             }
                         }
-                    ]
-                }
+                    ],
+                    unitStepSize: 0.25
+                },
+                maintainAspectRatio: false,
+
             }
         });
     }
