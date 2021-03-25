@@ -2,8 +2,9 @@ import AddGradeButton from '../add-grade-btn/AddGradeButton';
 import FetchHelper from '../../helpers/FetchHelper';
 import GradeHelper from '../../helpers/GradeHelper';
 import GradeOptions from '../grade-options/GradeOptions';
+import GradePrompt from '../grade-prompt/GradePrompt';
+import React, { Component, ReactNode } from 'react';
 import Subject from '../subject/Subject';
-import { Component, ReactNode } from 'react';
 import { IGrade, ITeacher, IUserSubject } from '../../@types';
 import './subject-page.css';
 
@@ -13,7 +14,7 @@ interface ISubjectPageProps {
 
     onAbort: () => void;
 
-    onAddGrade: () => void;
+    onAddGrade: (value: number, weight: number, date: Date) => void;
 
     onEditGrade?: (grade: IGrade, index: number) => void;
 
@@ -29,6 +30,8 @@ interface ISubjectPageState {
     teacher?: ITeacher;
 
     teacherFullname?: string;
+
+    displayPrompt: boolean;
 }
 
 class SubjectPage extends Component<ISubjectPageProps, ISubjectPageState> {
@@ -37,7 +40,8 @@ class SubjectPage extends Component<ISubjectPageProps, ISubjectPageState> {
         super(props);
         this.state = {
             loading: true,
-            subject: props.subject
+            subject: props.subject,
+            displayPrompt: false
         };
     }
 
@@ -82,6 +86,25 @@ class SubjectPage extends Component<ISubjectPageProps, ISubjectPageState> {
         let grades = this.state.subject.grades;
         let avg = Subject.getSubjectAvg(this.state.subject);
         let testPlural = (grades.length > 1) ? 's' : '';
+        let gradePrompt =
+            <div className={(this.state.displayPrompt) ? 'sp-prompt' : 'hidden'} >
+                <GradePrompt
+                    title={`${this.state.subject.name}`}
+                    onAbort={() => {
+                        this.setState({ displayPrompt: false });
+                    }}
+                    onSubmit={
+                        (value, weight, date) => {
+                            this.props.onAddGrade(value, weight, date);
+                            // this.state.subject.grades.push({
+                            //     date: date.toISOString(),
+                            //     value: value,
+                            //     weight: weight
+                            // });
+                        }
+                    }
+                />
+            </div>;
         return (
             <div className="sp-main-content">
                 <div className="sp-abort noselect" onClick={() => this.props.onAbort()}></div>
@@ -136,9 +159,14 @@ class SubjectPage extends Component<ISubjectPageProps, ISubjectPageState> {
                         </table>
                     </div>
                     <div className="sp-add-grade-wrapper">
-                        <AddGradeButton onClick={() => this.props.onAddGrade()} />
+                        <AddGradeButton onClick={() => {
+                            this.setState({
+                                displayPrompt: !this.state.displayPrompt
+                            });
+                        }} />
                     </div>
                 </div>
+                {gradePrompt}
             </div >
         );
     }
