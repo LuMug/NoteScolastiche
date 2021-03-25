@@ -80,7 +80,7 @@ Lo scopo del progetto è di creare un gestore delle note scolastiche per gli all
 Moltissime app offrono già la possibilità di organizzare le proprie note scolastiche e altro. Spesso però sono per singoli utenti e sono unicamente per dispositivi portatili come i cellulari. Abbiamo quindi l'obiettivo di ampliare queste funzionalita' e portare questo tipo di applicativo ad un altro livello. Grazie all'AD della scuola si potranno ottenere le informazioni di login di ogni allievo, docente e persona registrata nell'infrastruttura scolastica. Ogni utente, che deve essere registrato nella scuola, avrà quindi la possibilità di gestire le proprie note scolastiche che saranno accessibili ovunque grazie all'account di scuola. Per poter usare quest'app sono richieste delle competenze base sull'uso del computer e di un sito web.
 
 ### Analisi e specifica dei requisiti
-
+In base a quanto discusso in classe con il mandante, abbiamo ricavato i seguenti requisiti:
   | **ID**  |**Nome**			|**Priorità**|**Vers**|**Note**  |
   |---------|------------|--------|----|------|
   | Req - 0 | App web | 1 | 1.0 |  |
@@ -137,6 +137,12 @@ Prima di iniziare in maniera effettiva a lavorare sulla parte pratica del proget
 Il gruppo ha quindi deciso di utilizzare diverse metodologie per pianificare al meglio lo svolgimento del progetto.
 La pianificazione del progetto è stata quindi fatta utilizzando un diagramma di Gannt, che permette di suddividere il progetto in fasi, con diverse importanze e priorità.
 Il secondo strumento che il gruppo ha deciso di utilizzare è l'applicativo web Trello, che ti permette di suddividere in più fasi tutto ciò che bisogna fare sul arco del progetto, assegnandoli delle etichette, delle categorie, degli utenti e delle cartelle.
+
+![Gannt](./assets/Gantt.png)
+Questa è stata la nostra progettazione iniziale. A sinistra possiamo vedere le attività nelle rispettive fasi e a destra i tempi previsti.
+
+![Gannt](./assets/Trello.jpg)
+In modo da poter gestire il progetto in un modo più dinamico, abbiamo provveduto a creare una bacheca in Trello, in modo da avere tutti un punto di riferimento rispetto ai tempi. Inoltre ad ogni attività, abbiamo assegnato il rispettivo responsabile all'interno del gruppo.
 
 ### Analisi dei mezzi
 Questi sono i rispettivi mezzi che abbiamo utilizzato:<br>
