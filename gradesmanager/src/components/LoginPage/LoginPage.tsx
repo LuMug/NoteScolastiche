@@ -1,10 +1,28 @@
 import AboutButton from '../about-button/AboutButton';
+import FetchHelper from '../../helpers/FetchHelper';
 import GradientButton from '../gradient-button/GradientButton';
 import TextInput from '../text-input/TextInput';
+import { Redirect } from 'react-router';
+import { useEffect, useState } from 'react';
 import './LoginPage.css';
 
+const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [pw, setPw] = useState('');
 
-function test() {
+  const onClick = async () => {
+    // check username and pw
+    // authenticate...
+
+    // testing code
+    let index = parseInt(username);
+    if (isNaN(index)) {
+      // show errors
+      alert('bad');
+      return;
+    }
+  }
+
   return (
     <div className="lp-page">
       <div className="lp-main-content intro">
@@ -15,11 +33,19 @@ function test() {
             </div>
           </div>
           <div className="lp-left-bottom">
-            <TextInput inputType="text" placeHolder="Username" toolTipText="Inserisci il nome utente della scuola" />
-            <TextInput inputType="password" placeHolder="Password" toolTipText="Inserisci la password di scuola" />
+            <TextInput
+              inputType="text"
+              placeHolder="Username"
+              toolTipText="Inserisci il nome utente della scuola"
+              onChange={(text) => setUsername(text)} />
+            <TextInput
+              inputType="password"
+              placeHolder="Password"
+              toolTipText="Inserisci la password di scuola"
+              onChange={(text) => setPw(text)} />
           </div>
           <div className="lp-left-botbot">
-            <GradientButton />
+            <GradientButton onClick={() => onClick()} />
           </div>
         </div>
         <div className="lp-right-section">
@@ -59,4 +85,4 @@ function test() {
   );
 }
 
-export default test;
+export default LoginPage;
