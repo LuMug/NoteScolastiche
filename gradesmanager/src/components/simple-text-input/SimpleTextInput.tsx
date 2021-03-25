@@ -1,10 +1,11 @@
+import GradeHelper from '../../helpers/GradeHelper';
 import { Component } from 'react';
 import { ITextInputProps } from '../text-input/TextInput';
 import './simple-text-input.css';
 
 type STIOptions = 'text' | 'number' | 'password' | 'date';
 
-interface ISimpleTextInputProps<T extends STIOptions> extends Omit<ITextInputProps, 'inputType'> {
+interface ISimpleTextInputProps<T extends STIOptions> extends Omit<Omit<ITextInputProps, 'inputType'>, 'onChange'> {
 
     value?: T extends 'number'
     ? number
@@ -69,14 +70,13 @@ export default class SimpleTextInput<T extends STIOptions> extends Component<ISi
             />;
         } else if (typeof this.props.value == 'object') {
             let date = new Date(this.state.value as string);
-            let d = date.getDay().toString().padStart(2, '0');
-            let m = date.getMonth().toString().padStart(2, '0');
+            let dateComps = GradeHelper.getDate({ date: date.toISOString(), value: -1, weight: -1 }).split('.');
             input = <input
                 type={this.props.forceType || "date"}
                 autoComplete="off"
                 spellCheck="false"
                 title={this.props.toolTipText}
-                defaultValue={`${date.getFullYear()}-${m}-${d}`}
+                defaultValue={`${dateComps[2]}-${dateComps[1]}-${dateComps[0]}`}
                 onChange={(e) => this.onChange(e.target.valueAsDate)}
             />;
         }
