@@ -226,7 +226,11 @@ export class MongoHelper {
 		return new Promise<IUser | null>(async (resolve, reject) => {
 			try {
 				let data = await this.getUsers().findOne({ uid: uid });
-				delete (data as any)._id;
+				if (data) {
+					delete (data as any)._id;
+				} else {
+					console.error(`Illegal fetch: No user with uid: ${uid}`);
+				}
 				resolve(data);
 				return;
 			} catch (err) {
