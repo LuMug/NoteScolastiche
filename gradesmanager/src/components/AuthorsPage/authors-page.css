@@ -1,0 +1,33 @@
+.aup-main-content {
+  width: 90%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin: auto;
+}
+
+.aup-author-panel {
+  margin: 1rem;
+  opacity: 0;
+}
+
+.aup-author-panel:nth-child(1) {
+  animation: rise-up 350ms ease-in-out forwards,
+    opacity-in 220ms ease-in-out forwards;
+}
+
+.aup-author-panel:nth-child(2) {
+  animation: rise-up 350ms 200ms ease-in-out forwards,
+    opacity-in 220ms 200ms ease-in-out forwards;
+}
+
+.aup-author-panel:nth-child(3) {
+  animation: rise-up 350ms 400ms ease-in-out forwards,
+    opacity-in 220ms 400ms ease-in-out forwards;
+}
+
+.aup-author-panel:nth-child(4) {
+  animation: rise-up 350ms 600ms ease-in-out forwards,
+    opacity-in 220ms 600ms ease-in-out forwards;
+}
