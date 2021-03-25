@@ -81,7 +81,7 @@ export class MongoHelper {
 	private static async add<T extends CollectionTypes = IUser>(collName: Collections, data: Omit<T, 'uid'>): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			let withUID: T = Object.assign({}, data as unknown as T);
-			withUID.uid = await this.getNextUIDFor(collName);
+			withUID.uid = this.getUUID();
 			try {
 				await this.getCollection(collName).insertOne(withUID);
 			} catch (err) {
@@ -367,16 +367,11 @@ export class MongoHelper {
 	 * 
 	 * @param collection the collection from wich to get the value
 	 */
-	public static async getNextUIDFor(collection: Collections): Promise<number> {
-		return new Promise<number>(async (resolve, reject) => {
-			let coll: Collection<CollectionTypes> = this.getCollection(collection);
-			try {
-				resolve(await coll.countDocuments({}));
-			} catch (err) {
-				reject(err);
-				return;
-			}
-		});
+	public static getUUID(): number {
+		let now = Date.now();
+		let str = now.toString();
+		now = parseInt(str.substring(str.length - 6));
+		return now;
 	}
 
 	/**
