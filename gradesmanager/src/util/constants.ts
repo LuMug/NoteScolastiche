@@ -8,11 +8,11 @@ export const ROUTES: IRouteDescritor[] = [
         path: '/'
     },
     {
-        name: 'About',
-        path: '/about'
+        name: 'Autori',
+        path: '/authors'
     },
     {
         name: 'Logout',
-        path: '/logout'
+        path: '/login'
     },
 ];
