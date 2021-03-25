@@ -54,19 +54,19 @@
 Questo progetto è realizzato da Ambrosetti Nicola, Previtali Aris, Trentin Francisco e Viola Francisco, della classe I3A.
 Il progetto in questione coinvolge inoltre il docente Luca Muggiasca, che si è occupato di svolgere il ruole di mandate e di docente responsabile, docente che si occupa di assistere gli allievi durante lo svolgimento del progetto.
 Il progetto viene realizzati a partire dal 14 gennaio 2021 fino al dd/mm/yyyy, presso la SAMT (Scuola D'Arti E Mestieri Trevano), nella sezione informatica, per il Modulo 306 + Progetti.
-Durante questo progetto, oltre alla realizzazione verrano tenuti dei diari e una documentazione, che permetterano di mostrare come e quando gli allievi hanno svolto le determinate attività, nelle diverse sessioni di lavoro.
-Alla fine del progetto verrà svolta una presentaazione da parte di tutti gli individui del gruppo, utile per mostrare il risultato finale ottenuto nei mesi di lavoro.
+Durante questo progetto, oltre alla realizzazione verranno tenuti dei diari e una documentazione, che permetteranno di mostrare come e quando gli allievi hanno svolto le determinate attività, nelle diverse sessioni di lavoro.
+Alla fine del progetto verrà svolta una presentazione da parte di tutti gli individui del gruppo, utile per mostrare il risultato finale ottenuto nei mesi di lavoro.
 
 ### Abstract
 
 Nel corso degli anni, la tecnologia e l'informatica han permesso di sviluppare tanti applicativi utili in tutti i settori immaginabili.
 Per il settore scolastico sono state sviluppate delle applicazioni che permettono di marcare tutte le note ottenute nel corso del semestre, filtrandole per materie, docenti o altri parametri ancora.
 Nessuno di questi applicativi hanno però la possibilità di gestire gli utenti di un'intera scuola, permettendo agli utenti di poter accedere in qualsiasi momento, in un qualsiasi luogo, ottenendo tutti le proprie note.
-Questo è infatti lo scopo del nostro progetto, fare in modo che gli utenti, grazie al nome utente e la password usato per l'account dei PC della scuola vengano utilizazti sul applicativo WEB, così che le loro note sono sempre sincronizzate e disponibili, senza dover creare un nuovo account per un ennesimo nuovo servizio.
+Questo è infatti lo scopo del nostro progetto, fare in modo che gli utenti, grazie al nome utente e la password usato per l'account dei PC della scuola vengano utilizzati sul applicativo WEB, così che le loro note sono sempre sincronizzate e disponibili, senza dover creare un nuovo account per un ennesimo nuovo servizio.
 
   E’ una breve e accurata rappresentazione dei contenuti di un documento,
   senza notazioni critiche o valutazioni. Lo scopo di un abstract efficace
-  dovrebbe essere quello di far conoscere all’utente il contenuto di base
+  dovrebbe essere quello di far conoscere all'utente il contenuto di base
   di un documento e metterlo nella condizione di decidere se risponde ai
   suoi interessi e se è opportuno il ricorso al documento originale.
 
@@ -80,7 +80,7 @@ Questo è infatti lo scopo del nostro progetto, fare in modo che gli utenti, gra
       avere se portato a termine con successo.
 
   -   **Approccio/Metodi**: Come ho ottenuto dei progressi? Come ho
-      risolto il problema (tecniche…)? Quale è stata l’entità del mio
+      risolto il problema (tecniche…)? Quale è stata l'entità del mio
       lavoro? Che fattori importanti controllo, ignoro o misuro?
 
   -   **Risultati**: Quale è la risposta? Quali sono i risultati? Quanto è
@@ -121,7 +121,7 @@ Moltissime app offrono già la possibilità di organizzare le proprie note scola
   | Req - 2 | Utente Allievo | 1 | 1.0 |  |
   | Req - 2.1 | Pagina andamento | 1| 1.0| |
   | Req - 3 | Utente docente | 1 | 1.0| |
-  | Req - 3.1 | Possibiltà di vedere tutti gli allievi e le loro note | 1 | 1.0 | |
+  | Req - 3.1 | Possibilità di vedere tutti gli allievi e le loro note | 1 | 1.0 | |
   | Req - 4 | Utente amministratore | 1 | 1.0||
   | Req - 4.1 | Gestione utente | 1 | 1.0 | |
   | Req - 4.2 | Gestione dati e parametri | 1 | 1.0 | |
@@ -166,10 +166,10 @@ funzionalità del prodotto.
 
 ### Pianificazione
 
-Prima di iniziare in maniera effettiva a lavorare sulla parte pratica del progetto, tutto il gruppo ha svolta una sorta di riunione che ha permesso a tutti i partecipanti di discutere su varie metdologie per gestire al meglio lo sviluppo del progetto.
+Prima di iniziare in maniera effettiva a lavorare sulla parte pratica del progetto, tutto il gruppo ha svolta una sorta di riunione che ha permesso a tutti i partecipanti di discutere su varie metodologie per gestire al meglio lo sviluppo del progetto.
 Il gruppo ha quindi deciso di utilizzare diverse metodologie per pianificare al meglio lo svolgimento del progetto.
-La pianificazione del progetto è stata quindi fatta utilizzando un gantt, che permette di suddividere il progetto in fasi, con diverse importanze e priorità.
-Il secondo strumento che il gruppo ha deciso di utilizzare è l'applicativo web trello, che ti permette di suddividere in più fasi tutto ciò che bisgona fare sul arco del progetto, assegnadogli delle etichette, delle categorie, degli utenti e delle cartelle.
+La pianificazione del progetto è stata quindi fatta utilizzando un diagramma di Gannt, che permette di suddividere il progetto in fasi, con diverse importanze e priorità.
+Il secondo strumento che il gruppo ha deciso di utilizzare è l'applicativo web Trello, che ti permette di suddividere in più fasi tutto ciò che bisogna fare sul arco del progetto, assegnandoli delle etichette, delle categorie, degli utenti e delle cartelle.
 
 Questi sono i rispettivi mezzi che abbiamo utilizzato:<br>
 <gantt> <trello>
