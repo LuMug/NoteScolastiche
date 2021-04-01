@@ -202,14 +202,5 @@ export class LDAPClient {
       //username or password equals ""
       return false;
     }
-<<<<<<< HEAD
   };
 }
-=======
-  }else {
-    //username or password equals ""
-    return false;
-  }
-};
-}
->>>>>>> 25e4d13e3c19d5590efa3046f030b5fac36039be
