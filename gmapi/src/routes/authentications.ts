@@ -13,7 +13,7 @@ import { ILdapOptions } from 'ldap-ts-client-test/lib/ILdapOptions';
 
 const router: Router = express.Router();
 
-router.get('/authentication', async (req: Request, res: Response) => {
+router.post('/authentication', async (req: Request, res: Response) => {
     let opts: ILdapOptions = {
         bindPath: _JSON.bindPath,
         bindPw: _JSON.bindPw,
