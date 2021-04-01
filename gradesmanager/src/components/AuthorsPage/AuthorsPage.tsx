@@ -132,26 +132,24 @@ class AuthorsPage extends Component<IAuthorsPageProps, IAuthorsPageState> {
     }
 
     render(): ReactNode {
-        let content =
-            <div className="aup-main-content" >
-                {this.state.panels.map((p, i) => {
-                    return (
-                        <div
-                            className="aup-author-panel"
-                            key={i}
-                        >
-                            {p}
-                        </div>
-                    );
-                })}
-            </div>
         //content = <div className="aup-main-content">a</div>;
         return (
             <Page
-                content={content}
                 user={this.props.user}
-                displayPrompt={false}
-            />
+                displayPrompt={false}>
+                <div className="aup-main-content" >
+                    {this.state.panels.map((p, i) => {
+                        return (
+                            <div
+                                className="aup-author-panel"
+                                key={i}
+                            >
+                                {p}
+                            </div>
+                        );
+                    })}
+                </div>
+            </Page>
         );
     }
 }
