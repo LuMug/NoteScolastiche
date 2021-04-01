@@ -7,9 +7,9 @@ import {
     UserType
 } from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
-import { LDAPClient, PathParser, ADUser } from "ldap-ts-client-test";
+import { LDAPClient, PathParser, ADUser } from 'ldap-ts-client-test';
 import * as _JSON from './../temp.json';
-import { ILdapOptions } from 'ldap-ts-client-test/lib/ILdapOptions';
+import { ILdapOptions } from 'ldap-ts-client-test/ILdapOptions';
 
 const router: Router = express.Router();
 
@@ -98,7 +98,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
 });
 
 const isStudent = (user: ADUser) => {
-    if (user.group == '' || user.section == '' || user.year == null) {
+    if (user.section == undefined && user.group == undefined) {
         return false;
     } else {
         return true;
@@ -109,7 +109,12 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
     if (userFromPath.group && userFromPath.year) {
         let iuserFromPath: IUser;
         let group: string = userFromPath.group + userFromPath.year;
-        let checkGroup: IGroup | null = await MongoHelper.getGroupByName(group)
+        let checkGroup: IGroup | null = null;
+        try {
+            checkGroup = await MongoHelper.getGroupByName(group);
+        } catch (err) {
+            throw err;
+        }
         if (checkGroup) {
             iuserFromPath = {
                 uid: -1,
@@ -120,14 +125,15 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
                 type: UserType.STUDENT
             }
         } else {
+            let newGroup: IGroup | null
             try {
                 await MongoHelper.addGroup({
                     name: group
                 });
+                newGroup = await MongoHelper.getGroupByName(group);
             } catch (err) {
                 throw err;
             }
-            let newGroup: IGroup | null = await MongoHelper.getGroupByName(group);
             if (newGroup) {
                 iuserFromPath = {
                     uid: -1,
@@ -146,7 +152,11 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
                 throw err;
             }
         }
-        await MongoHelper.addUser(iuserFromPath);
+        try {
+            await MongoHelper.addUser(iuserFromPath);
+        } catch (err) {
+            throw err;
+        }
     }
 }
 
