@@ -28,32 +28,35 @@ export class LDAPClient {
     this.bindPw = options.bindPw;
     this.possiblePaths = options.possiblePaths;
     this.bindURL = options.bindURL;
-    this.client = ldap.createClient({
-      url: this.bindURL
-    });
     this.opts = {
-      attributes: ["cn", "ou"],
+      attributes: ["cn", "ou"]
     };
+    try {
+      this.client = ldap.createClient({
+        url: this.bindURL
+      });
+      this.client.on('error', e => { });
+    } catch (err) {
+      throw err;
+    }
   }
 
   /**
    * Method for initialize the LDAP comunication. Call it at 
    * the beginning of the requests.
    */
-  public start(): Promise<void> {
+  public async start() {
     return new Promise<void>((resolve, reject) => {
       this.client.bind(
         this.bindPath,
         this.bindPw,
-        function (error) {
-          if (error) {
-            console.log("Error while connecting");
-            reject(error);
-            return;
+        e => {
+          if (e) {
+            console.error(e);
+            reject('LDAP start error');
           } else {
             console.log("Connected!");
             resolve();
-            return;
           }
         }
       );
@@ -64,8 +67,18 @@ export class LDAPClient {
    * Method for end LDAP requests. Call it 
    * at the end of the requests.
    */
-  public end() {
-    this.client.unbind();
+  public async end() {
+    return new Promise<void>((resolve, reject) => {
+      this.client.unbind(e => {
+        if (e) {
+          reject(e);
+          return;
+        } else {
+          resolve();
+          return;
+        }
+      });
+    });
   }
 
 
@@ -82,9 +95,9 @@ export class LDAPClient {
       client.bind(
         path,
         pw,
-        (error) => {
-          if (error) {
-            reject(error);
+        e => {
+          if (e) {
+            reject(e);
             return;
           } else {
             resolve(true);
@@ -92,6 +105,19 @@ export class LDAPClient {
           }
         }
       );
+    });
+  }
+
+  public unbind = async (client: ldap.Client) => {
+    return new Promise<void>((resolve, reject) => {
+      client.unbind(e => {
+        if (e) {
+          reject(e);
+          return;
+        }
+        resolve();
+        return;
+      });
     });
   }
 
@@ -110,19 +136,20 @@ export class LDAPClient {
           reject(err);
           return;
         }
-        res.on("searchEntry", function (entry) {
+        res.on("searchEntry", entry => {
+          // entry????
           resolve(query);
           return;
         });
-        res.on("searchReference", function (referral) {
+        res.on("searchReference", referral => {
           resolve(referral);
           return;
         });
-        res.on("error", function (err) {
-          reject(null);
+        res.on("error", err => {
+          reject(err);
           return;
         });
-        res.on("end", function (result) { });
+        res.on("end", result => { });
       });
     });
   };
@@ -136,28 +163,21 @@ export class LDAPClient {
    */
   public getUserPath = async (name: string) => {
     let opts = {};
-    let out = null;
-    //console.log(this.possiblePaths.length);
-
+    let out;
     for (let i = 0; i < this.possiblePaths.length; i++) {
       let cn = `CN=${name},`;
       let query = cn + this.possiblePaths[i];
-      //console.log(query);
-
       try {
         out = await this.queryAD(query, opts);
-        if (out == undefined) {
-          out = null;
-        }
       } catch (err) {
-        //doesnt found
-        out = null;
+        console.error(err);
+        return null;
       }
-      //found
-      if (out != null) {
+      if (out) {
         return out;
       }
     }
+    return null;
   };
 
   /**
@@ -176,26 +196,29 @@ export class LDAPClient {
     let userclient: ldap.Client;
     if (nome.trim() != '' && password.trim() != '') {
       //name and password existing
+      let user;
       userclient = ldap.createClient({
         url: this.bindURL,
       });
-
-      let user = await this.getUserPath(nome);
-      console.log("user: " + user)
-      if (user != undefined) {
-        //user exists in AD
-        let __out;
-        try {
+      try {
+        user = await this.getUserPath(nome);
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
+      try {
+        if (user) {
+          //user exists in AD
+          let __out;
           __out = await this._bind(userclient, user, password);
-        } catch (err) {
-          //console.log(3);
-          userclient.unbind();
+          await this.unbind(userclient);
+          return __out;
+        } else {
+          await this.unbind(userclient);
           return false;
         }
-        userclient.unbind();
-        return __out;
-      } else {
-        userclient.unbind();
+      } catch (err) {
+        console.error(err);
         return false;
       }
     } else {
