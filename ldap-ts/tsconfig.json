@@ -2,10 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": [
-      "es6",
-      "ES2015"
-    ],
+    "lib": ["es6", "ES2015"],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
@@ -19,13 +16,6 @@
     "forceConsistentCasingInFileNames": true,
     "pretty": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "lib",
-    "node_modules",
-    "**/__tests__/*",
-    "./temp.json"
-  ]
+  "include": ["src"],
+  "exclude": ["lib", "node_modules", "**/__tests__/*", "./temp.json"]
 }

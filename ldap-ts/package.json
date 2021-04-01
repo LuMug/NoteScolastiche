@@ -1,11 +1,13 @@
 {
   "name": "ldap-ts-client-test",
-  "version": "1.0.3",
+  "version": "1.1.6",
+  "types": "lib/index.d.ts",
+  "main": "lib/index.js",
   "description": "LDAP ts client.",
-  "main": "./lib/index.js",
   "scripts": {
     "build": "tsc -p .",
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "prepub": "npm run build & npm version patch"
   },
   "author": "Francisco Viola",
   "license": "ISC",
