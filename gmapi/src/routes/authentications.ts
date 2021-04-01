@@ -2,6 +2,7 @@ import express, { Request, Response, Router } from 'express';
 import {
     IError,
     IGroup,
+    ITeacher,
     IUser,
     UserType
 } from '../@types';
@@ -30,7 +31,7 @@ router.get('/authentication', async (req: Request, res: Response) => {
                 message: 'Not a valid username'
             }
         };
-        return res.status(400).json({ error: err });
+        return res.status(400).json(err);
     }
     if (password.length == 0) {
         let err: IError = {
@@ -38,14 +39,15 @@ router.get('/authentication', async (req: Request, res: Response) => {
                 message: 'Not a valid password'
             }
         }
+        return res.status(400).json(err);
     };
     try {
         await ldap.start();
-        let path: string | undefined = await ldap.getUserPath(username);
+        let tempPath: string | undefined = await ldap.getUserPath(username);
 
         let userFromPath: ADUser;
-        if (path != undefined) {
-            userFromPath = PathParser.parse(path);
+        if (tempPath != undefined) {
+            userFromPath = PathParser.parse(tempPath);
         } else {
             let err: IError = {
                 error: {
@@ -55,52 +57,24 @@ router.get('/authentication', async (req: Request, res: Response) => {
             return res.status(400).json({ error: err });
         }
 
-        let check: boolean = await ldap.checkUserCredentials(username, password);
-        if (check) {
+        let tempCheck: boolean = await ldap.checkUserCredentials(username, password);
+        if (tempCheck) {
             let checkedUser: IUser | null = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
             if (checkedUser != null) {
-                return checkedUser;
+                return res.status(200).json(checkedUser);
             } else {
-                //Check group
-                if (userFromPath.group && userFromPath.year) {
-                    let iuserFromPath: IUser;
-                    let group: string = userFromPath.group + userFromPath.year;
-                    let checkGroup: IGroup | null = await MongoHelper.getGroupByName(group)
-                    if (checkGroup) {
-                        iuserFromPath = {
-                            uid: -1,
-                            name: fullName[0],
-                            surname: fullName[1],
-                            groupId: checkGroup.uid,
-                            subjects: [],
-                            type: UserType.STUDENT
-                        }
-                    } else {
-                        MongoHelper.addGroup({
-                            name: group
-                        });
-                        let newGroup: IGroup | null = await MongoHelper.getGroupByName(group);
-                        if (newGroup) {
-                            iuserFromPath = {
-                                uid: -1,
-                                name: fullName[0],
-                                surname: fullName[1],
-                                groupId: newGroup.uid,
-                                subjects: [],
-                                type: UserType.STUDENT
-                            }
-                        } else {
-                            let err: IError = {
-                                error: {
-                                    message: 'Not a valid group'
-                                }
-                            }
-                            return res.status(400).json({ error: err });
-                        }
+                if (isStudent(userFromPath)) {
+                    try {
+                        createUser(userFromPath, fullName);
+                    } catch (err) {
+                        return res.status(400).json(err);
                     }
-                    console.log(iuserFromPath);
-
-                    await MongoHelper.addUser(iuserFromPath);
+                } else {
+                    try {
+                        createTeacher(fullName);
+                    } catch (err) {
+                        return res.status(400).json(err);
+                    }
                 }
             }
         } else {
@@ -109,21 +83,92 @@ router.get('/authentication', async (req: Request, res: Response) => {
                     message: 'Username or Password incorrect'
                 }
             };
+            return res.status(400).json(err);
         }
         ldap.end();
+
     } catch (err) {
-        let error: IError;
-        if (typeof err == 'string') {
-            error = {
-                error: {
-                    message: err
-                }
-            };
-        } else {
-            error = err;
-        }
-        return res.status(400).json(error);
+        return res.status(400).json(err);
     }
+    return res.status(201).json({});
 });
+
+const isStudent = (user: ADUser) => {
+    if (user.group == '' || user.section == '' || user.year == null) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+const createUser = async (userFromPath: ADUser, fullName: string[]) => {
+    if (userFromPath.group && userFromPath.year) {
+        let iuserFromPath: IUser;
+        let group: string = userFromPath.group + userFromPath.year;
+        let checkGroup: IGroup | null = await MongoHelper.getGroupByName(group)
+        if (checkGroup) {
+            iuserFromPath = {
+                uid: -1,
+                name: fullName[0],
+                surname: fullName[1],
+                groupId: checkGroup.uid,
+                subjects: [],
+                type: UserType.STUDENT
+            }
+        } else {
+            try {
+                await MongoHelper.addGroup({
+                    name: group
+                });
+            } catch (err) {
+                throw err;
+            }
+            let newGroup: IGroup | null = await MongoHelper.getGroupByName(group);
+            if (newGroup) {
+                iuserFromPath = {
+                    uid: -1,
+                    name: fullName[0],
+                    surname: fullName[1],
+                    groupId: newGroup.uid,
+                    subjects: [],
+                    type: UserType.STUDENT
+                }
+            } else {
+                let err: IError = {
+                    error: {
+                        message: 'Not a valid group'
+                    }
+                }
+                throw err;
+            }
+        }
+        await MongoHelper.addUser(iuserFromPath);
+    }
+}
+
+const createTeacher = async (fullName: string[]) => {
+    let iuserFromPath: IUser;
+    iuserFromPath = {
+        uid: -1,
+        name: fullName[0],
+        surname: fullName[1],
+        groupId: -1,
+        subjects: [],
+        type: UserType.TEACHER
+    }
+    let iteacherFromPath: ITeacher;
+    iteacherFromPath = {
+        uid: -1,
+        name: fullName[0],
+        surname: fullName[1],
+        subjectsIds: []
+    }
+    try {
+        await MongoHelper.addUser(iuserFromPath);
+        await MongoHelper.addTeacher(iteacherFromPath);
+    } catch (err) {
+        throw err;
+    }
+};
 
 export default router;

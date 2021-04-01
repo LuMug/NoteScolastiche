@@ -9,7 +9,8 @@ import {
 	IUser,
 	IUserSubject,
 	UserType
-	} from '../@types';
+} from '../@types';
+import { sha256 } from 'js-sha256';
 
 const DB_NAME: string = 'gradesmanager';
 
@@ -81,7 +82,11 @@ export class MongoHelper {
 	private static async add<T extends CollectionTypes = IUser>(collName: Collections, data: Omit<T, 'uid'>): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			let withUID: T = Object.assign({}, data as unknown as T);
-			withUID.uid = this.getUUID();
+			if ((withUID as any).surname) {
+				withUID.uid = this.getUUID(`${withUID.name}.${(withUID as any).surname}`);
+			} else {
+				withUID.uid = this.getUUID(withUID.name);
+			}
 			try {
 				await this.getCollection(collName).insertOne(withUID);
 			} catch (err) {
@@ -367,11 +372,14 @@ export class MongoHelper {
 	 * 
 	 * @param collection the collection from wich to get the value
 	 */
-	public static getUUID(): number {
-		let now = Date.now();
-		let str = now.toString();
-		now = parseInt(str.substring(str.length - 6));
-		return now;
+	public static getUUID(username: string): number {
+		let hash = sha256(username);
+		let len = hash.length / 2;
+		let sum = 0;
+		for (let i = 0; i < len; i++) {
+			sum += parseInt(hash.substr(i * 2, 2), 16);
+		}
+		return sum;
 	}
 
 	/**

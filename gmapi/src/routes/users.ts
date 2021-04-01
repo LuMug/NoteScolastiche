@@ -5,7 +5,7 @@ import {
 	ITeacher,
 	IUser,
 	IUserSubject
-	} from '../@types';
+} from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
@@ -26,7 +26,7 @@ router.get('/users/:uid', async (req: Request, res: Response) => {
 	}
 	let user: IUser | null = await MongoHelper.getUser(uid);
 	if (user) {
-		return res.status(201).json(user);
+		return res.status(200).json(user);
 	} else {
 		res.status(404).json({
 			error: {
@@ -47,7 +47,7 @@ router.get('/users/:uid/subjects', async (req: Request, res: Response) => {
 	}
 	let user: IUser | null = await MongoHelper.getUser(uid);
 	if (user) {
-		return res.status(201).json(user.subjects);
+		return res.status(200).json(user.subjects);
 	} else {
 		res.status(400).json({
 			error: {
@@ -78,7 +78,7 @@ router.get('/users/:uid/subjects/:suid', async (req: Request, res: Response) => 
 	if (user) {
 		let len = user.subjects.length;
 		if (suid < len) {
-			return res.status(201).json(user.subjects[suid]);
+			return res.status(200).json(user.subjects[suid]);
 		}
 		return res.status(400).json({
 			error: {
@@ -107,7 +107,7 @@ router.post('/users', async (req: Request, res: Response) => {
 	try {
 		await MongoHelper.addUser(user);
 	} catch (err) {
-		return res.status(409).json(err);
+		return res.status(500).json(err);
 	}
 	res.status(201).json(user);
 });
@@ -153,13 +153,13 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 		try {
 			await MongoHelper.addSubjectId(uid, ...input);
 		} catch (err) {
-			return res.status(400).json({ error: { message: err } });
+			return res.status(500).json({ error: { message: err } });
 		}
 	} else if (!isNaN(parseInt(input))) {
 		try {
 			await MongoHelper.addSubjectId(uid, input);
 		} catch (err) {
-			return res.status(400).json({ error: { message: err } });
+			return res.status(500).json({ error: { message: err } });
 		}
 	} else {
 		let err: IError = {
@@ -169,7 +169,7 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 		}
 		return res.status(400).json({ error: err });
 	}
-	return res.status(204).json({});
+	return res.status(201).json({});
 });
 
 router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
@@ -219,7 +219,7 @@ router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
 	} catch (err) {
 		return res.status(400).json({ error: { message: err } });
 	}
-	return res.status(204).json({});
+	return res.status(201).json({});
 });
 
 router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) => {
@@ -298,7 +298,7 @@ router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Resp
 		}
 		return res.status(400).json(error);
 	}
-	return res.status(204).json({});
+	return res.status(201).json({});
 });
 
 router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, res: Response) => {
