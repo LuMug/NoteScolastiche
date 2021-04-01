@@ -68,6 +68,11 @@ export interface ITeacher {
      * The ids of the subjects of the teacher.
      */
     subjectsIds: number[];
+
+    /**
+     * The ids of the groups of the teacher
+     */
+    groupsIds: number[];
 }
 
 /**
