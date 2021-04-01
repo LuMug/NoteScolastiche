@@ -1,6 +1,6 @@
 {
   "name": "ldap-ts-client-test",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "LDAP ts client.",
   "main": "./lib/index.js",
   "scripts": {
@@ -11,9 +11,10 @@
   "license": "ISC",
   "devDependencies": {
     "@types/ldapjs": "^1.0.9",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   },
   "dependencies": {
+    "g": "^2.0.1",
     "ldapjs": "^2.2.4"
   }
 }
