@@ -12,7 +12,11 @@ export class PathParser {
         let userSection: string = '';
         let userClass: string = '';
         let userYear: string = '';
-        if (parts.length != 0) {
+        if (parts.length == 4) {
+            userName = parts[0].split(".")[0];
+            userSurname = parts[0].split(".")[1];
+            return new ADUser(userName, userSurname);
+        } else {
             userName = parts[0].split('=')[1].split(".")[0];
             userSurname = parts[0].split(".")[1];
             userSection = parts[3].split("=")[1];
@@ -20,10 +24,6 @@ export class PathParser {
             userYear = parts[1].split("=")[1];
             return new ADUser(userName, userSurname, userSection,
                 userClass, userYear);
-        } else {
-            userName = parts[0].split(".")[0];
-            userSurname = parts[0].split(".")[1];
-            return new ADUser(userName, userSurname);
         }
     }
 }
