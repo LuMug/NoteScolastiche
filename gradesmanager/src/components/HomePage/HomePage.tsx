@@ -21,7 +21,7 @@ import './home-page.css';
 
 interface IHomePageProps {
 
-  uuid: number;
+  uuid: number | null;
 }
 
 interface IHomePageState {
@@ -64,7 +64,7 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
     let data: IUser;
     let teachers: ITeacher[];
     try {
-      data = await FetchHelper.fetchUser(this.props.uuid);
+      data = await FetchHelper.fetchUser(this.props.uuid || -1);
       teachers = await FetchHelper.fetchAllTeachers();
     } catch {
       this.setState({
@@ -270,58 +270,7 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
         onAbort={() => this.toggleTIB()}
         onTeacherClick={(t) => this.onTIBTeacherClick(this.state, t)}
       />;
-    let content =
-      <div className="hp-main-content">
-        <div className="hp-content-page">
-          <div className="hp-welcome-panel">
-            <h1 className="hp-welcome-text">Benvenuto, <span>{this.state.user.name}</span></h1>
-          </div>
-          <div className="hp-welcome-separator"></div>
-          <div className="hp-card hp-trend-panel hp-rise-opacity-in">
-            <div className="hp-chart-wrapper">
-              <div className="hp-chart">
-                <AvgChart
-                  dataset={{
-                    label: 'Media',
-                    backgroundColor: '#007eff',
-                    data: GradeHelper.getAllAvgs(this.state.user.subjects)
-                  }}
-                  labels={this.state.user.subjects.map(s => s.name)}
-                />
-              </div>
-              <div className="hp-chart">
-                <TrendChart
-                  dataset={{
-                    label: 'Andamento',
-                    data: GradeHelper.getAllGradesValuesByDate(this.state.user.subjects)
-                  }}
-                  labels={GradeHelper.getAllGradesByDate(this.state.user.subjects).map(g => GradeHelper.getDate(g))}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="hp-subjects">
-            {this.state.user.subjects.map((s: IUserSubject, i: number) => {
-              return <Subject
-                subject={s}
-                key={i}
-                onDelete={() => this.onSubjectDelete(this.state, i)}
-                onAddGrade={() => this.onSubjectAddGrade(s)}
-                onRemoveGrade={(g, gi) => this.onSubjectRemoveGrade(this.state, i, gi)}
-                onApply={(state) => this.onSubjectApply(this.state, state, i)}
-                onTIBDisplay={() => {
-                  this.setState({
-                    currentSubject: s
-                  });
-                  this.toggleTIB();
-                }}
-              />
-            })}
-            <AddSubject onClick={() => this.onSubjectAdd(this.state)} />
-          </div>
-        </div>
-
-      </div>;
+    let content;
     let activePrompt;
     if (this.state.displayDetails) {
       activePrompt = subjectPage;
@@ -341,9 +290,59 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
           || this.state.displayTIB}
         user={this.state.user}
         promptElement={activePrompt}
-        content={content}
-        onListSubjectClick={(us) => this.onListSubjectClick(this.state, us)}
-      />
+        onListSubjectClick={(us) => this.onListSubjectClick(this.state, us)}>
+        <div className="hp-main-content">
+          <div className="hp-content-page">
+            <div className="hp-welcome-panel">
+              <h1 className="hp-welcome-text">Benvenuto, <span>{this.state.user.name}</span></h1>
+            </div>
+            <div className="hp-welcome-separator"></div>
+            <div className="hp-card hp-trend-panel hp-rise-opacity-in">
+              <div className="hp-chart-wrapper">
+                <div className="hp-chart">
+                  <AvgChart
+                    dataset={{
+                      label: 'Media',
+                      backgroundColor: '#007eff',
+                      data: GradeHelper.getAllAvgs(this.state.user.subjects)
+                    }}
+                    labels={this.state.user.subjects.map(s => s.name)}
+                  />
+                </div>
+                <div className="hp-chart">
+                  <TrendChart
+                    dataset={{
+                      label: 'Andamento',
+                      data: GradeHelper.getAllGradesValuesByDate(this.state.user.subjects)
+                    }}
+                    labels={GradeHelper.getAllGradesByDate(this.state.user.subjects).map(g => GradeHelper.getDate(g))}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="hp-subjects">
+              {this.state.user.subjects.map((s: IUserSubject, i: number) => {
+                return <Subject
+                  subject={s}
+                  key={i}
+                  onDelete={() => this.onSubjectDelete(this.state, i)}
+                  onAddGrade={() => this.onSubjectAddGrade(s)}
+                  onRemoveGrade={(g, gi) => this.onSubjectRemoveGrade(this.state, i, gi)}
+                  onApply={(state) => this.onSubjectApply(this.state, state, i)}
+                  onTIBDisplay={() => {
+                    this.setState({
+                      currentSubject: s
+                    });
+                    this.toggleTIB();
+                  }}
+                />
+              })}
+              <AddSubject onClick={() => this.onSubjectAdd(this.state)} />
+            </div>
+          </div>
+
+        </div>;
+      </Page>
     );
   }
 }

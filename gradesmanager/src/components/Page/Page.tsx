@@ -9,8 +9,6 @@ interface IPageProps {
 
     user: IUser | null;
 
-    content: JSX.Element;
-
     displayPrompt: boolean;
 
     promptElement?: JSX.Element;
@@ -49,7 +47,8 @@ class Page extends Component<IPageProps, IPageState> {
                     }}
                 />
                 <div className="pa-content-page">
-                    {this.props.content}
+                    {/* {this.props.content} */}
+                    {this.props.children}
                 </div>
                 {prompt}
             </div>

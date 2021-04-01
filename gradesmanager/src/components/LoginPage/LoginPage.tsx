@@ -1,27 +1,25 @@
 import AboutButton from '../about-button/AboutButton';
-import FetchHelper from '../../helpers/FetchHelper';
+import Auth from '../../auth/Auth';
 import GradientButton from '../gradient-button/GradientButton';
 import TextInput from '../text-input/TextInput';
-import { Redirect } from 'react-router';
-import { useEffect, useState } from 'react';
+import {
+  Link,
+  Redirect,
+  RouteComponentProps,
+  useHistory
+  } from 'react-router-dom';
+import { useState } from 'react';
 import './LoginPage.css';
 
-const LoginPage = () => {
+interface ILoginPageProps {
+
+  onLoginSuccess: (uuid: number) => void;
+}
+
+const LoginPage = (props: ILoginPageProps) => {
   const [username, setUsername] = useState('');
   const [pw, setPw] = useState('');
-
-  const onClick = async () => {
-    // check username and pw
-    // authenticate...
-
-    // testing code
-    let index = parseInt(username);
-    if (isNaN(index)) {
-      // show errors
-      alert('bad');
-      return;
-    }
-  }
+  const history = useHistory();
 
   return (
     <div className="lp-page">
@@ -45,7 +43,21 @@ const LoginPage = () => {
               onChange={(text) => setPw(text)} />
           </div>
           <div className="lp-left-botbot">
-            <GradientButton onClick={() => onClick()} />
+            <GradientButton onClick={async () => {
+              // check username and pw
+              // authenticate...
+
+              // testing code
+              let index = parseInt(username);
+              if (isNaN(index)) {
+                // show errors
+                alert('bad');
+                return;
+              }
+              Auth.login('', '');
+              props.onLoginSuccess(index);
+              history.push('/');
+            }} />
           </div>
         </div>
         <div className="lp-right-section">
