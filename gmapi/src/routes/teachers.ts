@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { IError, ITeacher } from '../@types';
+import { IError, IGroup, ITeacher } from '../@types';
 import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
@@ -30,6 +30,76 @@ router.get('/teachers/:uid', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/teachers/:uid/groupsIds', async (req: Request, res: Response) => {
+  let uid: number = parseInt(req.params.uid);
+  if (isNaN(uid)) {
+    let err: IError = {
+      error: {
+        message: 'Not a valid teacher id.'
+      }
+    }
+    return res.status(400).json(err);
+  }
+  try {
+    let teacher: ITeacher | null = await MongoHelper.getTeacher(uid);
+    if (teacher) {
+
+      return res.status(200).json(teacher.groupsIds)
+    } else {
+      let err: IError = {
+        error: {
+          message: 'Not an existing teacher id.'
+        }
+      };
+      return res.status(500).json(err);
+    }
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
+
+router.get('/teachers/:uid/groups', async (req: Request, res: Response) => {
+  let uid: number = parseInt(req.params.uid);
+  if (isNaN(uid)) {
+    let err: IError = {
+      error: {
+        message: 'Not a valid teacher id.'
+      }
+    }
+    return res.status(400).json(err);
+  }
+  try {
+    let teacher: ITeacher | null = await MongoHelper.getTeacher(uid);
+    let groups: IGroup[] = [];
+
+    if (teacher) {
+      for (let i = 0; i < teacher.groupsIds.length; i++) {
+        let checkNull = await MongoHelper.getGroup(teacher.groupsIds[i]);
+        if (checkNull) {
+          groups[i] = checkNull;
+        } else {
+          let err: IError = {
+            error: {
+              message: 'Not an existing group id.'
+            }
+          };
+          return res.status(500).json(err);
+        }
+      }
+      return res.status(200).json(groups);
+    } else {
+      let err: IError = {
+        error: {
+          message: 'Not an existing teacher id.'
+        }
+      };
+      return res.status(500).json(err);
+    }
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
+
 router.post('/teachers', async (req: Request, res: Response) => {
   if (!MongoHelper.isTeacher(req.body.teacher)) {
     let err: IError = {
@@ -49,7 +119,6 @@ router.post('/teachers', async (req: Request, res: Response) => {
 });
 
 router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) => {
-  // 1 numero, [...] numeri
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
     let err: IError = {
@@ -90,7 +159,7 @@ router.patch('/teachers/:uid', async (req: Request, res: Response) => {
   if (isNaN(uid)) {
     let err: IError = {
       error: {
-        message: 'Invalid uid.'
+        message: 'Not a valid teacher id.'
       }
     }
     return res.status(400).json(err);

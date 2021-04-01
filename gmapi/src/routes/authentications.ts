@@ -24,6 +24,10 @@ router.post('/authentication', async (req: Request, res: Response) => {
     let ldap = new LDAPClient(opts);
     let username: string = req.body.username;
     let fullName: string[] = username.split('.');
+    fullName[0] = fullName[0].substr(0, 1).toUpperCase()
+        + fullName[0].substr(1, fullName[0].length - 1);
+    fullName[1] = fullName[1].substr(0, 1).toUpperCase()
+        + fullName[1].substr(1, fullName[1].length - 1);
     let password: string = req.body.password;
     if (username.length == 0) {
         let err: IError = {
@@ -161,7 +165,8 @@ const createTeacher = async (fullName: string[]) => {
         uid: -1,
         name: fullName[0],
         surname: fullName[1],
-        subjectsIds: []
+        subjectsIds: [],
+        groupsIds: []
     }
     try {
         await MongoHelper.addUser(iuserFromPath);

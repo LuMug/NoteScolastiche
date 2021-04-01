@@ -163,7 +163,7 @@ export class MongoHelper {
 	 * @param input the object input
 	 */
 	public static isTeacher(input: any): boolean {
-		return this.is<ITeacher>(input, { name: '', subjectsIds: [], surname: '' });
+		return this.is<ITeacher>(input, { name: '', subjectsIds: [], surname: '', groupsIds: [] });
 	}
 
 	/**

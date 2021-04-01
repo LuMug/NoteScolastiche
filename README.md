@@ -19,7 +19,12 @@ In modo da tenere conto di quello che facciamo aggiorneremo la documentazione e 
 ### Allegati
 
 - [Documentazione](./Documenti/Documentazione-GradesManager.md)
-- [Diari](./Diari)
-- [Codice Sorgente](./src)
+- [Diari](./Diari) 
 - [Diario dei compiti](./DiarioDeiCompiti/)
 - [Gantt](./Documenti/GradesManager.gan)
+<br>
+
+###### Sources
+- [APP](./gradesmanager)
+- [API](./gmapi)
+- [LDAP](./ldap-ts)
