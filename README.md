@@ -28,5 +28,3 @@ In modo da tenere conto di quello che facciamo aggiorneremo la documentazione e 
 - [APP](./gradesmanager)
 - [API](./gmapi)
 - [LDAP](./ldap-ts)
-
-
