@@ -1,25 +1,42 @@
 import AboutPage from './components/AboutPage/AboutPage';
-import AuthorsPage from './components/AuthorsPage/AuthorsPage';
+import Auth from './auth/Auth';
 import HomePage from './components/HomePage/HomePage';
 import LoginPage from './components/LoginPage/LoginPage';
+import ProtectedRoute from './components/protected-route/ProtectedRoute';
+import React, { Component } from 'react';
 import TeacherPage from './components/TeacherPage/TeacherPage';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Redirect,
+  RouteComponentProps,
+  RouteProps,
+  Switch
+  } from 'react-router-dom';
 import { Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div>
-      <BrowserRouter>
-        <Switch>
-          <Route exact path="/teachers" component={TeacherPage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/about" component={AboutPage} />
-          <Route exact path="/authors" component={AuthorsPage} />
-          <Route path="/:uuid" render={(props) => <HomePage uuid={props.match.params.uuid} />} />
-        </Switch>
-      </BrowserRouter>
-    </div>
-  );
-}
+export default class App extends Component {
 
-export default App;
+  constructor(props: {}) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        <BrowserRouter>
+          <Switch>
+            <ProtectedRoute exact path="/teachers" render={() => <TeacherPage />} />
+            <Route exact path="/login">
+              <LoginPage
+                onLoginSuccess={uuid => { }}
+              />
+            </Route>
+            <ProtectedRoute exact path="/about" render={() => <AboutPage />} />
+            {/* <ProtectedRoute exact path="/authors" render={() => <AuthorsPage user={null} />} /> */}
+            <ProtectedRoute path="/" render={() => <HomePage uuid={Auth.getUser()?.uid || null} />} />
+          </Switch>
+        </BrowserRouter>
+      </div>
+    );
+  }
+}
