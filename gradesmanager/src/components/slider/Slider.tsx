@@ -1,7 +1,10 @@
-import { Component, ReactNode } from "react";
-import "./slider.css";
+import { Component, ReactNode } from 'react';
+import './slider.css';
 
-interface ISliderProps {}
+interface ISliderProps {
+
+  onChangeState: (on: boolean) => void;
+}
 
 class Slider extends Component<ISliderProps> {
   constructor(props: ISliderProps) {
@@ -10,9 +13,9 @@ class Slider extends Component<ISliderProps> {
 
   render(): ReactNode {
     return (
-      <div>
+      <div className="slider-main-content">
         <label className="form-switch">
-          <input type="checkbox" />
+          <input type="checkbox" onChange={e => this.props.onChangeState((e.target.value == 'true') ? true : false)} />
           <i></i>
         </label>
       </div>
