@@ -1,9 +1,31 @@
+import FetchHelper from '../helpers/FetchHelper';
 import { IUser } from '../@types';
 
 class Auth {
 
-    public login(username: string, password: string) {
-        sessionStorage.setItem('logged', 'true');
+    public async login(username: string, password: string): Promise<number | null> {
+        let ok = false;
+        let uid: number | null = null;
+        let body = {
+            username: username,
+            password: password
+        };
+        try {
+            ok = await FetchHelper.fetch('/authentication', 'POST', body);
+            // Fetches anyway so thath we can have standalone accounts only on our db.
+            uid = await FetchHelper.fetchUserUid(username);
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+        if (ok && uid || uid) {
+            sessionStorage.setItem('logged', 'true');
+            sessionStorage.setItem('uid', uid.toString());
+        } else {
+            sessionStorage.setItem('logged', 'false');
+            sessionStorage.removeItem('uid');
+        }
+        return uid;
     }
 
     public logout() {
@@ -14,11 +36,9 @@ class Auth {
         return (sessionStorage.getItem('logged') == 'true');
     }
 
-    public getUser(): IUser | null {
-        if (sessionStorage.getItem('user'))
-            return JSON.parse(sessionStorage.getItem('user') || '');
-        else
-            return null;
+    public getUserUid(): number | null {
+        let key = sessionStorage.getItem('uid');
+        return (key) ? parseInt(key) : null;
     }
 }
 
