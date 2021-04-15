@@ -35,7 +35,7 @@ export class LDAPClient {
       this.client = ldap.createClient({
         url: this.bindURL
       });
-      this.client.on('error', e => { });
+      this.client.on('error', e => console.error(`LDAP Error: ${e}`));
     } catch (err) {
       throw err;
     }
@@ -163,21 +163,20 @@ export class LDAPClient {
    */
   public getUserPath = async (name: string) => {
     let opts = {};
-    let out;
+    let out = null;
     for (let i = 0; i < this.possiblePaths.length; i++) {
       let cn = `CN=${name},`;
       let query = cn + this.possiblePaths[i];
       try {
         out = await this.queryAD(query, opts);
       } catch (err) {
-        console.error(err);
-        return null;
+        out = null;
       }
       if (out) {
         return out;
       }
     }
-    return null;
+    return out;
   };
 
   /**
