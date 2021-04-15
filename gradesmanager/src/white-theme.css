@@ -1,0 +1,72 @@
+:root {
+  --gray: #000;
+  --dark-gray: #b3b3b31e;
+  --bg-gray: #fff;
+  --card-gray: #1f1f1f;
+  --bg-nav: #f3f3f3;
+  --blue: #007eff;
+  --light-blue: #00eaff;
+  --dark-blue: #0061c2;
+  --red: #df0025;
+  --blue-grad: linear-gradient(197deg, #007eff 0%, #00eaff 100%);
+  --blue-grad-tilted: linear-gradient(222deg, #007eff 20%, #00eaff 100%);
+  --green-grad-tilted: linear-gradient(222deg, #00eaff 20%, #00ff9d 100%);
+  --card-shadow: 0 5px 5px -3px #00000040, 0 8px 5px 1px #00000030,
+    0 3px 5px 2px #00000029;
+  --card-radius: 10px;
+}
+
+@font-face {
+  font-family: 'Circular Std';
+  src: url('public/fonts/CircularStd-Book.ttf');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-weight: 100;
+  font-family: 'Circular Std';
+}
+
+body {
+  overflow: hidden;
+}
+
+h1 {
+  color: #fff;
+  margin: 0;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                      supported by Chrome, Edge, Opera and Firefox */
+}
+
+.editable-p {
+  background: none;
+  border: none;
+  color: #fff;
+  font-family: 'Circular Std';
+}
+
+.editable-p::-webkit-outer-spin-button,
+.editable-p::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.editable-p [type='number'] {
+  -moz-appearance: textfield;
+}
+
+.editable-p:focus {
+  outline: none;
+}

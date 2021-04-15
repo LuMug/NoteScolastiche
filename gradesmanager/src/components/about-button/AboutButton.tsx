@@ -23,12 +23,12 @@ export default class AboutButton extends Component<IAboutButtonProps> {
                         value="?"
                         onClick={() => {
                             let el = document.getElementById('ab-content');
-                            if(el){
+                            if (el) {
                                 let display = el.style.display;
-                                if(el && display == 'none'){
+                                if (el && display == 'none') {
                                     el.style.display = 'block';
                                     el.style.visibility = 'visible';
-                                }else{
+                                } else {
                                     el.style.display = 'none';
                                     el.style.visibility = 'hidden';
                                 }
@@ -36,9 +36,9 @@ export default class AboutButton extends Component<IAboutButtonProps> {
                         }}
                     />
                 </div>
-                <div className="ab-popup" id="ab-content">
+                {/* <div className="ab-popup" id="ab-content">
                     <p>Progetto svolto da: Ambrosetti Nicola, Previtali Aris, Trentin Ismael e Viola Francisco</p>
-                </div>
+                </div> */}
             </div>
 
         );
