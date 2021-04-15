@@ -1,6 +1,7 @@
 import { API_URL } from '../util/constants';
 import {
     IGrade,
+    IGroup,
     ITeacher,
     IUser,
     IUserSubject
@@ -66,6 +67,38 @@ export default class FetchHelper {
         return user;
     }
 
+    public static async fetchAllStudents() {
+        let students: IUser[];
+        try {
+            students = await this.fetch(`/students`);
+        } catch (err) {
+            throw err;
+        }
+        return students;
+    }
+
+    public static async fetchAllStudentsFor(groupUid: number) {
+        try {
+            return (await this.fetchAllStudents()).filter(v => v.groupId == groupUid);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public static async fetchUserUid(username: string) {
+        let uid: number | null;
+        let names = username.split('.');
+        try {
+            uid = await this.fetch(`/useruids/${names[0]}/${names[1]}`);
+        } catch (err) {
+            throw err;
+        }
+        if (uid) {
+            return uid;
+        }
+        return uid;
+    }
+
     public static async fetchAllUserSubjetcs(uid: number) {
         let user;
         try {
@@ -124,6 +157,49 @@ export default class FetchHelper {
             throw err;
         }
         return teacher;
+    }
+
+    public static async fetchGroup(uid: number) {
+        let group: IGroup;
+        try {
+            group = await this.fetch(`/groups/${uid}`);
+        } catch (err) {
+            throw err;
+        }
+        return group;
+    }
+
+    public static async fetchAllGroups() {
+        let groups: IGroup[];
+        try {
+            groups = await this.fetch(`/groups`);
+        } catch (err) {
+            throw err;
+        }
+        return groups;
+    }
+
+    public static async fetchGroupsFor(teacherUid: number) {
+        let teacher;
+        try {
+            teacher = await this.fetchTeacher(teacherUid);
+        } catch (err) {
+            throw err;
+        }
+        if (!teacher) {
+            return [];
+        }
+        let groups: IGroup[] = [];
+        for (let i = 0; i < teacher.groupsIds.length; i++) {
+            try {
+                groups.push(
+                    await this.fetchGroup(teacher.groupsIds[i])
+                );
+            } catch (err) {
+                throw err;
+            }
+        }
+        return groups;
     }
 
     public static async postUser(userData: Omit<IUser, 'uid'>) {
