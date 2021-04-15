@@ -35,7 +35,6 @@ class TrendChart extends Component<ITrendChartProps> {
 
 
         //if (!ObjectHelper.equals(prevProps, this.props)) {
-        console.log('full update');
         this.chart = this.buildChart();
         this.chart.update();
         //}

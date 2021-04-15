@@ -1,3 +1,4 @@
+import Auth from '../../auth/Auth';
 import { Component, ReactNode } from 'react';
 import { IRouteDescritor } from '../../@types';
 import { Link, Redirect } from 'react-router-dom';
@@ -22,9 +23,19 @@ class Nav extends Component<INavProps> {
         return <div className="n-side-panel">
             <div className="n-side-panel-section n-side-panel-routes-section">
                 {this.props.routes.map((r, i) => {
-                    return <Link to={r.path} className="n-ruote-wrapper" key={i}>
-                        <p className="n-route-el noselect">{r.name}</p>
-                    </Link>;
+                    return (
+                        <Link
+                            to={r.path}
+                            className="n-ruote-wrapper"
+                            key={i}
+                            onClick={() => {
+                                if (r.name == 'Logout') {
+                                    Auth.logout();
+                                }
+                            }}>
+                            <p className="n-route-el noselect">{r.name}</p>
+                        </Link>
+                    );
                 })}
             </div>
             <div className="n-side-panel-separator"></div>

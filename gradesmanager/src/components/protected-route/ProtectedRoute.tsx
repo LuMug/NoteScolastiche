@@ -6,7 +6,7 @@ interface IProtectedRouteProps extends RouteProps { }
 
 function ProtectedRoute(props: IProtectedRouteProps) {
     if (!Auth.isLoggedIn()) {
-        // return <Redirect to='/login' />
+        return <Redirect to='/login' />
     }
     return (
         <Route {...props} exact={props.exact} />

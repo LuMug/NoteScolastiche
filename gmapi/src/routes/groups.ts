@@ -5,12 +5,8 @@ import { MongoHelper } from '../helpers/MongoHelper';
 const router: Router = express.Router();
 
 router.get('/groups', async (req: Request, res: Response) => {
-  try {
-    let arr = await MongoHelper.asArray(MongoHelper.getGroups());
-    res.status(200).json(arr);
-  } catch (err) {
-    res.status(500).json({});
-  }
+  let arr = await MongoHelper.asArray(MongoHelper.getGroups());
+  res.status(200).json(arr);
 });
 
 router.get('/groups/:uid', async (req: Request, res: Response) => {

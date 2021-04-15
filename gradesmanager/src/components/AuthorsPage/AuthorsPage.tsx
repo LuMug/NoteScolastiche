@@ -1,6 +1,7 @@
 import arisProfPic from './../../public/img/aris.jpg';
 import AuthorBox from '../author-box/AuthorBox';
 import discordlogo from './../../public/img/discordlogo.png';
+import FetchHelper from '../../helpers/FetchHelper';
 import franciscoProfPic from './../../public/img/francisco.jpg';
 import githublogo from './../../public/img/gitlogo_light.png';
 import iglogo from './../../public/img/iglogo.png';
@@ -15,12 +16,16 @@ import './authors-page.css';
 
 interface IAuthorsPageProps {
 
-    user: IUser;
+    uuid: number | null;
 }
 
 interface IAuthorsPageState {
 
     panels: JSX.Element[];
+
+    user: IUser | null;
+
+    loading: boolean;
 }
 
 class AuthorsPage extends Component<IAuthorsPageProps, IAuthorsPageState> {
@@ -121,21 +126,30 @@ class AuthorsPage extends Component<IAuthorsPageProps, IAuthorsPageState> {
                         }
                     ]}
                 />
-            ]
+            ],
+            user: null,
+            loading: true
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let user;
+        try {
+            user = await FetchHelper.fetchUser(this.props.uuid || -1);
+        } catch (err) {
+            console.error(err);
+            return;
+        }
         this.setState({
+            user: user,
             panels: shuffle(this.state.panels)
         });
     }
 
     render(): ReactNode {
-        //content = <div className="aup-main-content">a</div>;
         return (
             <Page
-                user={this.props.user}
+                user={this.state.user}
                 displayPrompt={false}>
                 <div className="aup-main-content" >
                     {this.state.panels.map((p, i) => {

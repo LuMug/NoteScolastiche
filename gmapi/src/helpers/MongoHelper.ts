@@ -262,6 +262,11 @@ export class MongoHelper {
 		});
 	}
 
+	public static async getStudents() {
+		let users = await this.asArray(this.getUsers());
+		return users.filter(v => v.type == UserType.STUDENT);
+	}
+
 	/**
 	 * Returns the subject with uid `uid`.
 	 * 
@@ -304,8 +309,13 @@ export class MongoHelper {
 	 */
 	public static async getUserByFullName(name: string, surname: string): Promise<IUser | null> {
 		return new Promise<IUser | null>(async (resolve, reject) => {
+			let nameExp = new RegExp(name, 'i');
+			let surnameExp = new RegExp(surname, 'i');
 			try {
-				resolve(await this.getUsers().findOne({ name: name, surname: surname }));
+				resolve(await this.getUsers().findOne({
+					name: { $regex: nameExp },
+					surname: { $regex: surnameExp }
+				}));
 				return;
 			} catch (err) {
 				reject(err);
@@ -313,6 +323,9 @@ export class MongoHelper {
 			}
 		});
 	}
+
+
+
 
 	/**
 	* Returs the teacher object with name `name` and surname `surname`.
@@ -679,6 +692,19 @@ export class MongoHelper {
 				throw 'Invalid user id';
 			}
 			this.getUsers().deleteOne({ uid: uid });
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	public static async removeTeacher(uid: number) {
+		let user;
+		try {
+			user = await this.getTeacher(uid);
+			if (!user) {
+				throw 'Invalid user id';
+			}
+			this.getTeachers().deleteOne({ uid: uid });
 		} catch (err) {
 			throw err;
 		}

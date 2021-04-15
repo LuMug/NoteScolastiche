@@ -100,6 +100,29 @@ router.get('/teachers/:uid/groups', async (req: Request, res: Response) => {
   }
 });
 
+router.delete('/teachers/:uid', async (req: Request, res: Response) => {
+  let uid: number = parseInt(req.params.uid);
+  if (isNaN(uid)) {
+    let err: IError = {
+      error: {
+        message: 'Not a valid teacher id.'
+      }
+    };
+    return res.status(400).json({ error: err });
+  }
+  try {
+    await MongoHelper.removeTeacher(uid);
+  } catch (err) {
+    let error: IError = {
+      error: {
+        message: err
+      }
+    };
+    return res.status(400).json(error);
+  }
+  return res.status(200).json({});
+});
+
 router.post('/teachers', async (req: Request, res: Response) => {
   if (!MongoHelper.isTeacher(req.body.teacher)) {
     let err: IError = {

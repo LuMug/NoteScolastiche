@@ -9,6 +9,7 @@ import Subject from '../subject/Subject';
 import SubjectPage from '../SubjectPage/SubjectPage';
 import TeacherInfobox from '../teacher-infobox/TeacherInfobox';
 import TrendChart from '../trend-chart/TrendChart';
+import WelcomeComponent from '../welcome-component/WelcomeComponent';
 import { Component, ReactNode, useState } from 'react';
 import {
   IGrade,
@@ -96,12 +97,12 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
       return;
     }
     const newSub: IUserSubject = {
-      name: 'Subject',
-      teacherName: 'Surname Name',
+      name: 'Materia',
+      teacherName: 'Docente',
       grades: []
     }
     try {
-      await FetchHelper.postUserSubject(state.user?.uid, newSub);
+      await FetchHelper.postUserSubject(state.user.uid, newSub);
     } catch (err) {
       return;
     }
@@ -237,7 +238,11 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
 
   render(): ReactNode {
     if (this.state.loading || this.state.user == null) {
-      return <LoadingPage unavailable={this.state.unavailable} />;
+      return (
+        <Page displayPrompt={false} user={null}>
+          <LoadingPage unavailable={this.state.unavailable} />
+        </Page>
+      );
     }
 
     let subjectPage;
@@ -294,9 +299,8 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
         <div className="hp-main-content">
           <div className="hp-content-page">
             <div className="hp-welcome-panel">
-              <h1 className="hp-welcome-text">Benvenuto, <span>{this.state.user.name}</span></h1>
+              <WelcomeComponent name={this.state.user.name} />
             </div>
-            <div className="hp-welcome-separator"></div>
             <div className="hp-card hp-trend-panel hp-rise-opacity-in">
               <div className="hp-chart-wrapper">
                 <div className="hp-chart">
@@ -340,8 +344,7 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
               <AddSubject onClick={() => this.onSubjectAdd(this.state)} />
             </div>
           </div>
-
-        </div>;
+        </div>
       </Page>
     );
   }

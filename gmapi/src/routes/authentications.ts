@@ -1,4 +1,6 @@
+import * as _JSON from './../temp.json';
 import express, { Request, Response, Router } from 'express';
+import { ADUser, LDAPClient, PathParser } from './../../../ldap-ts/lib';
 import {
     IError,
     IGroup,
@@ -6,10 +8,8 @@ import {
     IUser,
     UserType
 } from '../@types';
+import { ILdapOptions } from 'ldap-ts-client-test/lib/ILdapOptions';
 import { MongoHelper } from '../helpers/MongoHelper';
-import { LDAPClient, PathParser, ADUser } from 'ldap-ts-client-test';
-import * as _JSON from './../temp.json';
-import { ILdapOptions } from 'ldap-ts-client-test/ILdapOptions';
 
 const router: Router = express.Router();
 
@@ -47,7 +47,11 @@ router.post('/authentication', async (req: Request, res: Response) => {
     };
     try {
         await ldap.start();
-        let tempPath: string | undefined = await ldap.getUserPath(username);
+        console.log(username);
+
+        let tempPath: string | null = await ldap.getUserPath(username);
+        console.log(tempPath);
+
 
         let userFromPath: ADUser;
         if (tempPath != undefined) {
@@ -98,7 +102,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
 });
 
 const isStudent = (user: ADUser) => {
-    if (user.section == undefined && user.group == undefined) {
+    if (user.group == '' || user.section == '' || user.year == null) {
         return false;
     } else {
         return true;
@@ -109,12 +113,7 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
     if (userFromPath.group && userFromPath.year) {
         let iuserFromPath: IUser;
         let group: string = userFromPath.group + userFromPath.year;
-        let checkGroup: IGroup | null = null;
-        try {
-            checkGroup = await MongoHelper.getGroupByName(group);
-        } catch (err) {
-            throw err;
-        }
+        let checkGroup: IGroup | null = await MongoHelper.getGroupByName(group)
         if (checkGroup) {
             iuserFromPath = {
                 uid: -1,
@@ -125,15 +124,14 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
                 type: UserType.STUDENT
             }
         } else {
-            let newGroup: IGroup | null
             try {
                 await MongoHelper.addGroup({
                     name: group
                 });
-                newGroup = await MongoHelper.getGroupByName(group);
             } catch (err) {
                 throw err;
             }
+            let newGroup: IGroup | null = await MongoHelper.getGroupByName(group);
             if (newGroup) {
                 iuserFromPath = {
                     uid: -1,
@@ -152,24 +150,11 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
                 throw err;
             }
         }
-        try {
-            await MongoHelper.addUser(iuserFromPath);
-        } catch (err) {
-            throw err;
-        }
+        await MongoHelper.addUser(iuserFromPath);
     }
 }
 
 const createTeacher = async (fullName: string[]) => {
-    let iuserFromPath: IUser;
-    iuserFromPath = {
-        uid: -1,
-        name: fullName[0],
-        surname: fullName[1],
-        groupId: -1,
-        subjects: [],
-        type: UserType.TEACHER
-    }
     let iteacherFromPath: ITeacher;
     iteacherFromPath = {
         uid: -1,
@@ -179,7 +164,6 @@ const createTeacher = async (fullName: string[]) => {
         groupsIds: []
     }
     try {
-        await MongoHelper.addUser(iuserFromPath);
         await MongoHelper.addTeacher(iteacherFromPath);
     } catch (err) {
         throw err;

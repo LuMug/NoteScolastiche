@@ -1,5 +1,6 @@
 import AboutButton from '../about-button/AboutButton';
 import Auth from '../../auth/Auth';
+import FetchHelper from '../../helpers/FetchHelper';
 import GradientButton from '../gradient-button/GradientButton';
 import TextInput from '../text-input/TextInput';
 import {
@@ -19,7 +20,24 @@ interface ILoginPageProps {
 const LoginPage = (props: ILoginPageProps) => {
   const [username, setUsername] = useState('');
   const [pw, setPw] = useState('');
+  const [showErrors, setShowErrors] = useState(false);
   const history = useHistory();
+
+  const attemptLogin = async () => {
+    let uid = await Auth.login(username, pw);
+    console.log(`UID: ${uid}`);
+    if (uid) {
+      props.onLoginSuccess(uid);
+      history.push('/');
+    }
+  }
+
+  const onKeyPressed = (key: string) => {
+    console.warn('A');
+    if (key == 'Enter') {
+      attemptLogin();
+    }
+  }
 
   return (
     <div className="lp-page">
@@ -35,29 +53,17 @@ const LoginPage = (props: ILoginPageProps) => {
               inputType="text"
               placeHolder="Username"
               toolTipText="Inserisci il nome utente della scuola"
-              onChange={(text) => setUsername(text)} />
+              onChange={(text) => setUsername(text)}
+              onKeyPress={key => onKeyPressed(key)} />
             <TextInput
               inputType="password"
               placeHolder="Password"
               toolTipText="Inserisci la password di scuola"
-              onChange={(text) => setPw(text)} />
+              onChange={(text) => setPw(text)}
+              onKeyPress={key => onKeyPressed(key)} />
           </div>
           <div className="lp-left-botbot">
-            <GradientButton onClick={async () => {
-              // check username and pw
-              // authenticate...
-
-              // testing code
-              let index = parseInt(username);
-              if (isNaN(index)) {
-                // show errors
-                alert('bad');
-                return;
-              }
-              Auth.login('', '');
-              props.onLoginSuccess(index);
-              history.push('/');
-            }} />
+            <GradientButton onClick={() => attemptLogin()} />
           </div>
         </div>
         <div className="lp-right-section">
@@ -89,7 +95,7 @@ const LoginPage = (props: ILoginPageProps) => {
             </div>
           </div>
           <div>
-            <AboutButton />
+            {/* <AboutButton /> */}
           </div>
         </div>
       </div>
