@@ -9,7 +9,7 @@ import {
 	IUser,
 	IUserSubject,
 	UserType
-	} from '../@types';
+} from '../@types';
 import { sha256 } from 'js-sha256';
 
 const DB_NAME: string = 'gradesmanager';
@@ -692,6 +692,19 @@ export class MongoHelper {
 				throw 'Invalid user id';
 			}
 			this.getUsers().deleteOne({ uid: uid });
+		} catch (err) {
+			throw err;
+		}
+	}
+
+	public static async removeTeacher(uid: number) {
+		let user;
+		try {
+			user = await this.getTeacher(uid);
+			if (!user) {
+				throw 'Invalid user id';
+			}
+			this.getTeachers().deleteOne({ uid: uid });
 		} catch (err) {
 			throw err;
 		}
