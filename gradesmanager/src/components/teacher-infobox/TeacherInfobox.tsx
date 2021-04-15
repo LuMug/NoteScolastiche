@@ -80,7 +80,7 @@ class TeacherInfobox extends Component<ITeacherInfoboxProps, ITeacherInfoboxStat
         }
         return <div className="tib-main tib-slide-in">
             <div className="tib-abort noselect" onClick={() => this.props.onAbort()}></div>
-            <div className="tib-head">Ci sembra che questo docente non e' registrato nella sede. <span>Non preoccuparti!</span> Qui sotto pui trovare tutti quelli registrati:</div>
+            <div className="tib-head">Seleziona un docente dalla <span>lista della scuola</span></div>
             <input
                 type="text"
                 className="tib-input"
