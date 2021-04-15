@@ -52,7 +52,7 @@ class Page extends Component<IPageProps, IPageState> {
                 </div>
                 {prompt}
             </div>
-        );
+        )
     }
 }
 
