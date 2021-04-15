@@ -1,163 +1,136 @@
-import FetchHelper from "../../helpers/FetchHelper";
-import Page from "../Page/Page";
-import React, { useEffect, useState } from "react";
-import { IUser, IUserSubject } from "../../@types";
-import "./TeacherPage.css";
+import FetchHelper from '../../helpers/FetchHelper';
+import LoadingPage from '../LoadingPage/LoadingPage';
+import Page from '../Page/Page';
+import React, { useEffect, useState } from 'react';
+import Slider from '../slider/Slider';
+import WelcomeComponent from '../welcome-component/WelcomeComponent';
+import { IGroup, IUser, IUserSubject } from '../../@types';
+import './TeacherPage.css';
 
-const TeacherPage = () => {
-  const [showGroups, setShowGroups] = useState(true);
-  const [showSubjects, setShowSubjects] = useState(false);
-  const [showStudents, setShowStudents] = useState(false);
-  const [users, setUsers] = useState<IUser[] | null>(null);
-  const [subjects, setSubjects] = useState<IUser[] | null>(null);
-  const [groups, setGroups] = useState<IUser[] | null>(null);
+interface ITeacherPageProps {
 
-  const getUsers = async () => {
-    try {
-      return FetchHelper.fetch("/users");
-    } catch (err) {
-      console.error(err);
-      return;
-    }
-  };
+  uuid: number;
+}
 
-  const getSubjects = async () => {
-    try {
-      return FetchHelper.fetch("/users");
-    } catch (err) {
-      console.error(err);
-      return;
-    }
-  };
-
-  const getGroups = async () => {
-    try {
-      return FetchHelper.fetch("/users");
-    } catch (err) {
-      console.error(err);
-      return;
-    }
-  };
+const TeacherPage = (props: ITeacherPageProps) => {
+  const [user, setUser] = useState<IUser | null>(null);
+  const [mode, toggleMode] = useState(false);
+  const [groups, setGroups] = useState<IGroup[] | null>(null);
+  const [subjects, setSubjects] = useState<number[] | null>(null);
+  const [students, setStudents] = useState<IUser[]>([]);
+  const [currentCtx, setCurrentCtx] = useState<IGroup | number | null>(null);
 
   useEffect(() => {
     const fetch = async () => {
-      setUsers(await getUsers());
-      setSubjects(await getSubjects());
-      setGroups(await getGroups());
+      try {
+        setUser(await FetchHelper.fetchUser(props.uuid));
+        setGroups(await FetchHelper.fetchGroupsFor(props.uuid));
+        setSubjects([0, 1, 2, 3, 4]);
+      } catch (err) {
+        console.error(err);
+        return;
+      }
     };
     fetch();
-  }, [showGroups]);
+  }, [])
 
-  const onShowGroups = () => {
-    setShowGroups((ps) => !ps);
-  };
-
-  const onShowSubjects = () => {
-    setShowSubjects((ps) => !ps);
-  };
-
-  let tdClick = (o: string) => {
-    let el = document.getElementById(o);
-    if (el) {
-      let display = el.style.display;
-      if (el && display == "none") {
-        el.style.display = "block";
-        el.style.visibility = "visible";
-      } else {
-        el.style.display = "none";
-        el.style.visibility = "hidden";
-      }
+  useEffect(() => {
+    if (!currentCtx) {
+      return
     }
-  };
+    const fetch = async () => {
+      try {
+        setStudents(await FetchHelper.fetchAllStudentsFor((typeof currentCtx == 'number') ? currentCtx : currentCtx.uid));
+      } catch (err) {
+        console.error(err);
+        return;
+      }
+    };
+    fetch();
+  }, [currentCtx])
 
-  let topTable;
-  let botTable;
-
-  if (!users) {
-    return <h1>loading</h1>;
-  }
-
-  if (!subjects) {
-    return <h1>loading</h1>;
-  }
-
-  if (!groups) {
-    return <h1>loading</h1>;
-  }
-
-  if (showGroups) {
-    topTable = (
-      <div>
-        <table className="tp-class-table" id="tp-class-table">
-          {users.map((u, i) => {
-            return (
-              <tr key={i}>
-                <td onClick={() => tdClick("tp-students-table")}>{u.name}</td>
-              </tr>
-            );
-          })}
-        </table>
-      </div>
+  if (!user || !groups && !subjects) {
+    return (
+      <Page displayPrompt={false} user={null}>
+        <LoadingPage />
+      </Page>
     );
   }
-  if (showSubjects) {
-    topTable = (
-      <div>
-        <table className="tp-subject-table" id="tp-subject-table">
-          {users.map((u, i) => {
-            return (
-              <tr key={i}>
-                <td onClick={() => tdClick("tp-students-table")}>{u.name}</td>
-              </tr>
-            );
-          })}
-        </table>
-      </div>
-    );
-  }
-  if (showStudents) {
-    botTable = (
-      <div>
-        <table className="tp-students-table" id="tp-students-table">
-          <tr>
-            <td>Nicola Ambrosetti</td>
-          </tr>
-          <tr>
-            <td>Francisco Viola</td>
-          </tr>
-          <tr>
-            <td>Aris Previtali</td>
-          </tr>
-          <tr>
-            <td>Ismael Trentin</td>
-          </tr>
-        </table>
-      </div>
-    );
+
+  let modeTableContent;
+  if (!mode && groups) {
+    modeTableContent =
+      <table className="tp-table">
+        <tr className="tp-tr">
+          <th className="tp-th">Classi</th>
+        </tr>
+        {groups.map((g, i) => {
+          let cname = (g == currentCtx) ? 'tp-tr tp-tr-current' : 'tp-tr';
+          console.log(cname == 'tp-tr tp-tr-current');
+          return (
+            <tr className={cname} key={i} onClick={() => {
+              //if (currentCtx != g) {
+              console.log('a');
+              setCurrentCtx(g);
+              //}
+            }}>
+              <td className="tp-td">{g.name}</td>
+            </tr>
+          );
+        })}
+      </table>;
+  } else if (mode && subjects) {
+    modeTableContent =
+      <table className="tp-table">
+        <tr className="tp-tr">
+          <th className="tp-th">Materie</th>
+        </tr>
+        {/* {subjects.map((s, i) => {
+          return (
+            <tr className="tp-tr" key={i} onClick={() => setCurrentCtx(s)}>
+              <td className="tp-td">{s}</td>
+            </tr>
+          );
+        })} */}
+        <tr className="tp-tr">
+          <td className="tp-td">Coming soon!</td>
+        </tr>
+      </table>;
   }
 
   return (
-    <Page displayPrompt={false} user={null}>
-      <div className="tp-main-content">
-        <div className="tp-wrapper">
-          <div className="tp-buttons-wrapper">
-            <input
-              type="submit"
-              className="tp-class-button"
-              tabIndex={3}
-              value="Classi"
-              onClick={() => onShowGroups()}
-            />
-            <input
-              type="submit"
-              className="tp-subjects-button"
-              tabIndex={3}
-              value="Materie"
-              onClick={() => onShowSubjects()}
-            />
+    <Page displayPrompt={false} user={user}>
+      <div className="tp-main-content" >
+        <WelcomeComponent name={user.name} />
+        <div className="tp-modes-wrapper">
+          <p className="tp-mode">Classi</p>
+          <div className="tp-slider">
+            <Slider onChangeState={() => {
+              setStudents([]);
+              setCurrentCtx(null);
+              toggleMode(ps => !ps);
+            }} />
           </div>
-          {topTable}
-          {botTable}
+          <p className="tp-mode">Materie</p>
+        </div>
+        <div className="tp-tables-wrapper">
+          <div className="tp-left-table">{modeTableContent}</div>
+          <div className="tp-right-table">
+            <table className="tp-table">
+              <tr className="tp-tr">
+                <th className="tp-th">Nome</th>
+                <th className="tp-th">Cognome</th>
+                <th className="tp-th">ID</th>
+              </tr>
+              {students.map((s, i) => {
+                return <tr className="tp-tr" key={i}>
+                  <td className="tp-td">{s.name}</td>
+                  <td className="tp-td">{s.surname}</td>
+                  <td className="tp-td">{s.uid}</td>
+                </tr>;
+              })}
+            </table>
+          </div>
         </div>
       </div>
     </Page>
