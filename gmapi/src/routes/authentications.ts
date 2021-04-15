@@ -1,13 +1,13 @@
 import * as _JSON from './../temp.json';
 import express, { Request, Response, Router } from 'express';
-import { ADUser, LDAPClient, PathParser } from 'ldap-ts-client-test';
+import { ADUser, LDAPClient, PathParser } from './../../../ldap-ts/lib';
 import {
     IError,
     IGroup,
     ITeacher,
     IUser,
     UserType
-    } from '../@types';
+} from '../@types';
 import { ILdapOptions } from 'ldap-ts-client-test/lib/ILdapOptions';
 import { MongoHelper } from '../helpers/MongoHelper';
 
@@ -47,7 +47,11 @@ router.post('/authentication', async (req: Request, res: Response) => {
     };
     try {
         await ldap.start();
+        console.log(username);
+
         let tempPath: string | null = await ldap.getUserPath(username);
+        console.log(tempPath);
+
 
         let userFromPath: ADUser;
         if (tempPath != undefined) {
@@ -151,15 +155,6 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
 }
 
 const createTeacher = async (fullName: string[]) => {
-    let iuserFromPath: IUser;
-    iuserFromPath = {
-        uid: -1,
-        name: fullName[0],
-        surname: fullName[1],
-        groupId: -1,
-        subjects: [],
-        type: UserType.TEACHER
-    }
     let iteacherFromPath: ITeacher;
     iteacherFromPath = {
         uid: -1,
@@ -169,7 +164,6 @@ const createTeacher = async (fullName: string[]) => {
         groupsIds: []
     }
     try {
-        await MongoHelper.addUser(iuserFromPath);
         await MongoHelper.addTeacher(iteacherFromPath);
     } catch (err) {
         throw err;
