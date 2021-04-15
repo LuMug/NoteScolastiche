@@ -12,7 +12,15 @@ export const ROUTES: IRouteDescritor[] = [
         path: '/authors'
     },
     {
+        name: 'test',
+        path: '/teachers'
+    },
+    {
+        name: 'About',
+        path: '/about'
+    },
+    {
         name: 'Logout',
         path: '/login'
-    },
+    }
 ];
