@@ -1,4 +1,5 @@
 import AboutPage from './components/AboutPage/AboutPage';
+import AdminPage from './components/AdminPage/AdminPage';
 import Auth from './auth/Auth';
 import AuthorsPage from './components/AuthorsPage/AuthorsPage';
 import HomePage from './components/HomePage/HomePage';
@@ -30,10 +31,11 @@ export default class App extends Component<{}> {
           <Switch>
             <Route exact path="/login">
               <LoginPage
-                onLoginSuccess={uuid => { }}
+                onLoginSuccess={() => { }}
               />
             </Route>
-            <ProtectedRoute exact path="/teachers" render={() => <TeacherPage uuid={Auth.getUserUid() || -1} />} />
+            <ProtectedRoute exact path="/teachers" render={() => <TeacherPage tuid={3835} />} />
+            <ProtectedRoute exact path="/admins" render={() => <AdminPage uuid={Auth.getUserUid()} />} />
             <ProtectedRoute exact path="/about" render={() => <AboutPage />} />
             <ProtectedRoute exact path="/authors" render={() => <AuthorsPage uuid={Auth.getUserUid()} />} />
             <ProtectedRoute path="/" render={() => <HomePage uuid={Auth.getUserUid()} />} />
