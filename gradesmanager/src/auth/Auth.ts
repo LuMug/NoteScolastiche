@@ -41,8 +41,8 @@ class Auth {
     }
 
     public getUserUid(): number | null {
-        let key = sessionStorage.getItem('uid');
-        return (key) ? parseInt(key) : null;
+        let uid = sessionStorage.getItem('uid');
+        return (uid) ? parseInt(uid) : null;
     }
 }
 
