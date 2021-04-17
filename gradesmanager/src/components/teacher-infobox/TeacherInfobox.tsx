@@ -1,5 +1,6 @@
 import FetchHelper from '../../helpers/FetchHelper';
 import React, { Component, ReactNode } from 'react';
+import SearchBar from '../search-bar/SearchBar';
 import SimpleTextInput from '../simple-text-input/SimpleTextInput';
 import { ITeacher } from '../../@types';
 import './teacher-infobox.css';
@@ -81,11 +82,7 @@ class TeacherInfobox extends Component<ITeacherInfoboxProps, ITeacherInfoboxStat
         return <div className="tib-main tib-slide-in">
             <div className="tib-abort noselect" onClick={() => this.props.onAbort()}></div>
             <div className="tib-head">Seleziona un docente dalla <span>lista della scuola</span></div>
-            <input
-                type="text"
-                className="tib-input"
-                onChange={(e) => this.onQueryChange(e.target.value)}
-                placeholder="Cerca" />
+            <SearchBar onChange={text => this.onQueryChange(text)} />
             {content}
             {loading}
         </div>
