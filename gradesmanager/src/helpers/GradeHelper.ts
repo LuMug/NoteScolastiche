@@ -1,4 +1,4 @@
-import Subject from '../components/subject/Subject';
+import Subject, { getSubjectAvg } from '../components/subject/Subject';
 import { IGrade, IUserSubject } from '../@types';
 
 export default class GradeHelper {
@@ -61,7 +61,7 @@ export default class GradeHelper {
     public static getAllAvgs(subjects: IUserSubject[]) {
         let grades: number[] = [];
         subjects.forEach(s => {
-            grades.push(Subject.getSubjectAvg(s));
+            grades.push(getSubjectAvg(s));
         });
         return grades;
     }

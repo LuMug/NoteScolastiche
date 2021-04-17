@@ -5,7 +5,7 @@ import GradeHelper from '../../helpers/GradeHelper';
 import GradeOptions from '../grade-options/GradeOptions';
 import GradePrompt from '../grade-prompt/GradePrompt';
 import React, { useEffect } from 'react';
-import Subject from '../subject/Subject';
+import Subject, { getSubjectAvg } from '../subject/Subject';
 import { IGrade, ITeacher, IUserSubject } from '../../@types';
 import { useState } from 'react';
 import './subject-page.css';
@@ -66,7 +66,7 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
         return <h1>loading</h1>
     }
     let grades = props.subject.grades;
-    let avg = Subject.getSubjectAvg(props.subject);
+    let avg = getSubjectAvg(props.subject);
     let testPlural = (grades.length > 1) ? 's' : '';
     let gradePrompt =
         <div className={(displayPrompt) ? 'sp-prompt' : 'hidden'} >
