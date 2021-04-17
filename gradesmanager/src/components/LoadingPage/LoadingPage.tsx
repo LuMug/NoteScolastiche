@@ -14,14 +14,14 @@ class LoadingPage extends Component<ILoadingPageProps> {
 
     render(): ReactNode {
         let cName = (this.props.unavailable)
-            ? 'lp-msg-container'
-            : 'lp-hidden';
+            ? 'loap-msg-container'
+            : 'loap-hidden';
         return (
-            <div className="lp-main">
-                <div className="lp-loading-bar">
+            <div className="loap-main">
+                <div className="loap-loading-bar">
                     <div className={cName}>
-                        <p className="lp-msg">Oh no!</p>
-                        <p className="lp-msg-hint">Siamo offline, prova a ricaricare la pagina tra un po'</p>
+                        <p className="loap-msg">Oh no!</p>
+                        <p className="loap-msg-hint">Siamo offline, prova a ricaricare la pagina tra un po'</p>
                     </div>
 
                 </div>
