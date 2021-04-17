@@ -1,14 +1,7 @@
-import AboutButton from '../about-button/AboutButton';
 import Auth from '../../auth/Auth';
-import FetchHelper from '../../helpers/FetchHelper';
 import GradientButton from '../gradient-button/GradientButton';
 import TextInput from '../text-input/TextInput';
-import {
-  Link,
-  Redirect,
-  RouteComponentProps,
-  useHistory
-  } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import './LoginPage.css';
 
