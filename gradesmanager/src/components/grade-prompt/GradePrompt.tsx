@@ -25,7 +25,7 @@ const GradePrompt: React.FunctionComponent<IGradePromptProps> = (props) => {
     }
 
     const onChangeDate = (value: Date) => {
-        setDate(date);
+        setDate(value);
     }
 
     const onAbort = () => {
