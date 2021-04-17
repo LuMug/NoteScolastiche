@@ -5,6 +5,7 @@ import GradeHelper from '../../helpers/GradeHelper';
 import GradePrompt from '../grade-prompt/GradePrompt';
 import LoadingPage from '../LoadingPage/LoadingPage';
 import Page from '../Page/Page';
+import SearchBar from '../search-bar/SearchBar';
 import Subject from '../subject/Subject';
 import SubjectPage from '../SubjectPage/SubjectPage';
 import TeacherInfobox from '../teacher-infobox/TeacherInfobox';
@@ -17,7 +18,6 @@ import {
   IUser,
   IUserSubject
   } from '../../@types';
-import { RouterProps } from 'react-router';
 import './home-page.css';
 
 interface IHomePageProps {
@@ -42,6 +42,12 @@ interface IHomePageState {
   teachersCache: ITeacher[];
 
   displayTIB: boolean;
+
+  query: string;
+
+  subjects: IUserSubject[];
+
+  shouldUpdateCharts: boolean;
 }
 
 
@@ -57,7 +63,10 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
       displayGradePrompt: false,
       currentSubject: null,
       teachersCache: [],
-      displayTIB: false
+      displayTIB: false,
+      query: '',
+      subjects: [],
+      shouldUpdateCharts: false
     };
   }
 
@@ -65,7 +74,12 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
     let data: IUser;
     let teachers: ITeacher[];
     try {
-      data = await FetchHelper.fetchUser(this.props.uuid || -1);
+      if (this.props.uuid !== null) {
+        data = await FetchHelper.fetchUser(this.props.uuid);
+      } else {
+        data = await FetchHelper.fetchUser(-1);
+      }
+
       teachers = await FetchHelper.fetchAllTeachers();
     } catch {
       this.setState({
@@ -77,13 +91,25 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
     this.setState({
       loading: false,
       user: data,
+      subjects: data.subjects,
       teachersCache: teachers
     });
   }
 
+  componentDidUpdate(pp: IHomePageProps, ps: IHomePageState) {
+    if (this.state.query != ps.query && this.state.user) {
+      this.setState({
+        subjects: this.state.user.subjects.filter(
+          v => v.name.toLowerCase().includes(this.state.query.toLowerCase())
+            || v.teacherName.toLowerCase().includes(this.state.query.toLowerCase()))
+      });
+    }
+  }
+
   private async updateUser(updated: IUser) {
     this.setState({
-      user: updated
+      user: updated,
+      shouldUpdateCharts: true
     });
     try {
       await FetchHelper.patchUser(updated.uid, updated);
@@ -108,9 +134,7 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
     }
     let updated = Object.assign({}, state.user);
     updated.subjects.push(newSub);
-    this.setState({
-      user: updated
-    });
+    this.updateUser(updated);
   }
 
   private async onSubjectDelete(state: IHomePageState, index: number) {
@@ -138,10 +162,11 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
       await FetchHelper.deleteSubjectGrade(state.user.uid, sIndex, gIndex);
       updated = await FetchHelper.fetchUser(state.user.uid);
     } catch (err) {
+      console.error(err);
       return;
     }
+    this.updateUser(updated)
     this.setState({
-      user: updated,
       currentSubject: updated.subjects[sIndex]
     });
   }
@@ -163,7 +188,7 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
     }
     try {
       await FetchHelper.patchUserSubject(state.user.uid, index, subjectState);
-      this.setState({ user: await FetchHelper.fetchUser(state.user.uid) });
+      this.updateUser(await FetchHelper.fetchUser(state.user.uid));
     } catch (err) {
       console.error(err);
       return;
@@ -190,9 +215,7 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
     }
     let updated = Object.assign({}, state.user);
     updated.subjects[index].grades.push(newGrade);
-    this.setState({
-      user: updated
-    });
+    this.updateUser(updated);
   }
 
   private async onTIBTeacherClick(state: IHomePageState, teacher: ITeacher) {
@@ -236,6 +259,12 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
     }
   }
 
+  private onChartUpdate() {
+    this.setState({
+      shouldUpdateCharts: false
+    });
+  }
+
   render(): ReactNode {
     if (this.state.loading || this.state.user == null) {
       return (
@@ -275,7 +304,6 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
         onAbort={() => this.toggleTIB()}
         onTeacherClick={(t) => this.onTIBTeacherClick(this.state, t)}
       />;
-    let content;
     let activePrompt;
     if (this.state.displayDetails) {
       activePrompt = subjectPage;
@@ -311,6 +339,8 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
                       data: GradeHelper.getAllAvgs(this.state.user.subjects)
                     }}
                     labels={this.state.user.subjects.map(s => s.name)}
+                    shouldUpdate={this.state.shouldUpdateCharts}
+                    onUpdate={() => this.onChartUpdate()}
                   />
                 </div>
                 <div className="hp-chart">
@@ -320,16 +350,25 @@ class HomePage extends Component<IHomePageProps, IHomePageState> {
                       data: GradeHelper.getAllGradesValuesByDate(this.state.user.subjects)
                     }}
                     labels={GradeHelper.getAllGradesByDate(this.state.user.subjects).map(g => GradeHelper.getDate(g))}
+                    shouldUpdate={this.state.shouldUpdateCharts}
+                    onUpdate={() => this.onChartUpdate()}
                   />
                 </div>
               </div>
             </div>
+            <div className="hp-search-bar">
+              <SearchBar
+                onChange={text => this.setState({ query: text })}
+                placeholder="Materia o docente"
+              />
+            </div>
             <div className="hp-subjects">
-              {this.state.user.subjects.map((s: IUserSubject, i: number) => {
+              {this.state.subjects.map((s: IUserSubject, i: number) => {
                 return <Subject
                   subject={s}
                   key={i}
                   onDelete={() => this.onSubjectDelete(this.state, i)}
+                  onDetails={() => this.onListSubjectClick(this.state, s, i)}
                   onAddGrade={() => this.onSubjectAddGrade(s)}
                   onRemoveGrade={(g, gi) => this.onSubjectRemoveGrade(this.state, i, gi)}
                   onApply={(state) => this.onSubjectApply(this.state, state, i)}
