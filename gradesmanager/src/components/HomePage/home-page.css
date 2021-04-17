@@ -44,27 +44,7 @@ h1 {
   height: 100%;
   background-color: var(--bg-gray);
   /* background-color: #fff; */
-  overflow: auto;
-}
-
-/* width */
-.hp-content-page::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-.hp-content-page::-webkit-scrollbar-track {
-  background: #343434;
-}
-
-/* Handle */
-.hp-content-page::-webkit-scrollbar-thumb {
-  background: #505050;
-}
-
-/* Handle on hover */
-.hp-content-page::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  /* overflow: auto; */
 }
 
 .hp-welcome-panel {
@@ -178,6 +158,16 @@ h1 {
 
 .hp-trend-data-page-switcher #right:active ~ .hp-trend-data-column {
   display: none;
+}
+
+.hp-search-bar {
+  /* width: 98.5%; */
+  padding: 0.4rem 0;
+  margin: auto;
+  opacity: 0;
+  animation: hp-search-bar-in 0.8s forwards, rise-up 350ms ease-in-out forwards,
+    opacity-in 0.8s ease-in-out forwards;
+  animation-timing-function: cubic-bezier(0, 1.11, 1, 0.99);
 }
 
 .hp-subjects {
@@ -308,5 +298,16 @@ h1 {
 @keyframes hp-subject-wrap-slide-in {
   100% {
     transform: translate(0);
+  }
+}
+
+@keyframes hp-search-bar-in {
+  0% {
+    width: 0px;
+    opacity: 0;
+  }
+  100% {
+    width: 98.5%;
+    opacity: 1;
   }
 }
