@@ -16,18 +16,10 @@ interface IPageProps {
     onListSubjectClick?: (us: IUserSubject, index: number) => void;
 }
 
-interface IPageState {
-
-    user: IUser | null;
-}
-
-class Page extends Component<IPageProps, IPageState> {
+class Page extends Component<IPageProps> {
 
     constructor(props: IPageProps) {
         super(props);
-        this.state = {
-            user: props.user
-        };
     }
 
     render(): ReactNode {
@@ -39,10 +31,10 @@ class Page extends Component<IPageProps, IPageState> {
             <div className="pa-main-content">
                 <Nav
                     routes={ROUTES}
-                    entries={(this.state.user) ? this.state.user.subjects.map(s => s.name) : []}
+                    entries={(this.props.user) ? this.props.user.subjects.map(s => s.name) : []}
                     onEntryClick={(i) => {
-                        if (this.props.onListSubjectClick && this.state.user) {
-                            this.props.onListSubjectClick(this.state.user.subjects[i], i);
+                        if (this.props.onListSubjectClick && this.props.user) {
+                            this.props.onListSubjectClick(this.props.user.subjects[i], i);
                         }
                     }}
                 />
