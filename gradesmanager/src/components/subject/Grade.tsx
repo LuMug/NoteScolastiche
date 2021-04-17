@@ -1,4 +1,3 @@
-import React from 'react'
 import { IGrade } from '../../@types';
 
 interface IGradeProps {
@@ -8,7 +7,7 @@ interface IGradeProps {
     editable?: boolean;
 }
 
-function Grade(props: IGradeProps) {
+const Grade: React.FunctionComponent<IGradeProps> = (props: IGradeProps) => {
 
     return (
         <input
