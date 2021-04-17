@@ -1,15 +1,16 @@
 import * as ObjectHelper from './ObjectHelper';
 
 export const shuffle = (array: Array<any>) => {
-    let currentIndex = array.length, temporaryValue, randomIndex;
+    let arr = [...array];
+    let currentIndex = arr.length, temporaryValue, randomIndex;
     while (0 != currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
+        temporaryValue = arr[currentIndex];
+        arr[currentIndex] = arr[randomIndex];
+        arr[randomIndex] = temporaryValue;
     }
-    return array;
+    return arr;
 }
 
 export const equals = <T>(arr1: Array<T>, arr2: Array<T>): boolean => {
