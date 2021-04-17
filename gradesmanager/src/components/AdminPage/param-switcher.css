@@ -1,0 +1,11 @@
+.pas-main-content {
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.pas-slider {
+  margin-left: 0.8rem;
+}
