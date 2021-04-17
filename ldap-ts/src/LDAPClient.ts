@@ -11,18 +11,41 @@ import { ILdapOptions } from './ILdapOptions';
 
 export class LDAPClient {
 
+  /**
+   * The user path used for the binding.
+   */
   private bindPath: string;
 
+  /**
+   * The password used for the binding user.
+   */
   private bindPw: string;
 
+  /**
+   * The list of possible user paths in the ActiveDirectory.
+   */
   private possiblePaths: string[];
 
+  /**
+   * The ActiveDirectory bind url.
+   * ex. ldap://ds.example.com:389
+   */
   private bindURL: string;
 
+  /**
+   * The ldap client.
+   */
   private client: ldap.Client;
 
+  /**
+   * The search options of the client.
+   */
   private opts: ldap.SearchOptions;
 
+  /**
+   * 
+   * @param options 
+   */
   constructor(options: ILdapOptions) {
     this.bindPath = options.bindPath;
     this.bindPw = options.bindPw;
