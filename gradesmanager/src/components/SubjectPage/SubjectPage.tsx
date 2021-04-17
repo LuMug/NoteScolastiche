@@ -1,4 +1,5 @@
 import AddGradeButton from '../add-grade-btn/AddGradeButton';
+import CircularFadeBorder from '../circular-fade-border/CircularFadeBorder';
 import FetchHelper from '../../helpers/FetchHelper';
 import GradeHelper from '../../helpers/GradeHelper';
 import GradeOptions from '../grade-options/GradeOptions';
@@ -111,9 +112,9 @@ class SubjectPage extends Component<ISubjectPageProps, ISubjectPageState> {
                 <div className="sp-top">
                     <div className="sp-top-top">
                         <div className="sp-avg-wrapper">
-                            <div className="sp-avg-border">
-                                <div className="sp-avg">{(grades.length == 0) ? '' : avg.toFixed(1)}</div>
-                            </div>
+                            <CircularFadeBorder>
+                                {(grades.length == 0) ? '' : avg.toFixed(1)}
+                            </CircularFadeBorder>
                         </div>
                         <div className="sp-subject-details">
                             <div className="sp-details-header">{this.state.subject.name}</div>
