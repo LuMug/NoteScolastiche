@@ -1,0 +1,20 @@
+.sb-input {
+  color: var(--gray);
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #b3b3b37e;
+  font-size: 1.1rem;
+  margin: 0.9rem 0;
+  padding: 0.1rem;
+}
+
+.sb-input:focus {
+  outline: none;
+  border-bottom: 1px solid var(--dark-blue);
+}
+
+.sb-input::placeholder {
+  opacity: 0.5;
+  font-size: 1.1rem;
+}
