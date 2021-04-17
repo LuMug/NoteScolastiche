@@ -34,14 +34,6 @@
   z-index: 2;
 }
 
-.tp-left-table {
-  width: 30%;
-}
-
-.tp-right-table {
-  width: 70%;
-}
-
 .tp-left-table,
 .tp-right-table {
   width: 100%;
@@ -62,7 +54,8 @@
 }
 
 .tp-tr,
-.tp-tr-current {
+.tp-tr-current,
+.tp-tr-loading {
   width: 100%;
   border-left: 4px solid transparent;
   transition: all 120ms linear;
@@ -104,4 +97,13 @@
 
 .tp-td {
   color: var(--gray);
+}
+
+.tp-td-loading {
+  width: 100%;
+  height: 51px;
+  background-image: url('./../../public/svg/loading.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
