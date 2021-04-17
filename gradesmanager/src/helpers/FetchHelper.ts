@@ -67,6 +67,16 @@ export default class FetchHelper {
         return user;
     }
 
+    public static async fetchAllUsers() {
+        let users: IUser[];
+        try {
+            users = await this.fetch(`/users`);
+        } catch (err) {
+            throw err;
+        }
+        return users;
+    }
+
     public static async fetchAllStudents() {
         let students: IUser[];
         try {
@@ -74,10 +84,25 @@ export default class FetchHelper {
         } catch (err) {
             throw err;
         }
+        await this.delay(1000);
         return students;
     }
 
-    public static async fetchAllStudentsFor(groupUid: number) {
+    private static async delay(time: number) {
+        return new Promise<void>((resolve, reject) => {
+            setTimeout(() => resolve(), time);
+        });
+    }
+
+    public static async fetchTeacherStudents(teacher: ITeacher) {
+        try {
+            return (await this.fetchAllStudents()).filter(v => teacher.groupsIds.includes(v.groupId));
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public static async fetchGroupStudents(groupUid: number) {
         try {
             return (await this.fetchAllStudents()).filter(v => v.groupId == groupUid);
         } catch (err) {
