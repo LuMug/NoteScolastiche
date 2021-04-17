@@ -1,73 +1,33 @@
-import React, { Component, ReactNode } from 'react';
-import { Chart } from 'chart.js';
+import AbstractChart, { IAbstractChartProps } from '../chart/AbstractChart';
+import React from 'react';
 
-export type AvgChartDataSet = {
-
-    label: string;
-
-    data: number[];
-
-    backgroundColor: string;
-};
-
-interface IAvgChartProps {
-
-    labels: string[];
-
-    dataset: AvgChartDataSet;
-}
-
-class AvgChart extends Component<IAvgChartProps> {
-
-    private chartRef: any;
-
-    private chart: Chart | null;
-
-    constructor(props: IAvgChartProps) {
-        super(props);
-        this.chartRef = React.createRef();
-        this.chart = null;
-    }
-
-    componentDidUpdate() {
-        this.chart = this.buildChart();
-        this.chart.update();
-    }
-
-    componentDidMount() {
-        this.chart = this.buildChart();
-    }
-
-    private buildChart() {
-        return new Chart(this.chartRef.current, {
-            type: 'bar',
-            data: {
-                labels: this.props.labels,
-                datasets: [this.props.dataset]
-            },
-            options: {
-                scales: {
-                    yAxes: [
-                        {
-                            ticks: {
-                                min: 1,
-                                max: 6
-                            }
+const AvgChart: React.FunctionComponent<IAbstractChartProps> = (props) => {
+    return <AbstractChart
+        dataset={props.dataset}
+        labels={props.labels}
+        type="bar"
+        options={{
+            scales: {
+                yAxes: [
+                    {
+                        ticks: {
+                            min: 1,
+                            max: 6
                         }
-                    ],
-                    unitStepSize: 0.25
-                },
-                maintainAspectRatio: false,
+                    }
+                ],
+                unitStepSize: 0.25
+            },
+            maintainAspectRatio: false,
 
+        }}
+        shouldUpdate={props.shouldUpdate}
+        onUpdate={() => {
+            if (props.onUpdate) {
+                props.onUpdate();
             }
-        });
-    }
-
-    render(): ReactNode {
-        return (
-            <canvas ref={this.chartRef} />
-        );
-    }
+        }}
+    />;
 }
 
 export default AvgChart;
