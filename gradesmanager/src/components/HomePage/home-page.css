@@ -48,10 +48,24 @@ h1 {
 }
 
 .hp-welcome-panel {
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
   margin: auto;
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.hp-welcome-comp {
+  width: 100%;
+}
+
+.hp-total-avg {
+  width: 58px;
+  transform: translateY(-12px);
 }
 
 .hp-card {

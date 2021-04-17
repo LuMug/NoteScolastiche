@@ -1,5 +1,6 @@
 import AddSubject from '../add-subject/AddSubject';
 import AvgChart from '../avg-chart/AvgChart';
+import CircularFadeBorder from '../circular-fade-border/CircularFadeBorder';
 import FetchHelper from '../../helpers/FetchHelper';
 import GradeHelper from '../../helpers/GradeHelper';
 import GradePrompt from '../grade-prompt/GradePrompt';
@@ -270,6 +271,7 @@ const HomePage: React.FunctionComponent<IHomePageProps> = (props) => {
     activePrompt = gradePrompt;
   }
 
+  let totalAvg = GradeHelper.getTotalAvg(user.subjects);
   return (
     <Page
       displayPrompt={
@@ -282,7 +284,14 @@ const HomePage: React.FunctionComponent<IHomePageProps> = (props) => {
       <div className="hp-main-content">
         <div className="hp-content-page">
           <div className="hp-welcome-panel">
-            <WelcomeComponent name={user.name} />
+            <div className="hp-welcome-comp">
+              <WelcomeComponent name={user.name} />
+            </div>
+            <div className="hp-total-avg">
+              <CircularFadeBorder fontSize="small">
+                <p>{(totalAvg == 0) ? '-' : GradeHelper.valueToString(totalAvg)}</p>
+              </CircularFadeBorder>
+            </div>
           </div>
           <div className="hp-card hp-trend-panel hp-rise-opacity-in">
             <div className="hp-chart-wrapper">
