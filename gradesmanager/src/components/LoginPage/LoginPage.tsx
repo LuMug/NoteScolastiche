@@ -14,7 +14,7 @@ import './LoginPage.css';
 
 interface ILoginPageProps {
 
-  onLoginSuccess: (uuid: number) => void;
+  onLoginSuccess?: (uuid: number) => void;
 }
 
 const LoginPage = (props: ILoginPageProps) => {
@@ -25,9 +25,10 @@ const LoginPage = (props: ILoginPageProps) => {
 
   const attemptLogin = async () => {
     let uid = await Auth.login(username, pw);
-    console.log(`UID: ${uid}`);
     if (uid) {
-      props.onLoginSuccess(uid);
+      if (props.onLoginSuccess) {
+        props.onLoginSuccess(uid);
+      }
       history.push('/');
     }
   }
