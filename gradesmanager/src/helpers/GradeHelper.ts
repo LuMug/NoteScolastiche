@@ -20,8 +20,13 @@ export default class GradeHelper {
         return `${d}${separator}${m}${separator}${y}`;
     }
 
-    public static valueToString(grade: IGrade): string {
-        let val = grade.value.toFixed(2);
+    public static valueToString(grade: IGrade | number): string {
+        let val;
+        if (typeof grade == 'number') {
+            val = grade.toFixed(2);
+        } else {
+            val = grade.value.toFixed(2);
+        }
         if (val.charAt(val.length - 2) == '0') {
             val = val.charAt(0);
         }
@@ -64,5 +69,13 @@ export default class GradeHelper {
             grades.push(getSubjectAvg(s));
         });
         return grades;
+    }
+
+    public static getTotalAvg(subjects: IUserSubject[]) {
+        let grades = GradeHelper.getAllGradesByDate(subjects);
+        if (grades.length == 0) {
+            return 0;
+        }
+        return grades.map(g => g.value * g.weight).reduce((p, c) => p + c) / grades.length;
     }
 }
