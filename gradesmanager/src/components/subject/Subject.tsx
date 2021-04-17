@@ -1,9 +1,7 @@
-import AddGradeButton from '../add-grade-btn/AddGradeButton';
+import CircularFadeBorder from '../circular-fade-border/CircularFadeBorder';
 import FetchHelper from '../../helpers/FetchHelper';
 import Grade from './Grade';
-import React, { Component, ReactNode } from 'react';
-import TeacherInfobox from '../teacher-infobox/TeacherInfobox';
-import { API_URL } from '../../util/constants';
+import { Component, ReactNode } from 'react';
 import { IGrade, ITeacher, IUserSubject } from '../../@types';
 import './Subject.css';
 
@@ -14,6 +12,8 @@ interface ISubjectProps {
     onDelete: () => void;
 
     onAddGrade: () => void;
+
+    onDetails: () => void;
 
     onRemoveGrade: (grade: IGrade, index: number) => void;
 
@@ -174,15 +174,18 @@ class Subject extends Component<ISubjectProps, ISubjectState> {
                         </div>;
                     })}
                 </div>
-                <div className="s-subject-avg-wrapper">
-                    <div className="s-subject-avg-border">
-                        <div className="s-subject-avg">{this.state.avg.toFixed(1)}</div>
-                    </div>
-                </div>
+                <CircularFadeBorder>
+                    {this.state.avg.toFixed(1)}
+                </CircularFadeBorder>
             </div>;
         }
+
         return (
-            <div className="hp-card s-subject">
+            <div className="hp-card s-subject" >
+                <div className="s-drag-handle-wrapper">
+                    <div className="s-drag-handle"
+                        draggable="true"></div>
+                </div>
                 <div className="s-subject-top">
                     <input
                         type="text"
@@ -205,12 +208,13 @@ class Subject extends Component<ISubjectProps, ISubjectState> {
                         <div className="s-edit-btn noselect"> </div>
                         <div className="s-edit-btn-content">
                             <div className="s-edit-btn-el s-edit-btn-el-edit noselect" onClick={() => this.onEdit()}> </div>
+                            <div className="s-edit-btn-el s-edit-btn-el-details noselect" onClick={() => this.props.onDetails()}> </div>
                             <div className="s-edit-btn-el s-edit-btn-el-trash noselect" onClick={() => this.props.onDelete()}></div>
                         </div>
                     </div>
                 </div>
                 <div className="s-subject-separator"></div>
-                {sData}
+                { sData}
                 <div className={`${this.state.isEditing ? 's-subject-apply-wrapper noselect' : 's-subject-add-grade-wrapper noselect'}`}>
                     <div
                         className={`${this.state.isEditing ? 's-subject-apply noselect' : 's-subject-add-grade noselect'}`}
@@ -223,7 +227,7 @@ class Subject extends Component<ISubjectProps, ISubjectState> {
                         }}
                     >+</div>
                 </div>
-            </div>
+            </div >
         );
     }
 }
