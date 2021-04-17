@@ -2,6 +2,7 @@
   --gray: #b3b3b3;
   --ok-dark-gray: #666666;
   --dark-gray: #b3b3b31e;
+  --lp-dark-gray: #303030;
   --bg-gray: #181818;
   --card-gray: #1f1f1f;
   --bg-nav: #111;
@@ -15,6 +16,7 @@
   --card-shadow: 0 5px 5px -3px #00000040, 0 8px 5px 1px #00000030,
     0 3px 5px 2px #00000029;
   --card-radius: 10px;
+  --fade-border-thickness: 0.11rem;
   --ab-border-color: #141414;
 }
 
