@@ -45,6 +45,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
         }
         return res.status(400).json(err);
     };
+    let checkedUser: IUser | null = null;
     try {
         await ldap.start();
         console.log(username);
@@ -62,13 +63,14 @@ router.post('/authentication', async (req: Request, res: Response) => {
                     message: 'Not a valid user'
                 }
             }
-            return res.status(400).json({ error: err });
+            return res.status(400).json(err);
         }
 
         let tempCheck: boolean = await ldap.checkUserCredentials(username, password);
+        await ldap.end();
         if (tempCheck) {
-            let checkedUser: IUser | null = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
-            if (checkedUser != null) {
+            checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
+            if (checkedUser) {
                 return res.status(200).json(checkedUser);
             } else {
                 if (isStudent(userFromPath)) {
@@ -84,6 +86,17 @@ router.post('/authentication', async (req: Request, res: Response) => {
                         return res.status(400).json(err);
                     }
                 }
+                checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
+                if (checkedUser) {
+                    return res.status(201).json(checkedUser);
+                } else {
+                    let err: IError = {
+                        error: {
+                            message: 'Could not create user'
+                        }
+                    }
+                    return res.status(500).json(err);
+                }
             }
         } else {
             let err: IError = {
@@ -93,12 +106,12 @@ router.post('/authentication', async (req: Request, res: Response) => {
             };
             return res.status(400).json(err);
         }
-        ldap.end();
-
     } catch (err) {
+        if (typeof err === 'string') {
+            return res.status(400).json({ error: { message: err } });
+        }
         return res.status(400).json(err);
     }
-    return res.status(201).json({});
 });
 
 const isStudent = (user: ADUser) => {
