@@ -518,6 +518,18 @@ export class MongoHelper {
 					reject(`Could not find an user with uid ${userId}`);
 					return;
 				}
+				if (user.subjects.length == 0) {
+					reject(`User has no subjects`);
+					return;
+				}
+				if (!user.subjects[subjectId]) {
+					reject(`User has no subject with id ${subjectId}`);
+					return;
+				}
+				if (!grade.date || grade.date.trim() === "") {
+					grade.date = new Date().toISOString();
+				}
+				let subject = user.subjects[subjectId];
 				user.subjects[subjectId].grades.push(grade);
 				await this.updateUser(userId, { subjects: user.subjects });
 			} catch (err) {
@@ -529,7 +541,7 @@ export class MongoHelper {
 		});
 	}
 
-	public static async updateGrade(userId: number, subjectId: number, gradeId: number, grade: IGrade) {
+	public static async updateGrade(userId: number, subjectId: number, gradeId: number, grade: Partial<IGrade>) {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
 				let user: IUser | null = await this.getUser(userId);
@@ -537,7 +549,31 @@ export class MongoHelper {
 					reject(`Could not find an user with uid ${userId}`);
 					return;
 				}
-				user.subjects[subjectId].grades[gradeId] = grade;
+				if (user.subjects.length == 0) {
+					reject(`User has no subjects`);
+					return;
+				}
+				if (!user.subjects[subjectId]) {
+					reject(`User has no subject with id ${subjectId}`);
+					return;
+				}
+				let subject = user.subjects[subjectId];
+				if (subject.grades.length == 0) {
+					reject(`User has no grades for subjects ${subject.name}`);
+					return;
+				}
+				let oldGrade = user.subjects[subjectId].grades[gradeId];
+				if (grade.date) {
+					oldGrade.date = grade.date;
+				}
+				if (grade.weight) {
+					oldGrade.weight = grade.weight;
+				}
+				if (grade.value) {
+					oldGrade.value = grade.value;
+				}
+
+				user.subjects[subjectId].grades[gradeId] = oldGrade;
 				await this.updateUser(userId, { subjects: user.subjects });
 			} catch (err) {
 				reject(err);
