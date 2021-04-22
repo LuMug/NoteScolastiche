@@ -13,6 +13,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
             (req as any).authorized = true;
         }
     } else {
+        console.error('Unauthorized access from: ', req.ip);
         (req as any).authorized = false;
     }
     next();
@@ -22,6 +23,7 @@ export const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     if ((req as any).authorized) {
         next();
     } else {
+        console.error('Unauthorized access from: ', req.ip);
         return res.status(401).send('Unauthorized');
     }
 };
