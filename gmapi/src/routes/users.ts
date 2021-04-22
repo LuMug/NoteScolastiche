@@ -272,7 +272,6 @@ router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Resp
 				message: 'Not a valid User id.'
 			}
 		};
-		console.log(uuid);
 		return res.status(400).json({ error: err });
 	}
 	if (isNaN(suid)) {
@@ -296,6 +295,8 @@ router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Resp
 		} else {
 			error = err;
 		}
+		console.log(err);
+
 		return res.status(400).json(error);
 	}
 	return res.status(201).json({});
@@ -305,14 +306,13 @@ router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, re
 	let uuid: number = parseInt(req.params.uuid);
 	let suid: number = parseInt(req.params.suid);
 	let guid: number = parseInt(req.params.guid);
-	let grade: IGrade = req.body.grade;
+	let grade: Partial<IGrade> = req.body.grade;
 	if (isNaN(uuid)) {
 		let err: IError = {
 			error: {
 				message: 'Not a valid User id.'
 			}
 		};
-		console.log(uuid);
 		return res.status(400).json({ error: err });
 	}
 	if (isNaN(suid)) {
@@ -344,6 +344,8 @@ router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, re
 		} else {
 			error = err;
 		}
+		console.log(err);
+
 		return res.status(400).json(error);
 	}
 	return res.status(204).json({});
