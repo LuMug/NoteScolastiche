@@ -71,7 +71,21 @@ router.post('/authentication', async (req: Request, res: Response) => {
         if (tempCheck) {
             checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
             if (checkedUser) {
-                return res.status(200).json(checkedUser);
+                let groupName: string;
+                let group: IGroup | null = await MongoHelper.getGroup(checkedUser.groupId);
+                if (userFromPath.group && userFromPath.year) {
+                    groupName = userFromPath.group + userFromPath.year;
+                    if (group && group.name == groupName) {
+                        return res.status(200).json(checkedUser);
+                    } else {
+                        await MongoHelper.addGroup({ name: groupName });
+                        let groupId = await MongoHelper.getGroupByName(groupName);
+                        if (groupId) {
+                            await MongoHelper.updateUser(checkedUser.uid, { groupId: groupId?.uid });
+                        }
+                        return res.status(201).json(checkedUser);
+                    }
+                }
             } else {
                 if (isStudent(userFromPath)) {
                     try {
