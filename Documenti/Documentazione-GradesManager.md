@@ -150,7 +150,7 @@ Questi sono i rispettivi mezzi che abbiamo utilizzato:<br>
 - Node JS (v15.0.6) - Runtime System
 - Visual Studio Code - Editor
 - Postman (v8.0.7) - Utilizzato per il testing delle API
-- MongoDB (v4.4.3) - Utilizzato come DBMS per salvare i dati
+- MongoDB (v4.4.4) - Utilizzato come DBMS per salvare i dati
 
 Librerie:
 - React
@@ -279,6 +279,8 @@ risultato ottenuto non per forza può essere come era stato progettato.
 
 Sulla base di queste informazioni il lavoro svolto dovrà essere
 riproducibile.
+
+
 
 In questa parte è richiesto l’inserimento di codice sorgente/print
 screen di maschere solamente per quei passaggi particolarmente
