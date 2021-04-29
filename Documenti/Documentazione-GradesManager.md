@@ -176,7 +176,7 @@ Una REST API è invece un interfaccia di programmazione delle applicazioni confo
 
 **REST (Representational state transfer)** , è uno stile architetturale basato sul protocollo HTTP. Il funzionamento prevede una struttura degli URL ben definita che identifica univocamente una risorsa o un insieme di risorse e l'utilizzo dei metodi HTTP specifici per il recupero di informazioni (GET), per la modifica (POST, PUT, PATCH, DELETE) e per altri scopi (OPTIONS, ecc.). 
 
-<br>
+
 
 L'API quindi funge da elemento di intermediazione tra gli utenti, i clienti e le risorse che intendono ottenere. In poche parole, viene programmata a lato server, e tramite le route (ovvero le rotte che condurranno ai dati) è possibile andare a pescare le informazioni.
 I motivi principali per cui abbiamo utilizzato questa architettura sono:
@@ -257,6 +257,7 @@ per la realizzazione del prodotto.
 ## Implementazione
 
 Dopo aver pianificato e progettato tutto possiamo passare all'implementazione. In gran modo possiamo suddividere tutto il lavoro in 3 grandi sezioni:
+
 - **LDAP**, ovvero tutto ciò che concerne la connessione e l'elaborazione degli utenti affinché si possa fare il login
 - **API**, tutto quello che concerne il back-end dell'applicazione, che interagisce con il database e l'LDAP.
 - **React**, tutto ciò che concerne la creazione delle pagine (Typescript, CSS, HTML)
@@ -269,7 +270,27 @@ Dopo aver pianificato e progettato tutto possiamo passare all'implementazione. I
   
   Sostanzialmente quello che svolge questo metodo è svolgere il bind utilizzando un percorso di un utente presente nell'Active Directory con lasua password. Infatti per fare un bind bisogna avere le credenziali di un utente all'interno dell'AD che abbia i permessi per svolgere il bind.
   
-  - **Cercare utente nell'AD**: una volta fatto il bind con il server possiamo già iniziare a fare diverse richieste LDAP. In questo caso ci interessa sapere se un utente esiste nell'Active Direcotry. Per fare ciò abbiamo sviluppato questo metodo:
+  - **Cercare utente nell'AD**
+  Una volta fatto il bind con il server possiamo già iniziare a fare diverse richieste LDAP. In questo caso ci interessa sapere se un utente esiste nell'ActiveDirectory. Per fare ciò abbiamo sviluppato questo metodo:
+
+  ![QueryAD](./assets/queryAD.png)
+
+  Infatti questo metodo, accetta un percorso dell'ActiveDirectory, e ci dice se il percorso è valido (corrisponde a quello dell'AD) oppure no. Questo metodo ritorna una ``Promise``, ovvero è un oggetto che può produrre un singolo valore in un certo momento nel futuro: un valore risolto, o un motivo per cui non è stato risolto (ad esempio, si è verificato un errore di rete).
+
+  - **Ritornare il percorso di un utente**
+  Come abbiamo cercato un utente nell'AD, abbiamo fatto anche l'operazione contrapposta. Abbiamo sviluppato un metodo che passando un nome utente (nome.cognome dell'allievo), riesce a ritornarci tutto il percorso di Organisation Unit. Questo metodo ci è stato molto utile prima di tutto per sapere se esiste l'utente nell'AD (fa parte della scuola). Sapendo il percorso dell'allievo in questione, ricaviamo da esso la sezione dell'allievo (Chimica, Elettronica, Informatica..) e la classe (I3AA, D1AA, ...).
+  
+  ![GetUserPath](./assets/getUserPath.png)
+
+  Dato che non abbiamo trovato delle librerie abbastanza avanzate di LDAP, abbiamo dovuto ricorrere a un metodo molto rudimentale. Infatti, questo metodo fa passare tutti i percorsi possibili dell'AD, e tramite il metodo ``queryAD``, riesce a capire se il percorso è valido. Nel momento in cui il percorso è valido lo ritorna.
+
+  - **Controllare le credenziali dell'utente**
+  Il metodo più utile in assoluto è stato questo. Ci ha permesso di svolgere il passaggio più importante, che ci sarebbe servito per il login:
+
+  ![CheckUserCredentials](./assets/checkUserCredentials.png)
+
+  Il metodo accetta il nome e la password. Semplicemente se il nome e la password corrispondono a quelle dell'AD, ritorna true, altrimenti false. Questo metodo è un po' una fusione delle altre funzionalità che abbiamo sviluppato, dato che per arrivare a sviluppare questo metodo, abbiamo avuto bisogno di partire da quelli menzionati in precedenza.
+
 
 
 
@@ -298,6 +319,31 @@ Per eventuali dettagli si possono inserire riferimenti ai diari.
 
 ### Protocollo di test
 
+|Test Case      | TC-001                               |
+|---------------|--------------------------------------|
+|**Nome**       |Binding |
+|**Riferimento**|Req - 1                               |
+|**Descrizione**| Fare il binding verso l'ActiveDirectory della scuola.|
+|**Risultati attesi** | Il programma riesce a comunicare con l'ActiveDirectory. |
+
+|Test Case      | TC-002                               |
+|---------------|--------------------------------------|
+|**Nome**       |Accesso con nome utente o password sbagliate |
+|**Riferimento**|Req - 1                               |
+|**Descrizione**|Acecdere al sistema utilizzando un nome utente o una password errata.|
+|**Risultati attesi** | Il sistema rifiuta l'accesso indicando che il nome utente oppure la password  |
+
+|Test Case      | TC-003                               |
+|---------------|--------------------------------------|
+|**Nome**       |Accesso con utente allievo, docente e admin. Riesce a riconoscere il suo ruolo |
+|**Riferimento**|Req - 1                               |
+|**Descrizione**|Accedere al sistema utilizzando un utente con il ruolo di allievo, uno con il riolo di docente e infine col ruolo di admin.|
+|**Risultati attesi** | Riesce a riconoscere prima di tutto se esistono, e dopodiché riconosce che ruolo possiedono.  |
+
+
+
+
+
 Definire in modo accurato tutti i test che devono essere realizzati per
 garantire l’adempimento delle richieste formulate nei requisiti. I test
 fungono da garanzia di qualità del prodotto. Ogni test deve essere
@@ -316,11 +362,25 @@ ripetibile alle stesse condizioni.
 
 ### Risultati test
 
-Tabella riassuntiva in cui si inseriscono i test riusciti e non del
-prodotto finale. Se un test non riesce e viene corretto l’errore, questo
-dovrà risultare nel documento finale come riuscito (la procedura della
-correzione apparirà nel diario), altrimenti dovrà essere descritto
-l’errore con eventuali ipotesi di correzione.
+|Test Case      | TC-001                               |
+|---------------|--------------------------------------|
+|**Nome**       |Binding |
+|**Descrizione**|Il sistema è riuscito a svolgere il binding con successo.|
+|**Passato**|✔                     |
+
+
+|Test Case      | TC-002                               |
+|---------------|--------------------------------------|
+|**Nome**       |Accesso con nome utente o password sbagliate |
+|**Descrizione**| Quando si passano nomi o password diverse il sistema non accede e invia un messaggio di errore all'utente.|
+|**Passato**|✔                     |
+
+
+|Test Case      | TC-003                               |
+|---------------|--------------------------------------|
+|**Nome**       |Accesso con utente allievo, docente e admin. Riesce a riconoscere il suo ruolo |
+|**Descrizione**| Il sistema riconosce il ruolo dell'utente. |
+|**Passato**|✔                     |
 
 ### Mancanze/limitazioni conosciute
 
@@ -337,17 +397,25 @@ consuntivo).
 
 ## Conclusioni
 
+Il prodotto finale lo reputiamo molto utile. Per un allievo è molto importante tenere conto del suo andamento scolastico, ma potrebbe essere anche un'operazione abbastanza tediosa. Il nostro prodotto riesce a rendere le azioni che potrebbero essere più difficili da tenere conto, in un processo molto più semplice e visivo. Il fatto di possedere un grafico che evidenzi il tuo andamento è anche quello una funzionalità molto utile per un allievo. D'altra parte ci sono anche i docenti, che grazie al nostro prodotto potranno avere una concezione più precisa dell'andamento di ogni allievo, focalizzando tutto su un sistema unico. Un altro punto forte della soluzione è il fatto che sia un applicativo web e come tutti sappiamo, un applicativo web è molto versatile in diversi aspetti. Uno di questi è che vi si può accedere da ovunque, da ogni dispositivo. Pensiamo veramente che sia uno strumento molto utile per la nostra scuola e che ha il potenziale di essere pubblicato e reso disponibili effettivamente. Tuttavia i risultati che abbiamo ottenuti sono fatti a misura per il nostro ambiente e rispettando, ma si potrebbe anche generalizzare per tutte le scuole.
+
 Quali sono le implicazioni della mia soluzione? Che impatto avrà?
-Cambierà il mondo? È un successo importante? È solo un’aggiunta
+Cambierà il mondo? È un successo importante? È solo un aggiunta
 marginale o è semplicemente servita per scoprire che questo percorso è
 stato una perdita di tempo? I risultati ottenuti sono generali,
 facilmente generalizzabili o sono specifici di un caso particolare? ecc
 
 ### Sviluppi futuri
-  Migliorie o estensioni che possono essere sviluppate sul prodotto.
+  Ci sono diverse funzionalità che abbiamo pensato potessero essere interessanti per il nostro progetto, ma che per diversi motivi non sono state implementate:
+
+  - Possibilità di scegliere tra diversi linguaggi
+  - Separazione delle note in base ai semestri
+  - Note colorate in base alla sufficienza
+  - Valutazioni semestrali docenti da parte degli allievi
+  - Sviluppare una breve guida per il collegamento del sito alla home (Android e IOS)
 
 ### Considerazioni personali
-  Cosa ho imparato in questo progetto? ecc
+  Cosa ho imparato in questo progetto? ecc 
 
 ## Sitografia
 
