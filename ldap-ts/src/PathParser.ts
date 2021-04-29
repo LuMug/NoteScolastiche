@@ -1,7 +1,11 @@
 import { ADUser } from "./ADUser";
 
 /**
+ * Used for parse an LDAP path,
+ * After parsing, it generates an ADUser.
+ * 
  * @author Francisco Viola
+ * @version 15.04.2021
  */
 export class PathParser {
 
