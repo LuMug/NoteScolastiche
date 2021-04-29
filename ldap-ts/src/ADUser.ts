@@ -28,7 +28,7 @@ export class ADUser {
   group?: string;
 
   /**
-   * The school year.d
+   * The school year.
    */
   year?: number;
 
