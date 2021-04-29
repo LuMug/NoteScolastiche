@@ -10,11 +10,19 @@ import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
 
+/**
+ * Gets all users.
+ */
 router.get('/users', async (req: Request, res: Response) => {
 	let arr = await MongoHelper.asArray(MongoHelper.getUsers());
 	res.status(200).json(arr);
 });
 
+/**
+ * Gets a user.
+ * 
+ * @param uid the unique id of a user
+ */
 router.get('/users/:uid', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	if (isNaN(uid)) {
@@ -36,6 +44,11 @@ router.get('/users/:uid', async (req: Request, res: Response) => {
 	}
 });
 
+/**
+ * Gets all the user's subjects.
+ * 
+ * @param uid the unique id of a user
+ */
 router.get('/users/:uid/subjects', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	if (isNaN(uid)) {
@@ -57,6 +70,13 @@ router.get('/users/:uid/subjects', async (req: Request, res: Response) => {
 	}
 });
 
+
+/**
+ * Gets a user's subject by passing subject unique id.
+ * 
+ * @param uid the unique id of the user
+ * @param suid the unique id of the subject
+ */
 router.get('/users/:uid/subjects/:suid', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	let suid: number = parseInt(req.params.suid);
@@ -94,6 +114,9 @@ router.get('/users/:uid/subjects/:suid', async (req: Request, res: Response) => 
 	}
 });
 
+/**
+ * Adds a user.
+ */
 router.post('/users', async (req: Request, res: Response) => {
 	if (!MongoHelper.isUser(req.body.user)) {
 		let err: IError = {
@@ -112,6 +135,11 @@ router.post('/users', async (req: Request, res: Response) => {
 	res.status(201).json(user);
 });
 
+/**
+ * Updates a user.
+ * 
+ * @param uid the unique id of the user
+ */
 router.patch('/users/:uid', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	let user: Partial<Omit<IUser, 'uid'>> = req.body.user;
@@ -136,6 +164,11 @@ router.patch('/users/:uid', async (req: Request, res: Response) => {
 	return res.status(204).json({});
 });
 
+/**
+ * Adds a subjects to a user.
+ * 
+ * @param uid the unique id of the user
+ */
 router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 	// 1 numero, [...] numeri
 	let uid: number = parseInt(req.params.uid);
@@ -172,6 +205,11 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 	return res.status(201).json({});
 });
 
+/**
+ * Adds a subject to a user.
+ * 
+ * @param uid the unique id of the user
+ */
 router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	if (isNaN(uid)) {
@@ -222,6 +260,12 @@ router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
 	return res.status(201).json({});
 });
 
+/**
+ * Updates a user's subject.
+ * 
+ * @param uid the unique id of the user
+ * @param suid the unique id of the subject
+ */
 router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) => {
 	let uuid: number = parseInt(req.params.uuid);
 	let suid: number = parseInt(req.params.suid);
@@ -262,6 +306,12 @@ router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) 
 	return res.status(204).json({});
 });
 
+/**
+ * Adds a grade to a user's subject.
+ * 
+ * @param uid the unique id of the user
+ * @param suid the unique id of the subject
+ */
 router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Response) => {
 	let uuid: number = parseInt(req.params.uuid);
 	let suid: number = parseInt(req.params.suid);
@@ -302,6 +352,13 @@ router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Resp
 	return res.status(201).json({});
 });
 
+/**
+ * Updates a grade of a user's subject.
+ * 
+ * @param uid the unique id of the user
+ * @param suid the unique id of the subject
+ * @param guid the unique id of the grade
+ */
 router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, res: Response) => {
 	let uuid: number = parseInt(req.params.uuid);
 	let suid: number = parseInt(req.params.suid);
@@ -351,6 +408,13 @@ router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, re
 	return res.status(204).json({});
 });
 
+/**
+ * Deletes a grade of a user's subject.
+ * 
+ * @param uid the unique id of the user
+ * @param suid the unique id of the subject
+ * @param guid the unique id of the grade
+ */
 router.delete('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, res: Response) => {
 	let uuid: number = parseInt(req.params.uuid);
 	let suid: number = parseInt(req.params.suid);
@@ -393,6 +457,11 @@ router.delete('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, r
 	return res.status(200).json({});
 });
 
+/**
+ * Deletes a user.
+ * 
+ * @param uid the unique id of the user
+ */
 router.delete('/users/:uid', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	if (isNaN(uid)) {
@@ -416,6 +485,12 @@ router.delete('/users/:uid', async (req: Request, res: Response) => {
 	return res.status(200).json({});
 });
 
+/**
+ * Deletes a user's subjects.
+ * 
+ * @param uid the unique id of the user
+ * @param suid the unique id of the subject
+ */
 router.delete('/users/:uid/subjects/:suid', async (req: Request, res: Response) => {
 	let uid: number = parseInt(req.params.uid);
 	let suid: number = parseInt(req.params.suid);

@@ -4,11 +4,19 @@ import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
 
+/**
+ * Gets all the teachers.
+ */
 router.get('/teachers', async (req: Request, res: Response) => {
   let arr = await MongoHelper.asArray(MongoHelper.getTeachers());
   res.status(200).json(arr);
 });
 
+/**
+ * Gets a teacher.
+ * 
+ * @param uid the unique id of the teacher
+ */
 router.get('/teachers/:uid', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
@@ -30,6 +38,11 @@ router.get('/teachers/:uid', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * Gets all of the teacher's groupsIds.
+ * 
+ * @param uid the unique id of the teacher
+ */
 router.get('/teachers/:uid/groupsIds', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
@@ -58,6 +71,11 @@ router.get('/teachers/:uid/groupsIds', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * Gets all of the teacher's groups name.
+ * 
+ * @param uid the unique id of the teacher
+ */
 router.get('/teachers/:uid/groups', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
@@ -100,6 +118,11 @@ router.get('/teachers/:uid/groups', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * Deletes a teacher.
+ * 
+ * @param the unique id of the teacher
+ */
 router.delete('/teachers/:uid', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
@@ -123,6 +146,9 @@ router.delete('/teachers/:uid', async (req: Request, res: Response) => {
   return res.status(200).json({});
 });
 
+/**
+ * Add a teacher.
+ */
 router.post('/teachers', async (req: Request, res: Response) => {
   if (!MongoHelper.isTeacher(req.body.teacher)) {
     let err: IError = {
@@ -141,6 +167,11 @@ router.post('/teachers', async (req: Request, res: Response) => {
   res.status(201).json(teacher);
 });
 
+/**
+ * Adds to a teacher a subject by passing its id.
+ * 
+ * @param uid the unique id of the teacher
+ */
 router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
@@ -176,6 +207,11 @@ router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) =>
   return res.status(201).json();
 });
 
+/**
+ * Updates a teacher.
+ * 
+ * @param uid the unique id of a teacher
+ */
 router.patch('/teachers/:uid', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   let teacher: Partial<Omit<ITeacher, 'uid'>> = req.body.teacher;

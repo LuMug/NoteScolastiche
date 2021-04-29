@@ -4,6 +4,9 @@ import { UserType } from '../@types';
 
 const router: Router = express.Router();
 
+/**
+ * Gets all of the students in an array.
+ */
 router.get('/students', async (req: Request, res: Response) => {
     let arr = await MongoHelper.asArray(MongoHelper.getUsers());
     res.status(200).json(arr.filter(v => v.type === UserType.STUDENT));
