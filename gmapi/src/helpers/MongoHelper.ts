@@ -167,16 +167,6 @@ export class MongoHelper {
 	}
 
 	/**
-	 * Returns `true` if `input` is a valid `ISubject` object,
-	 * `false` otherwise.
-	 * 
-	 * @param input the object input
-	 */
-	// public static isSubject(input: any): boolean {
-	//     return this.is<ISubject>(input, { name: '', teacherId: -1 });
-	// }
-
-	/**
 	 * Returns `true` if `input` is a valid `IGroup` object,
 	 * `false` otherwise.
 	 * 
@@ -207,13 +197,6 @@ export class MongoHelper {
 	public static getTeachers(): Collection<ITeacher> {
 		return this.getCollection('teachers');
 	}
-
-	/**
-	 * Returns the subjects collection.
-	 */
-	// public static getSubjects(): Collection<ISubject> {
-	//     return this.getCollection('subjects');
-	// }
 
 	/**
 	 * Returns the groups collection.
@@ -268,23 +251,6 @@ export class MongoHelper {
 	}
 
 	/**
-	 * Returns the subject with uid `uid`.
-	 * 
-	 * @param uid the subject unique id
-	 */
-	// public static async getSubject(uid: number): Promise<ISubject | null> {
-	//     return new Promise<ISubject | null>(async (resolve, reject) => {
-	//         try {
-	//             resolve(await this.getSubjects().findOne({ uid: uid }));
-	//             return;
-	//         } catch (err) {
-	//             reject(err);
-	//             return;
-	//         }
-	//     });
-	// }
-
-	/**
 	 * Returns the group with the unique id `uid`.
 	 * 
 	 * @param uid the group unique id
@@ -324,9 +290,6 @@ export class MongoHelper {
 		});
 	}
 
-
-
-
 	/**
 	* Returs the teacher object with name `name` and surname `surname`.
 	* 
@@ -344,23 +307,6 @@ export class MongoHelper {
 			}
 		});
 	}
-
-	/**
-	 * Returns a subject by its name.
-	 * 
-	 * @param name the subject name
-	 */
-	// public static async getSubjectByName(name: string): Promise<ISubject | null> {
-	//     return new Promise<ISubject | null>(async (resolve, reject) => {
-	//         try {
-	//             resolve(await this.getSubjects().findOne({ name: name }));
-	//             return;
-	//         } catch (err) {
-	//             reject(err);
-	//             return;
-	//         }
-	//     });
-	// }
 
 	/**
 	 * Returns the group by its name.
@@ -434,25 +380,6 @@ export class MongoHelper {
 	}
 
 	/**
-	 * Adds a new subject to the subjects collection. It automatically
-	 * handles the `uid` value increase.
-	 * 
-	 * @param subject the new subject to be added
-	 */
-	// public static async addSubject(subject: Omit<ISubject, 'uid'>): Promise<void> {
-	//     return new Promise<void>(async (resolve, reject) => {
-	//         try {
-	//             await this.add<ISubject>('subjects', subject);
-	//         } catch (err) {
-	//             reject(err);
-	//             return;
-	//         }
-	//         resolve();
-	//         return;
-	//     });
-	// }
-
-	/**
 	 * Adds a new group to the groups collection. It automatically
 	 * handles the `uid` value increase.
 	 * 
@@ -471,6 +398,12 @@ export class MongoHelper {
 		});
 	}
 
+	/**
+	 * Adds a new subject id to the teacher.
+	 * 
+	 * @param teacherUID the unique id of the teacher
+	 * @param ids the ids of the subjects
+	 */
 	public static async addSubjectId(teacherUID: number, ...ids: number[]): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
@@ -490,7 +423,12 @@ export class MongoHelper {
 		});
 	}
 
-
+	/**
+	 * Adds a new subject to a user.
+	 * 
+	 * @param userId the unique id of the user
+	 * @param subject the IUserSubject
+	 */
 	public static async addUserSubject(userId: number, subject: IUserSubject): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
@@ -510,6 +448,13 @@ export class MongoHelper {
 		});
 	}
 
+	/**
+	 * Adds a new grade to a user.
+	 * 
+	 * @param userId the unique id of the user
+	 * @param subjectId the unique id of the subject
+	 * @param grade the IGrade
+	 */
 	public static async addGrade(userId: number, subjectId: number, grade: IGrade): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
@@ -541,6 +486,14 @@ export class MongoHelper {
 		});
 	}
 
+	/**
+	 * Updates a user's grade
+	 * 
+	 * @param userId the unique id of the user
+	 * @param subjectId the unique id of the subject
+	 * @param gradeId the unique id of the grade
+	 * @param grade the updated IGrade
+	 */
 	public static async updateGrade(userId: number, subjectId: number, gradeId: number, grade: Partial<IGrade>) {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
@@ -584,6 +537,13 @@ export class MongoHelper {
 		});
 	}
 
+	/**
+	 * Updates a user's subject.
+	 * 
+	 * @param userId the unique id of the user
+	 * @param subject the updates IUserSubject 
+	 * @param subjectIndex the subject's index in the user's array
+	 */
 	public static async updateUserSubject(userId: number, subject: IUserSubject, subjectIndex: number): Promise<void> {
 		return new Promise<void>(async (resolve, reject) => {
 			try {
@@ -669,25 +629,6 @@ export class MongoHelper {
 	}
 
 	/**
-	 * Updates the subject by its `uid` with the given `subjectData` data.
-	 * 
-	 * @param uid the uid of the subject that needs to be updated
-	 * @param subjectData the new data
-	 */
-	// public static async updateSubject(uid: number, subjectData: Partial<Omit<ISubject, 'uid'>>): Promise<void> {
-	//     return new Promise<void>(async (resolve, reject) => {
-	//         try {
-	//             await this.update<ISubject>('subjects', uid, subjectData);
-	//         } catch (err) {
-	//             reject(err);
-	//             return;
-	//         }
-	//         resolve();
-	//         return;
-	//     });
-	// }
-
-	/**
 	 * Updates the group by its `uid` with the given `groupData` data.
 	 * 
 	 * @param uid the uid of the group that needs to be updated
@@ -706,6 +647,13 @@ export class MongoHelper {
 		});
 	}
 
+	/**
+	 * Removes a grade from a user's subject
+	 * 
+	 * @param uuid the unique id of the user
+	 * @param sIndex the subject's index of the user's array
+	 * @param gIndex the grade's index of the user's array
+	 */
 	public static async removeGrade(uuid: number, sIndex: number, gIndex: number) {
 		let user;
 		try {
@@ -720,6 +668,11 @@ export class MongoHelper {
 		}
 	}
 
+	/**
+	 * Removes a user.
+	 * 
+	 * @param uid the unique id of the user
+	 */
 	public static async removeUser(uid: number) {
 		let user;
 		try {
@@ -733,6 +686,11 @@ export class MongoHelper {
 		}
 	}
 
+	/**
+	 * Removes a teacher.
+	 * 
+	 * @param uid unique id of the teacher
+	 */
 	public static async removeTeacher(uid: number) {
 		let user;
 		try {
@@ -746,6 +704,12 @@ export class MongoHelper {
 		}
 	}
 
+	/**
+	 * Removes a UserSubject.
+	 * 
+	 * @param uid the unique id of the user
+	 * @param suid the unique id of the subject
+	 */
 	public static async removeUserSubject(uid: number, suid: number) {
 		let user;
 		try {
