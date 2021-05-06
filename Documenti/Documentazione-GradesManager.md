@@ -51,17 +51,17 @@
 
 ### Informazioni sul progetto
 
-Questo progetto è realizzato da: Ambrosetti Nicola, Previtali Aris, Trentin Francisco e Viola Francisco, della classe I3A. <br>Il progetto in questione coinvolge inoltre il docente Luca Muggiasca, che si è occupato di svolgere il ruolo di mandate e di docente responsabile, docente che si occupa di assistere gli allievi durante lo svolgimento del progetto.
-Il progetto viene realizzati a partire dal 14 gennaio 2021 fino al 20 maggio 2021, presso la SAMT (Scuola D'Arti E Mestieri Trevano), nella sezione informatica, per il Modulo 306 + Progetti.
-Durante questo progetto, oltre alla realizzazione verranno tenuti dei diari e una documentazione, che permetteranno di mostrare come e quando gli allievi hanno svolto le determinate attività, nelle diverse sessioni di lavoro.
-Alla fine del progetto verrà svolta una presentazione da parte di tutti gli individui del gruppo, utile per mostrare il risultato finale ottenuto nei mesi di lavoro.
+  Questo progetto è realizzato da: Ambrosetti Nicola, Previtali Aris, Trentin Francisco e Viola Francisco, della classe I3A. <br>Il progetto in questione coinvolge inoltre il docente Luca Muggiasca, che si è occupato di svolgere il ruolo di mandate e di docente responsabile, docente che si occupa di assistere gli allievi durante lo svolgimento del progetto.
+  Il progetto viene realizzato a partire dal 14 gennaio 2021 fino al 20 maggio 2021, presso la SAMT (Scuola D'Arti E Mestieri Trevano), nella sezione informatica, per il Modulo 306 + Progetti.
+  Durante questo progetto, oltre alla realizzazione verranno tenuti dei diari e una documentazione, che permetteranno di mostrare come e quando gli allievi hanno svolto le determinate attività, nelle diverse sessioni di lavoro.
+  Alla fine del progetto verrà svolta una presentazione da parte di tutti gli individui del gruppo, utile per mostrare il risultato finale ottenuto nei mesi di lavoro.
 
 ### Abstract
 
-Nel corso degli anni, la tecnologia e l'informatica han permesso di sviluppare tanti applicativi utili in tutti i settori immaginabili.
-Per il settore scolastico sono state sviluppate delle applicazioni che permettono di marcare tutte le note ottenute nel corso del semestre, filtrandole per materie, docenti o altri parametri ancora.
-Nessuno di questi applicativi hanno però la possibilità di gestire gli utenti di un'intera scuola, permettendo agli utenti di poter accedere in qualsiasi momento, in un qualsiasi luogo, ottenendo tutti le proprie note.
-Questo è infatti lo scopo del nostro progetto, fare in modo che gli utenti, grazie al nome utente e la password usato per l'account dei PC della scuola vengano utilizzati sul applicativo WEB, così che le loro note sono sempre sincronizzate e disponibili, senza dover creare un nuovo account per un ennesimo nuovo servizio.
+  Nel corso degli anni, la tecnologia e l'informatica han permesso di sviluppare tanti applicativi utili in tutti i settori immaginabili.
+  Per il settore scolastico sono state sviluppate delle applicazioni che permettono di marcare tutte le note ottenute nel corso del semestre, filtrandole per materie, docenti o altri parametri ancora.
+  Nessuno di questi applicativi hanno però la possibilità di gestire gli utenti di un'intera scuola, permettendo agli utenti di poter accedere in qualsiasi momento, in un qualsiasi luogo, ottenendo tutti le proprie note.
+  Questo è infatti lo scopo del nostro progetto, fare in modo che gli utenti, grazie al nome utente e la password usato per l'account dei PC della scuola vengano utilizzati sul applicativo WEB, così che le loro note sono sempre sincronizzate e disponibili, senza dover creare un nuovo account per un ennesimo nuovo servizio.
 
   >*Over the years, technology and information technology have made it possible to develop many useful applications in every imaginable field.
   For the school sector, applications have been developed that allow you to mark all the marks obtained during the semester, filtering them by subjects, teachers or other parameters.
@@ -70,17 +70,17 @@ Questo è infatti lo scopo del nostro progetto, fare in modo che gli utenti, gra
 
 ### Scopo
 
-Lo scopo del progetto è di creare un gestore delle note scolastiche per gli allievi del CPT. Non ne usufruiranno solo gli allievi siccome anche i docenti potranno accedervi e vedere le note di ogni allievo per la specifica materia. Oltre alla gestione delle note, l'applicazione offrirà anche una vista generale ed un andamento dell'allievo così da poter tenere la propria situazione sott'occhio facilmente. Integrando l'Active Directory della scuola ci si assicurerà l'utilizzo solo da utenti registrati nell'infrastruttura scolastica.
+  Lo scopo del progetto è di creare un gestore delle note scolastiche per gli allievi del CPT. Non ne usufruiranno solo gli allievi siccome anche i docenti potranno accedervi e vedere le note di ogni allievo per la specifica materia. Oltre alla gestione delle note, l'applicazione offrirà anche una vista generale ed un andamento dell'allievo così da poter tenere la propria situazione sott'occhio facilmente. Integrando l'Active Directory della scuola ci si assicurerà l'utilizzo solo da utenti registrati nell'infrastruttura scolastica.
 
 
 ## Analisi
 
 ### Analisi del dominio
 
-Moltissime app offrono già la possibilità di organizzare le proprie note scolastiche e altro. Spesso però sono per singoli utenti e sono unicamente per dispositivi portatili come i cellulari. Abbiamo quindi l'obiettivo di ampliare queste funzionalita' e portare questo tipo di applicativo ad un altro livello. Grazie all'AD della scuola si potranno ottenere le informazioni di login di ogni allievo, docente e persona registrata nell'infrastruttura scolastica. Ogni utente, che deve essere registrato nella scuola, avrà quindi la possibilità di gestire le proprie note scolastiche che saranno accessibili ovunque grazie all'account di scuola. Per poter usare quest'app sono richieste delle competenze base sull'uso del computer e di un sito web.
+Moltissime app offrono già la possibilità di organizzare le proprie note scolastiche e altro. Spesso però sono per singoli utenti e sono unicamente per dispositivi portatili come i cellulari. Abbiamo quindi l'obiettivo di ampliare queste funzionalità e portare questo tipo di applicativo ad un altro livello. Grazie all'AD della scuola si potranno ottenere le informazioni di login di ogni allievo, docente e persona registrata nell'infrastruttura scolastica. Ogni utente, che è registrato all'intero del sistema informatico scolastico, avrà quindi la possibilità di gestire le proprie note scolastiche che saranno accessibili ovunque grazie all'account di scuola. Per poter usare quest'app sono richieste delle competenze base sull'uso del computer e di un sito web.
 
 ### Analisi e specifica dei requisiti
-In base a quanto discusso in classe con il mandante, abbiamo ricavato i seguenti requisiti:
+  In base a quanto discusso in classe con il mandante, abbiamo ricavato i seguenti requisiti:
   | **ID**  |**Nome**			|**Priorità**|**Vers**|**Note**  |
   |---------|------------|--------|----|------|
   | Req - 0 | App web | 1 | 1.0 |  |
@@ -133,104 +133,93 @@ funzionalità del prodotto.
 
 ### Pianificazione
 
-Prima di iniziare in maniera effettiva a lavorare sulla parte pratica del progetto, tutto il gruppo ha svolta una sorta di riunione che ha permesso a tutti i partecipanti di discutere su varie metodologie per gestire al meglio lo sviluppo del progetto.
-Il gruppo ha quindi deciso di utilizzare diverse metodologie per pianificare al meglio lo svolgimento del progetto.
-La pianificazione del progetto è stata quindi fatta utilizzando un diagramma di Gannt, che permette di suddividere il progetto in fasi, con diverse importanze e priorità.
-Il secondo strumento che il gruppo ha deciso di utilizzare è l'applicativo web Trello, che ti permette di suddividere in più fasi tutto ciò che bisogna fare sul arco del progetto, assegnandoli delle etichette, delle categorie, degli utenti e delle cartelle.
+  Prima di iniziare in maniera effettiva a lavorare sulla parte pratica del progetto, tutto il gruppo ha svolta una sorta di riunione che ha permesso a tutti i partecipanti di discutere su varie metodologie per gestire al meglio lo sviluppo del progetto.
+  Il gruppo ha quindi deciso di utilizzare diverse metodologie per pianificare al meglio lo svolgimento del progetto.
+  La pianificazione del progetto è stata quindi fatta utilizzando un diagramma di Gannt, che permette di suddividere il progetto in fasi, con diverse importanze e priorità.
+  Il secondo strumento che il gruppo ha deciso di utilizzare è l'applicativo web Trello, che  permette di suddividere in più fasi tutto ciò che bisogna fare sul arco del progetto, assegnandoli delle etichette, delle categorie, degli utenti e delle cartelle.
 
-![Gannt](./assets/Gantt.png)
-Questa è stata la nostra progettazione iniziale. A sinistra possiamo vedere le attività nelle rispettive fasi e a destra i tempi previsti.
+  ![Gannt](./assets/GanntIniziale.jpg)
+  Questa è stata la nostra progettazione iniziale. A sinistra possiamo vedere le attività nelle rispettive fasi e a destra i tempi previsti.
 
-![Gannt](./assets/Trello.jpg)
-In modo da poter gestire il progetto in un modo più dinamico, abbiamo provveduto a creare una bacheca in Trello, in modo da avere tutti un punto di riferimento rispetto ai tempi. Inoltre, ad ogni attività abbiamo assegnato il rispettivo responsabile all'interno del gruppo.
+  ![Gannt](./assets/Trello.jpg)
+  Abbiamo provveduto ad utilizzare Trello così da poter gestire il progetto in maniera più dinamica, così da avere tutti un riferimento rispetto ai tempi.
+  Inoltre, ad ogni attività abbiamo assegnato il rispettivo responsabile all'interno del gruppo.
 
 ### Analisi dei mezzi
-Questi sono i rispettivi mezzi che abbiamo utilizzato:<br>
+  Questi sono i rispettivi mezzi che abbiamo utilizzato:<br>
 
-- Node JS (v15.0.6) - Runtime System
-- Visual Studio Code - Editor
-- Postman (v8.0.7) - Utilizzato per il testing delle API
-- MongoDB (v4.4.4) - Utilizzato come DBMS per salvare i dati
+  - Node JS (v15.0.6) - Runtime System
+  - Visual Studio Code - Editor
+  - Postman (v8.0.7) - Utilizzato per il testing delle API
+  - MongoDB (v4.4.4) - Utilizzato come DBMS per salvare i dati
 
-Librerie:
-- React
-- LDAPJS
-- Express
-- Cors
-- Morgan
+  Librerie:
+  - React
+  - LDAPJS
+  - Express
+  - Cors
+  - Morgan
 
-In modo da poter lavorare in classe nei migliori dei modi, ognuno ha utilizzato il suo portatile personale.
-Una volta finito l'applicativo web, l'idea è quella di metterlo in un server della scuola, in modo da poterci accedere e connettere anche dall'esterno. 
+  In modo da poter lavorare in classe nei migliori dei modi, ognuno ha utilizzato il suo portatile personale.
+  Una volta finito l'applicativo web, l'idea è quella di metterlo in un server della scuola, così da poterci accedere e connettere anche dall'esterno. 
 
 
 ## Progettazione
 
 
 ### Design dell’architettura del sistema
-Come prima cosa abbiamo pensato di programmare una Web Application. Questo ci avrebbe permesso di poter allocare il sito in un server a scuola, e perciò averlo sempre disponibile. Un altro punto che abbiamo considerato, è che essendo un'applicazione abbastanza semplice da utilizzare, sarebbe stato ottimale poterlo utilizzare anche da telefono.
-Dopo qualche discussione con il nostro gruppo, siamo arrivati alla conclusione che Javascript (più precisamente NodeJS) sarebbe stato il linguaggio adatto alla situazione per diversi motivi.
-Prima di spiegare come abbiamo progettato l'applicazione e tutto il progetto, occorre conoscere diverse nozioni di base sui sistemi che abbiamo utilizzato.
-NodeJS è un runtime costruito sul motore Javascript, che permette di progettare applicazioni di rete scalabili. La runtime è maggiormente legata ad eventi asincroni, e viene utilizzata per scrivere applicazioni lato server.
-Utilizzare questo framework ci ha quindi condizionati a lavorare con una REST API. <br>
-Una REST API è invece un interfaccia di programmazione delle applicazioni conformi ai vincoli dell'architettura REST. Per capire bene come funziona una REST API occorre di analizzare il nome in sé:
+  Come prima cosa abbiamo pensato di programmare una Web Application. Questo ci avrebbe permesso di poter allocare il sito in un server a scuola, e perciò averlo sempre disponibile. Un altro punto che abbiamo considerato, è che essendo un'applicazione abbastanza semplice da utilizzare, sarebbe stato ottimale poterlo utilizzare anche da telefono.
+  Dopo qualche discussione con il nostro gruppo, siamo arrivati alla conclusione che Javascript (più precisamente NodeJS) sarebbe stato il linguaggio adatto alla situazione per diversi motivi.
+  Prima di spiegare come abbiamo progettato l'applicazione e tutto il resto del progetto, occorre conoscere diverse nozioni di base sui sistemi che abbiamo utilizzato.
+  NodeJS è un runtime costruito sul motore Javascript, che permette di progettare applicazioni di rete scalabili. Il runtime è maggiormente legata ad eventi asincroni, e viene utilizzata per scrivere applicazioni lato server.
+  Utilizzare questo framework ci ha quindi condizionati a lavorare con una REST API. <br>
+  Una REST API è invece un interfaccia di programmazione delle applicazioni conformi ai vincoli dell'architettura REST. Per capire bene come funziona una REST API occorre di analizzare il nome in sé:
 
-**REST (Representational state transfer)** , è uno stile architetturale basato sul protocollo HTTP. Il funzionamento prevede una struttura degli URL ben definita che identifica univocamente una risorsa o un insieme di risorse e l'utilizzo dei metodi HTTP specifici per il recupero di informazioni (GET), per la modifica (POST, PUT, PATCH, DELETE) e per altri scopi (OPTIONS, ecc.). 
-
-
-
-L'API quindi funge da elemento di intermediazione tra gli utenti, i clienti e le risorse che intendono ottenere. In poche parole, viene programmata a lato server, e tramite le route (ovvero le rotte che condurranno ai dati) è possibile andare a pescare le informazioni.
-I motivi principali per cui abbiamo utilizzato questa architettura sono:
-1. Pur essendo un'architettura abbastanza complessa, la separazione tra client e server consente di trattare indipendentemente l'evoluzione delle diverse componenti. La separazione tra client e server si traduce anche in una migliore scalabilità del sistema stesso.
-2. Rende il codice più pulito da leggere, senza query inserite direttamente nel programma e con metodi apposta per  le richieste
-3. Dato che i dati non vengono presi in chiaro, ma tramite una richiesta, il sistema diventa più sicuro grazie ai sistemi di sicurezza implementati nella stessa.
-
-Una volta definito ciò possiamo passare alla progettazione generale dell'applicazione.
-
-![AppDesign](./assets/AppDesign.jpg)
-
-Questo schema riassume il funzionamento generale dell'applicazione. Partendo dall'alto, possiamo trovare il Server Active Directory. Questo server AD corrisponde a quello della scuola. A destra, possiamo trovare il nostro database MongoDB (che descriveremo nel prossimo capitolo). Tramite il protocollo LDAP, ci è stato possibile andare a controllare se un utente effettivamente esiste, e se la sua password corrisponde. Infatti, il protocollo **LDAP (Lightweight Directory Access Protocol)**, si occupa dell'interrogazione dei server directory.
-Sostanzialmente, l'applicazione Web raccoglie i dati inseriti dall'utente (ad esempio il login o le operazioni che esegue all'interno della pagina web) e vengono passati all'API che si occuperebbe a sua volta di interrogare il server AD e di inserire i dati nel database.
+  **REST (Representational state transfer)** , è uno stile architetturale basato sul protocollo HTTP. Il funzionamento prevede una struttura degli URL ben definita che identifica univocamente una risorsa o un insieme di risorse e l'utilizzo dei metodi HTTP specifici per il recupero di informazioni (GET), per la modifica (POST, PUT, PATCH, DELETE) e per altri scopi (OPTIONS, ecc.). 
 
 
 
-Questo capitolo descrive esaustivamente come deve essere realizzato il
-prodotto fin nei suoi dettagli. Una buona progettazione permette
-all'esecutore di evitare fraintendimenti e imprecisioni
-nell'implementazione del prodotto.
+  L'API quindi funge da elemento di intermediazione tra gli utenti, i clienti e le risorse che intendono ottenere. In poche parole, viene programmata a lato server, e tramite le route (ovvero le rotte che condurranno ai dati) è possibile andare a pescare le informazioni.
+  I motivi principali per cui abbiamo utilizzato questa architettura sono:
+  1. Pur essendo un'architettura abbastanza complessa, la separazione tra client e server consente di trattare indipendentemente l'evoluzione delle diverse componenti. La separazione tra client e server si traduce anche in una migliore scalabilità del sistema stesso.
+  2. Rende il codice più pulito da leggere, senza query inserite direttamente nel programma e con metodi apposta per  le richieste
+  3. Dato che i dati non vengono presi in chiaro, ma tramite una richiesta, il sistema diventa più sicuro grazie ai sistemi di sicurezza implementati nella stessa.
+
+  Una volta definito ciò possiamo passare alla progettazione generale dell'applicazione.
+
+  ![AppDesign](./assets/AppDesign.jpg)
+
+  Questo schema riassume il funzionamento generale dell'applicazione. Partendo dall'alto, possiamo trovare il Server Active Directory. Questo server AD corrisponde a quello della scuola. A destra, possiamo trovare il nostro database MongoDB (che descriveremo nel prossimo capitolo). Tramite il protocollo LDAP, ci è stato possibile andare a controllare se un utente effettivamente esiste, e se la sua password corrisponde. Infatti, il protocollo **LDAP (Lightweight Directory Access Protocol)**, si occupa dell'interrogazione dei server directory.
+  Sostanzialmente, l'applicazione Web raccoglie i dati inseriti dall'utente (ad esempio il login o le operazioni che esegue all'interno della pagina web) e vengono passati all'API che si occuperebbe a sua volta di interrogare il server AD e di inserire i dati nel database.
 
 
-<br><br>
-Descrive:
 
--   La struttura del programma/sistema lo schema di rete...
-
--   Gli oggetti/moduli/componenti che lo compongono.
-
--   I flussi di informazione in ingresso ed in uscita e le
-    relative elaborazioni. Può utilizzare *diagrammi di flusso dei
-    dati* (DFD).
-
--   Eventuale sitemap
+  Questo capitolo descrive esaustivamente come deve essere realizzato il
+  prodotto fin nei suoi dettagli. Una buona progettazione permette
+  all'esecutore di evitare fraintendimenti e imprecisioni
+  nell'implementazione del prodotto.
 
 ### Design dei dati e database
-In modo da gestire i dati delle materie, dei professori e delle note abbiamo utilizzato un database MongoDB. MongoDB è un database document-based. MongoDB si allontana dalla struttura di db tradizionale basata sulle relazioni tra tabelle, in favore ai documenti in stile JSON con schema dinamico. Utilizzare questo sistema rende in certi casi l'integrazione di dati di alcuni tipi di applicazione più facile e veloce. Dato che abbiamo utilizzato un sistema basato su Javascript, MongoDB calza a pennello con le nostre esigenze.
 
-Descrizione delle strutture di dati utilizzate dal programma in base
-agli attributi e le relazioni degli oggetti in uso.
+  In modo da gestire i dati delle materie, dei professori e delle note abbiamo utilizzato un database MongoDB. MongoDB è un database document-based. MongoDB si allontana dalla struttura di db tradizionale basata sulle relazioni tra tabelle, in favore ai documenti in stile JSON con schema dinamico. Utilizzare questo sistema rende in certi casi l'integrazione di dati di alcuni tipi di applicazione più facile e veloce. Dato che abbiamo utilizzato un sistema basato su Javascript, MongoDB calza a pennello con le nostre esigenze.
+
+  Descrizione delle strutture di dati utilizzate dal programma in base
+  agli attributi e le relazioni degli oggetti in uso.
 
 ### Schema E-R, schema logico e descrizione.
-![AppDesign](./assets/DbScheme.JPG)
-Questa è la rappresentazione del database che abbiamo estrapolato da MongoDB. Come precedentemente accennato, non ci sono tabelle ma utilizziamo le collezioni. 
+
+  ![AppDesign](./assets/DbScheme.JPG)
+  Questa è la rappresentazione del database che abbiamo estrapolato da MongoDB. Come precedentemente accennato, non ci sono tabelle ma utilizziamo le collezioni. 
 
 ### Design delle interfacce
 
-Prima di iniziare con l'implementazione abbiamo cercato di fare degli schizzi di come potrebbe essere l'interfaccia grafica, ottenendo questo risultato:
+  Prima di iniziare con l'implementazione abbiamo cercato di fare degli schizzi di come potrebbe essere l'interfaccia grafica, ottenendo questo risultato:
 
-![GuiDesign](./assets/GUI_Design.jpg)
+  ![GuiDesign](./assets/GUI_Design.jpg)
 
-La prima interfaccia disegnata corrisponde a quella del login, che per il momento abbiamo previsto di poter inserire nome e password come in un semplice login. Nel caso che il login avvenga con successo, se è allievo, viene reindirizzato alla home.
-Come prima cosa, la home possiede un grafico dell'andamento che rappresenta le note con le rispettive medie. Nella sezione inferiore invece troviamo dei blocchetti che rappresentano ogni una una materia. L'idea è quella di poter aggiungere materie semplicemente cliccando su una materia vuote, e di poter editare direttamente dal blocchetto le rispettive informazioni della materia (nome materia, docente, ...). Anche le note prevediamo di poterle aggiungere direttamente dal suo blocchetto. Ogni blocchetto avrà in grande la sua media, e sulla sinistra le note degli ultimi test svolti.
-Nel caso in cui si volesse visualizzare la materia in grande, bisognerà andare nel rispettivo blocchetto e premere l'opzione "visualizzare in grande" nel menu a tendina del blocchetto. Nella visualizzazione della materia singola ci saranno le stesse informazioni del blocchetto singolo, ma nella parte inferiore della pagina ci sarà una tabella con tutte le note per esteso. Nella tabella si potrà anche definire il peso della nota in modo da calcolare correttamente la media anche con pesi diversi.
+  La prima interfaccia disegnata corrisponde a quella del login, che per il momento abbiamo previsto di poter inserire nome e password come in un semplice login. Nel caso che il login avvenga con successo, se è allievo, viene reindirizzato alla home.
+  Come prima cosa, la home possiede un grafico dell'andamento che rappresenta le note con le rispettive medie. Nella sezione inferiore invece troviamo dei blocchetti che rappresentano ogni una una materia. L'idea è quella di poter aggiungere materie semplicemente cliccando su una materia vuote, e di poter editare direttamente dal blocchetto le rispettive informazioni della materia (nome materia, docente, ...). Anche le note prevediamo di poterle aggiungere direttamente dal suo blocchetto. Ogni blocchetto avrà in grande la sua media, e sulla sinistra le note degli ultimi test svolti.
+  Nel caso in cui si volesse visualizzare la materia in grande, bisognerà andare nel rispettivo blocchetto e premere l'opzione "visualizzare in grande" nel menu a tendina del blocchetto. Nella visualizzazione della materia singola ci saranno le stesse informazioni del blocchetto singolo, ma nella parte inferiore della pagina ci sarà una tabella con tutte le note per esteso. Nella tabella si potrà anche definire il peso della nota in modo da calcolare correttamente la media anche con pesi diversi.
 
 ### Design procedurale
 
@@ -256,11 +245,11 @@ per la realizzazione del prodotto.
 
 ## Implementazione
 
-Dopo aver pianificato e progettato tutto possiamo passare all'implementazione. In gran modo possiamo suddividere tutto il lavoro in 3 grandi sezioni:
+  Dopo aver pianificato e progettato tutto possiamo passare all'implementazione. In gran modo possiamo suddividere tutto il lavoro in 3 grandi sezioni:
 
-- **LDAP**, ovvero tutto ciò che concerne la connessione e l'elaborazione degli utenti affinché si possa fare il login
-- **API**, tutto quello che concerne il back-end dell'applicazione, che interagisce con il database e l'LDAP.
-- **React**, tutto ciò che concerne la creazione delle pagine (Typescript, CSS, HTML)
+  - **LDAP**, ovvero tutto ciò che concerne la connessione e l'elaborazione degli utenti affinché si possa fare il login
+  - **API**, tutto quello che concerne il back-end dell'applicazione, che interagisce con il database e l'LDAP.
+  - **React**, tutto ciò che concerne la creazione delle pagine (Typescript, CSS, HTML)
 
 ##### ldap-ts
   Uno degli obbiettivi del progetto è permettere che tutti gli allievi e i docenti presenti nell'Active Directory della possano utilizzare il sito. Dopo diverse ricerche abbiamo costatato che la libreria ``LDAPJS`` era la più indicata per il nostro lavoro. Tuttavia questa libreria era abbastanza base e non possedeva tutte le funzionalità che avevamo bisogni, il ché ci ha portati a dover creare una nostra libreria che utilizzasse ``LDAPJS`` e in più le funzionalità di cui avevamo bisogno. Queste sono le parti di codice più importanti della nostra libreria ``ldap-ts``:
@@ -294,6 +283,7 @@ Dopo aver pianificato e progettato tutto possiamo passare all'implementazione. I
 
 
 
+
 In questo capitolo dovrà essere mostrato come è stato realizzato il
 lavoro. Questa parte può differenziarsi dalla progettazione in quanto il
 risultato ottenuto non per forza può essere come era stato progettato.
@@ -319,26 +309,26 @@ Per eventuali dettagli si possono inserire riferimenti ai diari.
 
 ### Protocollo di test
 
-|Test Case      | TC-001                               |
-|---------------|--------------------------------------|
-|**Nome**       |Binding |
-|**Riferimento**|Req - 1                               |
-|**Descrizione**| Fare il binding verso l'ActiveDirectory della scuola.|
-|**Risultati attesi** | Il programma riesce a comunicare con l'ActiveDirectory. |
+  |Test Case      | TC-001                               |
+  |---------------|--------------------------------------|
+  |**Nome**       |Binding |
+  |**Riferimento**|Req - 1                               |
+  |**Descrizione**| Fare il binding verso l'ActiveDirectory della scuola.|
+  |**Risultati attesi** | Il programma riesce a comunicare con l'ActiveDirectory. |
 
-|Test Case      | TC-002                               |
-|---------------|--------------------------------------|
-|**Nome**       |Accesso con nome utente o password sbagliate |
-|**Riferimento**|Req - 1                               |
-|**Descrizione**|Acecdere al sistema utilizzando un nome utente o una password errata.|
-|**Risultati attesi** | Il sistema rifiuta l'accesso indicando che il nome utente oppure la password  |
+  |Test Case      | TC-002                               |
+  |---------------|--------------------------------------|
+  |**Nome**       |Accesso con nome utente o password sbagliate |
+  |**Riferimento**|Req - 1                               |
+  |**Descrizione**|Acecdere al sistema utilizzando un nome utente o una password errata.|
+  |**Risultati attesi** | Il sistema rifiuta l'accesso indicando che il nome utente oppure la password  |
 
-|Test Case      | TC-003                               |
-|---------------|--------------------------------------|
-|**Nome**       |Accesso con utente allievo, docente e admin. Riesce a riconoscere il suo ruolo |
-|**Riferimento**|Req - 1                               |
-|**Descrizione**|Accedere al sistema utilizzando un utente con il ruolo di allievo, uno con il riolo di docente e infine col ruolo di admin.|
-|**Risultati attesi** | Riesce a riconoscere prima di tutto se esistono, e dopodiché riconosce che ruolo possiedono.  |
+  |Test Case      | TC-003                               |
+  |---------------|--------------------------------------|
+  |**Nome**       |Accesso con utente allievo, docente e admin. Riesce a riconoscere il suo ruolo |
+  |**Riferimento**|Req - 1                               |
+  |**Descrizione**|Accedere al sistema utilizzando un utente con il ruolo di allievo, uno con il riolo di docente e infine col ruolo di admin.|
+  |**Risultati attesi** | Riesce a riconoscere prima di tutto se esistono, e dopodiché riconosce che ruolo possiedono.  |
 
 
 
@@ -384,26 +374,25 @@ ripetibile alle stesse condizioni.
 
 ### Mancanze/limitazioni conosciute
 
-Descrizione con motivazione di eventuali elementi mancanti o non
-completamente implementati, al di fuori dei test case. Non devono essere
-riportati gli errori e i problemi riscontrati e poi risolti durante il
-progetto.
+  Descrizione con motivazione di eventuali elementi mancanti o non
+  completamente implementati, al di fuori dei test case. Non devono essere
+  riportati gli errori e i problemi riscontrati e poi risolti durante il
+  progetto.
 
 ## Consuntivo
 
-Consuntivo del tempo di lavoro effettivo e considerazioni riguardo le
-differenze rispetto alla pianificazione (cap 1.7) (ad esempio Gannt
-consuntivo).
+  Consuntivo del tempo di lavoro effettivo e considerazioni riguardo le
+  differenze rispetto alla pianificazione (cap 1.7) (ad esempio Gannt
+  consuntivo).
 
 ## Conclusioni
+  Il prodotto finale lo reputiamo molto utile. Per un allievo è molto importante tenere conto del suo andamento scolastico, ma potrebbe essere anche un'operazione abbastanza tediosa. Il nostro prodotto riesce a rendere le azioni che potrebbero essere più difficili da tenere conto, in un processo molto più semplice e visivo. Il fatto di possedere un grafico che evidenzi il tuo andamento è anche quello una funzionalità molto utile per un allievo. D'altra parte ci sono anche i docenti, che grazie al nostro prodotto potranno avere una concezione più precisa dell'andamento di ogni allievo, focalizzando tutto su un sistema unico. Un altro punto forte della soluzione è il fatto che sia un applicativo web e come tutti sappiamo, un applicativo web è molto versatile in diversi aspetti. Uno di questi è che vi si può accedere da ovunque, da ogni dispositivo. Pensiamo veramente che sia uno strumento molto utile per la nostra scuola e che ha il potenziale di essere pubblicato e reso disponibili effettivamente. Tuttavia i risultati che abbiamo ottenuti sono fatti a misura per il nostro ambiente e rispettando, ma si potrebbe anche generalizzare per tutte le scuole.
 
-Il prodotto finale lo reputiamo molto utile. Per un allievo è molto importante tenere conto del suo andamento scolastico, ma potrebbe essere anche un'operazione abbastanza tediosa. Il nostro prodotto riesce a rendere le azioni che potrebbero essere più difficili da tenere conto, in un processo molto più semplice e visivo. Il fatto di possedere un grafico che evidenzi il tuo andamento è anche quello una funzionalità molto utile per un allievo. D'altra parte ci sono anche i docenti, che grazie al nostro prodotto potranno avere una concezione più precisa dell'andamento di ogni allievo, focalizzando tutto su un sistema unico. Un altro punto forte della soluzione è il fatto che sia un applicativo web e come tutti sappiamo, un applicativo web è molto versatile in diversi aspetti. Uno di questi è che vi si può accedere da ovunque, da ogni dispositivo. Pensiamo veramente che sia uno strumento molto utile per la nostra scuola e che ha il potenziale di essere pubblicato e reso disponibili effettivamente. Tuttavia i risultati che abbiamo ottenuti sono fatti a misura per il nostro ambiente e rispettando, ma si potrebbe anche generalizzare per tutte le scuole.
-
-Quali sono le implicazioni della mia soluzione? Che impatto avrà?
-Cambierà il mondo? È un successo importante? È solo un aggiunta
-marginale o è semplicemente servita per scoprire che questo percorso è
-stato una perdita di tempo? I risultati ottenuti sono generali,
-facilmente generalizzabili o sono specifici di un caso particolare? ecc
+  Quali sono le implicazioni della mia soluzione? Che impatto avrà?
+  Cambierà il mondo? È un successo importante? È solo un aggiunta
+  marginale o è semplicemente servita per scoprire che questo percorso è
+  stato una perdita di tempo? I risultati ottenuti sono generali,
+  facilmente generalizzabili o sono specifici di un caso particolare? ecc
 
 ### Sviluppi futuri
   Ci sono diverse funzionalità che abbiamo pensato potessero essere interessanti per il nostro progetto, ma che per diversi motivi non sono state implementate:
@@ -418,36 +407,21 @@ facilmente generalizzabili o sono specifici di un caso particolare? ecc
   Cosa ho imparato in questo progetto? ecc 
 
 ## Sitografia
+- http://ldapjs.org/, *LDAP JS*, 20-1-2021
+- https://www.datensen.com/data-modeling/moon-modeler-for-databases.html, *Moon Modeler*, 
+- https://infograph.venngage.com/, *Venngage Graphic Creator*, 02-03-2021
+- https://www.serverplan.com/blog/node-js/#gref, *Server plan - NodeJS*, 02-03-2021
+- https://it.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol, *Wikipedia*, 09-03-2021
 
-1.  URL del sito (se troppo lungo solo dominio, evt completo nel
-    diario),
-
-2.  Eventuale titolo della pagina (in italico),
-
-3.  Data di consultazione (GG-MM-AAAA).
-
-**Esempio:**
-
--   http://standards.ieee.org/guides/style/section7.html, *IEEE
-    Standards Style Manual*, 07-06-2008.
 
 ## Allegati
 
-Elenco degli allegati, esempio:
+- [Diari](./Diari) 
+- [Diario dei compiti](./DiarioDeiCompiti/)
+- [Gantt](./Documenti/GradesManager.gan)
+<br>
 
--   Diari di lavoro
-
--   Codici sorgente/documentazione macchine virtuali
-
--   Istruzioni di installazione del prodotto (con credenziali
-    di accesso) e/o di eventuali prodotti terzi
-
--   Documentazione di prodotti di terzi
-
--   Eventuali guide utente / Manuali di utilizzo
-
--   Mandato e/o Qdc
-
--   Prodotto
-
--   …
+### Sources
+- [APP](./gradesmanager)
+- [API](./gmapi)
+- [LDAP](./ldap-ts)
