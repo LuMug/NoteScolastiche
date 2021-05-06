@@ -1,136 +1,11 @@
 import CircularFadeBorder from '../circular-fade-border/CircularFadeBorder';
 import FetchHelper from '../../helpers/FetchHelper';
 import Grade from './Grade';
-import { Component, ReactNode, useEffect } from 'react';
+import GradeHelper from '../../helpers/GradeHelper';
 import { IGrade, ITeacher, IUserSubject } from '../../@types';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import './Subject.css';
-
-
-
-class _Subject extends Component<ISubjectProps, ISubjectState> {
-
-    constructor(props: ISubjectProps) {
-        super(props);
-        this.state = {
-            name: props.subject.name,
-            avg: this.getAvg(),
-            teacherName: '',
-            isEditing: false,
-            hasCustomTeacher: false
-        };
-    }
-
-    async componentDidMount() {
-        await this.setUp();
-    }
-
-    async componentDidUpdate(prevProps: ISubjectProps, prevState: ISubjectState) {
-        if (prevState.name != this.props.subject.name && !this.state.isEditing) {
-            this.setState({
-                name: this.props.subject.name
-            });
-        }
-        if (this.getAvg() != this.state.avg) {
-            this.setState({
-                avg: this.getAvg()
-            });
-        }
-        if (prevProps.subject.teacherName != this.props.subject.teacherName) {
-            await this.setUp();
-        }
-    }
-
-    private async setUp() {
-        let teacher: ITeacher | null = null;
-        try {
-            if (this.props.subject.teacherId != undefined) {
-                teacher = await FetchHelper.fetchTeacher(this.props.subject.teacherId);
-            }
-        } catch (err) {
-            // console.error(err);
-            return;
-        }
-        if (teacher) {
-            this.setState({
-                teacherName: `${teacher.surname} ${teacher.name}`,
-                hasCustomTeacher: false,
-                name: this.props.subject.name
-            });
-        } else {
-            this.setState({
-                teacherName: this.props.subject.teacherName,
-                hasCustomTeacher: true,
-                name: this.props.subject.name
-            });
-        }
-    }
-
-    private onEdit() {
-        this.setState({
-            isEditing: true
-        });
-    }
-
-    private async onApply() {
-        // SE IL NOME E" REGISTRATO NON ACCETTERA" PIU" NUOVI NOMI
-        let name = this.state.name;
-        let teacher = this.state.teacherName;
-        let hasCustom = false;
-        if (this.state.name.trim() == '') {
-            name = 'Subject';
-        }
-        let teachers = await FetchHelper.fetchAllTeachers();
-        let t = teachers.filter((t) => {
-            return `${t.surname} ${t.name}` == teacher
-                || `${t.name} ${t.surname}` == teacher;
-        });
-        if (t.length >= 1) {
-            teacher = `${t[0].surname} ${t[0].name}`;
-        } else {
-            hasCustom = true;
-        }
-        if (this.state.teacherName.trim() == '') {
-            teacher = '?';
-        }
-        this.setState({
-            isEditing: false,
-            name: name,
-            teacherName: teacher,
-            hasCustomTeacher: hasCustom
-        });
-        let subject = this.props.subject;
-        subject.name = name;
-        subject.teacherName = teacher;
-        this.props.onApply(subject);
-    }
-
-    private onChangeName(name: string) {
-        this.setState({
-            name: name
-        });
-    }
-
-    private async onChangeTeacher(name: string) {
-        this.setState({
-            teacherName: name
-        });
-    }
-
-    public static getSubjectAvg(subject: IUserSubject): number {
-        let avg = 0;
-        for (let g of subject.grades) {
-            avg += g.value * g.weight;
-        }
-        return avg / Math.max(1, subject.grades.length);
-    }
-
-    public getAvg(): number {
-        // return Subject.getSubjectAvg(this.props.subject);
-        return 6
-    }
-
-}
 
 interface ISubjectProps {
 
@@ -149,25 +24,11 @@ interface ISubjectProps {
     onTIBDisplay: () => void;
 }
 
-interface ISubjectState {
-
-    name: string;
-
-    teacherName: string;
-
-    avg: number;
-
-    isEditing: boolean;
-
-    hasCustomTeacher: boolean;
-}
-
 const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
     const [name, setName] = useState<string>(props.subject.name);
     const [teacherName, setTeacherName] = useState<string>('');
     const [avg, setAvg] = useState<number>(1);
     const [isEditing, setIsEditing] = useState(false);
-    const [hasCustomTeacher, setHasCustomTeacher] = useState(true);
 
     useEffect(() => {
         const fetch = async () => {
@@ -191,7 +52,7 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
         if (!isEditing) {
             setName(props.subject.name);
         }
-    }, [name, props.subject.name])
+    }, [name, props.subject.name, isEditing])
 
     const getAvg = (): number => {
         return getSubjectAvg(props.subject);
@@ -200,7 +61,7 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
     const setUp = async () => {
         let teacher: ITeacher | null = null;
         try {
-            if (props.subject.teacherId != undefined) {
+            if (props.subject.teacherId !== undefined) {
                 teacher = await FetchHelper.fetchTeacher(props.subject.teacherId);
             }
         } catch (err) {
@@ -209,10 +70,8 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
         }
         if (teacher) {
             setTeacherName(`${teacher.surname} ${teacher.name}`);
-            setHasCustomTeacher(false);
         } else {
             setTeacherName(props.subject.teacherName);
-            setHasCustomTeacher(true);
         }
         setAvg(getAvg());
     }
@@ -222,8 +81,8 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
         let _name = name;
         let teacher = teacherName;
         let hasCustom = false;
-        if (name.trim() == '') {
-            _name = 'Subject';
+        if (name.trim() === '') {
+            _name = 'Materia';
         }
         let teachers;
         try {
@@ -232,36 +91,46 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
             console.error(err);
             return;
         }
-        let t = teachers.filter((t) => {
-            return `${t.surname} ${t.name}` == teacher
-                || `${t.name} ${t.surname}` == teacher;
+        let t = teachers.filter(t => {
+            return `${t.surname} ${t.name}` === teacher
+                || `${t.name} ${t.surname}` === teacher;
         });
         if (t.length >= 1) {
             teacher = `${t[0].surname} ${t[0].name}`;
+            hasCustom = false;
         } else {
             hasCustom = true;
         }
-        if (teacherName.trim() == '') {
+        if (teacherName.trim() === '') {
             teacher = '?';
+            hasCustom = true;
         }
         setIsEditing(false);
         setName(_name);
         setTeacherName(teacher);
-        setHasCustomTeacher(hasCustom);
         let subject = props.subject;
         subject.name = name;
         subject.teacherName = teacher;
+        if (hasCustom) {
+            delete subject.teacherId;
+        }
         props.onApply(subject);
     }
 
     let sData;
-    let customTeacher = (!hasCustomTeacher)
-        ? ''
-        : <div
+    // let customTeacher = (!hasCustomTeacher)
+    //     ? ''
+    // : <div
+    //     className="s-subject-teacher-warning noselect"
+    //     onClick={() => props.onTIBDisplay()}
+    // ></div>;
+    let customTeacher = !isEditing
+        ? <div
             className="s-subject-teacher-warning noselect"
             onClick={() => props.onTIBDisplay()}
-        ></div>;
-    if (props.subject.grades.length != 0) {
+        ></div>
+        : null;
+    if (props.subject.grades.length !== 0) {
         sData = <div className="s-subject-data">
             <div className="s-subject-grades">
                 {props.subject.grades.map((g, i) => {
@@ -272,7 +141,9 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
                 })}
             </div>
             <CircularFadeBorder>
-                {avg.toFixed(1)}
+                <p className={avg < 4 ? 'orange-text' : ''}>
+                    {avg.toFixed(1)}
+                </p>
             </CircularFadeBorder>
         </div>;
     }
@@ -331,9 +202,10 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
 export default Subject;
 
 export const getSubjectAvg = (subject: IUserSubject): number => {
-    let avg = 0;
-    for (let g of subject.grades) {
-        avg += g.value * g.weight;
+    if (subject.grades.length == 0) {
+        return 0;
     }
-    return avg / Math.max(1, subject.grades.length);
+    let sum = subject.grades.map(g => g.value * g.weight).reduce((p, c) => p + c);
+    let weightSum = subject.grades.map(g => g.weight).reduce((p, c) => p + c);
+    return sum / Math.max(1, weightSum);
 }
