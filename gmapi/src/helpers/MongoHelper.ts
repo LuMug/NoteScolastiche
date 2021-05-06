@@ -9,7 +9,7 @@ import {
 	IUser,
 	IUserSubject,
 	UserType
-} from '../@types';
+	} from '../@types';
 import { sha256 } from 'js-sha256';
 
 const DB_NAME: string = 'gradesmanager';
@@ -88,6 +88,11 @@ export class MongoHelper {
 				withUID.uid = this.getUUID(withUID.name);
 			}
 			try {
+				if (collName === 'users') {
+					if (await this.getUser(withUID.uid)) {
+						await this.add(collName, data);
+					}
+				}
 				await this.getCollection(collName).insertOne(withUID);
 			} catch (err) {
 				reject(err);
@@ -387,12 +392,13 @@ export class MongoHelper {
 	 */
 	public static getUUID(username: string): number {
 		let hash = sha256(username);
+		let ran = Math.round(Math.random() * 9999 + 1000);
 		let len = hash.length / 2;
 		let sum = 0;
 		for (let i = 0; i < len; i++) {
 			sum += parseInt(hash.substr(i * 2, 2), 16);
 		}
-		return sum;
+		return parseInt(sum + '' + ran);
 	}
 
 	/**
