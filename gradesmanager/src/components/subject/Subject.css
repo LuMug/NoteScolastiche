@@ -12,6 +12,10 @@
   overflow: hidden;
 }
 
+/* .s-subject:hover {
+  transform: scale(1.02);
+} */
+
 .s-drag-handle-wrapper {
   position: absolute;
   top: 0px;
@@ -38,7 +42,7 @@
 }
 
 .s-subject:hover .s-drag-handle {
-  transform: translateY(0);
+  /* transform: translateY(0); */
 }
 
 .s-subject-top {
@@ -62,7 +66,8 @@
 }
 
 .s-subject-teacher-warning {
-  content: url('./../../public/svg/warning.svg');
+  /* content: url('./../../public/svg/warning.svg'); */
+  content: url('./../../public/svg/list.svg');
   width: 18px;
   height: 18px;
   margin-left: 4px;
