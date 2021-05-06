@@ -128,8 +128,7 @@ requisiti.
 
 ### Use case
 
-I casi d’uso rappresentano l’interazione tra i vari attori e le
-funzionalità del prodotto.
+ ![Gannt](./assets/UseCase.jpg)
 
 ### Pianificazione
 
@@ -208,7 +207,7 @@ funzionalità del prodotto.
 
 ### Schema E-R, schema logico e descrizione.
 
-  ![AppDesign](./assets/DbScheme.JPG)
+  ![AppDesign](./assets/GradesManagerDb.jpg)
   Questa è la rappresentazione del database che abbiamo estrapolato da MongoDB. Come precedentemente accennato, non ci sono tabelle ma utilizziamo le collezioni. 
 
 ### Design delle interfacce
