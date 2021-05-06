@@ -1,9 +1,11 @@
-import FetchHelper from '../../helpers/FetchHelper';
 import Nav from '../nav/Nav';
-import React, { Component, ReactNode } from 'react';
+import React, { useEffect, useState } from 'react';
+import Toast from '../toast/Toast';
 import { IUser, IUserSubject } from '../../@types';
 import { ROUTES } from './../../util/constants';
+import { toast } from 'react-toastify';
 import './page.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface IPageProps {
 
@@ -17,10 +19,9 @@ interface IPageProps {
 }
 
 const Page: React.FunctionComponent<IPageProps> = (props) => {
-    let prompt =
-        <div className={`pa-prompt ${(props.displayPrompt) ? '' : 'hidden'}`}>
-            {props.promptElement}
-        </div>;
+    let prompt = (props.displayPrompt && props.promptElement)
+        ? <div className="pa-prompt">{props.promptElement}</div>
+        : null;
     return (
         <div className="pa-main-content">
             <Nav
@@ -35,8 +36,9 @@ const Page: React.FunctionComponent<IPageProps> = (props) => {
             <div className="pa-content-page">
                 {props.children}
             </div>
+            { props.displayPrompt && props.promptElement ? <div className="pa-prompt-overlay"></div> : null}
             {prompt}
         </div>
-    )
+    );
 }
 export default Page;
