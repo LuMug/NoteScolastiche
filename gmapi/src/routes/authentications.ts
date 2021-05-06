@@ -7,7 +7,7 @@ import {
     ITeacher,
     IUser,
     UserType
-} from '../@types';
+    } from '../@types';
 import { ILdapOptions } from 'ldap-ts-client-test/lib/ILdapOptions';
 import { MongoHelper } from '../helpers/MongoHelper';
 
@@ -24,12 +24,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
     let ldap = new LDAPClient(opts);
     let username: string = req.body.username;
     let fullName: string[] = username.split('.');
-    fullName[0] = fullName[0].substr(0, 1).toUpperCase()
-        + fullName[0].substr(1, fullName[0].length - 1);
-    fullName[1] = fullName[1].substr(0, 1).toUpperCase()
-        + fullName[1].substr(1, fullName[1].length - 1);
-    let password: string = req.body.password;
-    if (username.length == 0) {
+    if (username.length === 0 || fullName.length !== 2) {
         let err: IError = {
             error: {
                 message: 'Not a valid username'
@@ -37,6 +32,11 @@ router.post('/authentication', async (req: Request, res: Response) => {
         };
         return res.status(400).json(err);
     }
+    fullName[0] = fullName[0].substr(0, 1).toUpperCase()
+        + fullName[0].substr(1, fullName[0].length - 1);
+    fullName[1] = fullName[1].substr(0, 1).toUpperCase()
+        + fullName[1].substr(1, fullName[1].length - 1);
+    let password: string = req.body.password;
     if (password.length == 0) {
         let err: IError = {
             error: {
@@ -48,12 +48,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
     let checkedUser: IUser | null = null;
     try {
         await ldap.start();
-        console.log(username);
-
         let tempPath: string | null = await ldap.getUserPath(username);
-        console.log(tempPath);
-
-
         let userFromPath: ADUser;
         if (tempPath != undefined) {
             userFromPath = PathParser.parse(tempPath);
@@ -65,7 +60,6 @@ router.post('/authentication', async (req: Request, res: Response) => {
             }
             return res.status(400).json(err);
         }
-
         let tempCheck: boolean = await ldap.checkUserCredentials(username, password);
         await ldap.end();
         if (tempCheck) {
@@ -75,13 +69,13 @@ router.post('/authentication', async (req: Request, res: Response) => {
             } else {
                 if (isStudent(userFromPath)) {
                     try {
-                        createUser(userFromPath, fullName);
+                        await createUser(userFromPath, fullName);
                     } catch (err) {
                         return res.status(400).json(err);
                     }
                 } else {
                     try {
-                        createTeacher(fullName);
+                        await createTeacher(fullName);
                     } catch (err) {
                         return res.status(400).json(err);
                     }
@@ -92,7 +86,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
                 } else {
                     let err: IError = {
                         error: {
-                            message: 'Could not create user'
+                            message: 'Could find newly created user'
                         }
                     }
                     return res.status(500).json(err);
