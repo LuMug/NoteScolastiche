@@ -21,7 +21,7 @@ interface ISubjectPageProps {
 
     onEditGrade?: (grade: IGrade, index: number) => void;
 
-    onRemoveGrade: (grade: IGrade, index: number) => void;
+    onRemoveGrade?: (grade: IGrade, index: number) => void;
 }
 
 const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
@@ -29,6 +29,7 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
     const [teacher, setTeacher] = useState<ITeacher | null>(null);
     const [teacherFullname, setTeacherFullname] = useState<string | null>(null);
     const [displayPrompt, setDisplayPrompt] = useState(false);
+    const [prompt, setPrompt] = useState<JSX.Element>();
 
     const setUp = async () => {
         if (props.subject.teacherId) {
@@ -46,6 +47,15 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
         }
         setLoading(false);
         setTeacherFullname(props.subject.teacherName);
+    }
+
+    const getColorClassName = (value: number): string => {
+        if (value < 3.5) {
+            return 'orange-text'; // red
+        } else if (value < 4 && value >= 3.5) {
+            return 'orange-text';
+        }
+        return '';
     }
 
     useEffect(() => {
@@ -67,26 +77,10 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
     }
     let grades = props.subject.grades;
     let avg = getSubjectAvg(props.subject);
-    let testPlural = (grades.length > 1) ? 's' : '';
-    let gradePrompt =
-        <div className={(displayPrompt) ? 'sp-prompt' : 'hidden'} >
-            <GradePrompt
-                title={`${props.subject.name}`}
-                onAbort={() => {
-                    setDisplayPrompt(false);
-                }}
-                onSubmit={
-                    (value, weight, date) => {
-                        props.onAddGrade(value, weight, date);
-                        // this.state.subject.grades.push({
-                        //     date: date.toISOString(),
-                        //     value: value,
-                        //     weight: weight
-                        // });
-                    }
-                }
-            />
-        </div>;
+    let testPlural = (grades.length > 1) ? 'he' : 'a';
+    let gradePrompt = (displayPrompt)
+        ? <div className="pa-prompt" >{prompt}</div>
+        : null;
     return (
         <div className="sp-main-content">
             <div className="sp-abort noselect" onClick={() => props.onAbort()}></div>
@@ -94,7 +88,9 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                 <div className="sp-top-top">
                     <div className="sp-avg-wrapper">
                         <CircularFadeBorder>
-                            {(grades.length == 0) ? '' : avg.toFixed(1)}
+                            <p className={avg < 4 ? 'orange-text' : ''}>
+                                {(grades.length == 0) ? '' : avg.toFixed(1)}
+                            </p>
                         </CircularFadeBorder>
                     </div>
                     <div className="sp-subject-details">
@@ -102,7 +98,7 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                         <div className="sp-details-teacher">{teacherFullname}</div>
                         <div className="sp-details-data">
                             <div className="sp-details-tests">
-                                <p><span>{grades.length}</span> test{testPlural}</p>
+                                <p><span>{grades.length}</span> verific{testPlural}</p>
                             </div>
                             <div className="sp-details-avg">
                                 <p>Avg: <span className={(grades.length > 0) ? 'sp-details-avg-number' : ''}>{(grades.length == 0) ? '-' : avg.toFixed(2)}</span></p>
@@ -122,15 +118,35 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                         </tr>
                         {props.subject.grades.map((g, i) => {
                             return <tr className="sp-tr" key={i}>
-                                <td className="sp-td sp-grade">{GradeHelper.valueToString(g)}</td>
+                                <td className={`sp-td sp-grade ${getColorClassName(g.value)}`}>{GradeHelper.valueToString(g)}</td>
                                 <td className="sp-td">{GradeHelper.getDate(g)}</td>
                                 <td className="sp-td">{g.weight.toFixed(1)}</td>
                                 <td className="sp-td sp-options">
                                     <div className="sp-options-wrapper">
                                         <GradeOptions
-                                            onOptionClick={(oi) => {
-                                                if (oi == 1) {
-                                                    props.onRemoveGrade(g, i);
+                                            onOptionClick={oi => {
+                                                if (oi == 0) {
+                                                    setPrompt(<GradePrompt
+                                                        title={`Modifica: ${props.subject.name}`}
+                                                        onAbort={() => {
+                                                            setDisplayPrompt(false);
+                                                        }}
+                                                        onSubmit={(v, w, d) => {
+                                                            setDisplayPrompt(false);
+                                                            let newGrade: IGrade = {
+                                                                value: v,
+                                                                weight: w,
+                                                                date: d.toISOString()
+                                                            }
+                                                            return props.onEditGrade ? props.onEditGrade(newGrade, i) : null;
+                                                        }}
+                                                        value={g.value}
+                                                        weight={g.weight}
+                                                        date={new Date(g.date)}
+                                                    />);
+                                                    setDisplayPrompt(ps => !ps);
+                                                } else if (oi == 1) {
+                                                    return props.onRemoveGrade ? props.onRemoveGrade(g, i) : null;
                                                 }
                                             }}
                                         />
@@ -142,10 +158,23 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                 </div>
                 <div className="sp-add-grade-wrapper">
                     <AddGradeButton onClick={() => {
+                        setPrompt(<GradePrompt
+                            title={`${props.subject.name}`}
+                            onAbort={() => {
+                                setDisplayPrompt(false);
+                            }}
+                            onSubmit={
+                                (value, weight, date) => {
+                                    setDisplayPrompt(false);
+                                    props.onAddGrade(value, weight, date);
+                                }
+                            }
+                        />);
                         setDisplayPrompt(ps => !ps);
                     }} />
                 </div>
             </div>
+            { displayPrompt ? <div className="pa-prompt-overlay"></div> : null}
             {gradePrompt}
         </div >
     );
