@@ -1,7 +1,5 @@
-import GradeHelper from '../../helpers/GradeHelper';
-import React, { Component, ReactNode } from 'react';
 import SimpleTextInput from '../simple-text-input/SimpleTextInput';
-import { IGrade } from '../../@types';
+import { useEffect, useState } from 'react';
 import './grade-prompt.css';
 
 interface IGradePromptProps {
@@ -11,9 +9,6 @@ interface IGradePromptProps {
     onAbort: () => void;
 
     title: string;
-}
-
-export interface IGradePromptState {
 
     value?: number;
 
@@ -22,98 +17,91 @@ export interface IGradePromptState {
     date?: Date;
 }
 
-class GradePrompt extends Component<IGradePromptProps, IGradePromptState> {
+const GradePrompt: React.FunctionComponent<IGradePromptProps> = (props) => {
+    const [value, setValue] = useState<number>(props.value ? props.value : 4.5);
+    const [weight, setWeight] = useState<number>(props.weight ? props.weight : 1);
+    const [date, setDate] = useState<Date>(props.date ? props.date : new Date());
 
-    constructor(props: IGradePromptProps) {
-        super(props);
-        this.state = {
-            value: 4.5,
-            weight: 1.0,
-            date: new Date()
-        };
+    const reset = () => {
+        setValue(4.5);
+        setWeight(1);
+        setDate(new Date());
     }
 
-    private onChangeGrade(value: number) {
-        this.setState({
-            value: Math.min(6, Math.max(1, value))
-        });
+    const onChangeGrade = (value: number) => {
+        setValue(Math.min(6, Math.max(1, value)));
     }
 
-    private onChangeWeight(value: number) {
-        this.setState({ weight: value });
+    const onChangeWeight = (value: number) => {
+        setWeight(value);
     }
 
-    private onChangeDate(value: Date) {
-        this.setState({ date: value });
+    const onChangeDate = (value: Date) => {
+        setDate(value);
     }
 
-    private onAbort() {
-        // this.setState({
-        //     value: 4.5,
-        //     weight: 1,
-        //     date: new Date()
-        // });
-        this.props.onAbort();
+    const onAbort = () => {
+        reset();
+        props.onAbort();
     }
 
-    render(): ReactNode {
-        let okBtnCName;
-        if (!this.state.date || !this.state.value || !this.state.weight) {
-            okBtnCName = 'gp-disabled';
-        }
-        return (
-            <div className="gp-main">
-                <div className="gp-content">
-                    <h1 className="gp-title">{this.props.title}</h1>
-                    <div className="gp-abort noselect" onClick={() => this.onAbort()}></div>
-                    <div className="gp-inputs">
-                        <div className="gp-input">
-                            <SimpleTextInput
-                                value={this.state.value}
-                                forceType="number"
-                                placeHolder="Nota"
-                                toolTipText="La nota del test"
-                                min={1}
-                                max={6}
-                                step={0.25}
-                                onChange={(v) => this.onChangeGrade(v as number)}
-                            />
-                        </div>
-                        <div className="gp-input">
-                            <SimpleTextInput
-                                value={this.state.weight}
-                                forceType="number"
-                                placeHolder="Peso"
-                                toolTipText="Il peso della nota"
-                                min={0}
-                                step={0.1}
-                                onChange={(v) => this.onChangeWeight(v as number)}
-                            />
-                        </div>
-                        <div className="gp-input">
-                            <SimpleTextInput
-                                value={this.state.date}
-                                forceType="date"
-                                placeHolder="Data"
-                                toolTipText="La data di consegna"
-                                onChange={(v) => this.onChangeDate(v as Date)}
-                            />
-                        </div>
+    const onSubmit = (value: number, weight: number, date: Date) => {
+        reset();
+        props.onSubmit(value, weight, date);
+    }
+
+    let okBtnCName;
+    if (!date || !value || !weight) {
+        okBtnCName = 'gp-disabled';
+    }
+    return (
+        <div className="gp-main">
+            <div className="gp-content">
+                <h1 className="gp-title">{props.title}</h1>
+                <div className="gp-abort noselect" onClick={() => onAbort()}></div>
+                <div className="gp-inputs">
+                    <div className="gp-input">
+                        <SimpleTextInput
+                            value={value}
+                            forceType="number"
+                            placeHolder="Nota"
+                            toolTipText="La nota del test"
+                            min={1}
+                            max={6}
+                            step={0.25}
+                            onChange={(v) => onChangeGrade(v as number)}
+                        />
                     </div>
-                    <div className={`gp-ok-btn ${okBtnCName} noselect`} onClick={() => {
-                        this.props.onSubmit(
-                            this.state.value as number,
-                            this.state.weight as number,
-                            this.state.date as Date
-                        );
-                        setTimeout(() => {
-                            this.props.onAbort();
-                        }, 80);
-                    }}>OK</div>
+                    <div className="gp-input">
+                        <SimpleTextInput
+                            value={weight}
+                            forceType="number"
+                            placeHolder="Peso"
+                            toolTipText="Il peso della nota"
+                            min={0}
+                            step={0.1}
+                            onChange={(v) => onChangeWeight(v as number)}
+                        />
+                    </div>
+                    <div className="gp-input">
+                        <SimpleTextInput
+                            value={date}
+                            forceType="date"
+                            placeHolder="Data"
+                            toolTipText="La data di consegna"
+                            onChange={(v) => onChangeDate(v as Date)}
+                        />
+                    </div>
                 </div>
+                <div className={`gp-ok-btn ${okBtnCName} noselect`} onClick={() => {
+                    onSubmit(
+                        value as number,
+                        weight as number,
+                        date as Date
+                    );
+                }}>OK</div>
             </div>
-        );
-    }
+        </div>
+    );
 }
-
 export default GradePrompt;

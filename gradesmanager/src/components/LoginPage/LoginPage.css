@@ -4,11 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-    197deg,
-    rgba(0, 126, 255, 1) 0%,
-    rgba(0, 234, 255, 1) 100%
-  );
+  background: var(--blue-grad-tilted);
   background-size: 400% 400%;
   background-repeat: no-repeat;
   animation: anim-bg 13s ease-in-out infinite;
@@ -36,6 +32,7 @@
   height: 100%;
   display: flex;
   flex-flow: column nowrap;
+  align-items: flex-start;
   padding: 1.2rem;
   padding-bottom: 2rem;
 }
@@ -64,6 +61,7 @@
 }
 
 .lp-left-bottom {
+  position: relative;
   width: 100%;
   height: 50%;
   padding: 2.1rem;
@@ -71,11 +69,8 @@
 }
 
 .lp-left-botbot {
-  height: 50%;
-}
-
-.lp-left-botbot {
   width: 100%;
+  height: 50%;
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -84,6 +79,26 @@
 
 .lp-left-bottom .input {
   margin-bottom: 1.1rem;
+}
+
+.lp-loading-icon {
+  content: url('../../public/svg/loading.svg');
+  width: 160px;
+  height: 160px;
+}
+
+.lp-left-error-wrapper {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.lp-left-error {
+  margin: auto;
+  color: var(--red);
 }
 
 .lp-right-section {

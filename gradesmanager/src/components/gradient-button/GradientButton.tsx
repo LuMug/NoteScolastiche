@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './GradientButton.css';
 
 export interface IGradientButtonProps {
@@ -10,10 +10,6 @@ export interface IGradientButtonProps {
 
 export default class GradientButton extends Component<IGradientButtonProps> {
 
-    constructor(props: IGradientButtonProps) {
-        super(props);
-    }
-
     render() {
         return (
             <div className="gb-button-wrapper"
@@ -23,7 +19,7 @@ export default class GradientButton extends Component<IGradientButtonProps> {
                         type="submit"
                         className="gb-login-button"
                         tabIndex={3}
-                        value="Login"
+                        value={this.props.message}
                     />
                 </div>
             </div>

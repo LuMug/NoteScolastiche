@@ -1,3 +1,12 @@
+.sb-main-content {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .sb-input {
   color: var(--gray);
   width: 100%;
@@ -14,7 +23,27 @@
   border-bottom: 1px solid var(--dark-blue);
 }
 
+.sb-input:valid + .sb-clear {
+  opacity: 0;
+}
+
 .sb-input::placeholder {
   opacity: 0.5;
   font-size: 1.1rem;
+}
+
+.sb-clear {
+  content: url('./../../public/svg/x.svg');
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  right: 0px;
+  opacity: 0.3;
+  transition: opacity 170ms ease-in-out, transform 105ms ease-in-out;
+}
+
+.sb-clear:hover {
+  transform: scale(1.2);
+  opacity: 1;
+  cursor: pointer;
 }

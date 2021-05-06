@@ -18,30 +18,6 @@ export interface IGroup {
 }
 
 /**
- * The subject.
- * 
- * @author Nicola Ambrosetti
- * @version 2021.01.28
- */
-// export interface ISubject {
-
-//     /**
-//      * The subject id.
-//      */
-//     uid: number;
-
-//     /**
-//      * The subject name.
-//      */
-//     name: string;
-
-//     /**
-//      * The id of the teacher.
-//      */
-//     teacherId: number;
-// }
-
-/**
  * The teacher.
  * 
  * @author Nicola Ambrosetti
@@ -178,11 +154,19 @@ export interface IUser {
      * The type of user.
      */
     type: UserType;
+
+    /**
+     * Defines if the user has read the welcome message.
+     * `true` yes `false` otherwise.
+     */
+    hasReadWelcomeMsg?: boolean;
 }
 
 export interface IError {
 
-    message: string;
+    error: {
+        message: string;
+    }
 }
 
 export interface IRouteDescritor {
@@ -193,7 +177,3 @@ export interface IRouteDescritor {
 
     iconURL?: string;
 }
-
-export type Collections = 'users' | 'teachers' | 'groups';
-
-export type CollectionTypes = IUser | ITeacher | IGroup;

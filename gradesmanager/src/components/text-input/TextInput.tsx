@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './TextInput.css';
 
 export interface ITextInputProps {
@@ -14,7 +14,7 @@ export interface ITextInputProps {
     onKeyPress?: (key: string) => void;
 }
 
-export default function TextInput(props: ITextInputProps) {
+const TextInput: React.FunctionComponent<ITextInputProps> = (props) => {
     let input = <input
         type={props.inputType}
         autoComplete="false"
@@ -37,3 +37,4 @@ export default function TextInput(props: ITextInputProps) {
         </div>
     );
 }
+export default TextInput;

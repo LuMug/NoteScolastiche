@@ -16,11 +16,7 @@
 .gb-button-border {
   width: 160px;
   height: 160px;
-  background: linear-gradient(
-    197deg,
-    rgba(0, 126, 255, 1) 0%,
-    rgba(0, 234, 255, 1) 100%
-  );
+  background: var(--blue-grad);
   border-radius: 50%;
   overflow: hidden;
   padding: 0.15rem;
@@ -32,11 +28,7 @@
 
 .gb-button-border:hover .gb-login-button,
 .gb-button-border:focus .gb-login-button {
-  background: linear-gradient(
-    197deg,
-    rgba(0, 126, 255, 1) 0%,
-    rgba(0, 234, 255, 1) 100%
-  );
+  background: var(--blue-grad);
   outline: none;
   cursor: pointer;
 }

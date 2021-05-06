@@ -1,16 +1,18 @@
 .wc-main-content {
   width: 100%;
-  opacity: 0;
-  animation: wc-welcome-text-in 300ms 80ms forwards ease-out;
+  /* animation: wc-welcome-text-in 0.4s forwards;
+  animation-timing-function: cubic-bezier(0.75, 0.25, 1, 1); */
 }
 
 .wc-welcome-text {
   font-weight: 100;
   color: #ffffff62;
+  transition: opacity 800ms ease-in-out;
 }
 
 .wc-welcome-text span {
   color: #fff;
+  transition: all 500ms ease-in-out;
 }
 
 .wc-welcome-separator {
@@ -18,7 +20,12 @@
   height: 1px;
   margin: 8px auto 14px;
   background-color: #b3b3b336;
-  animation: grow-horiz 320ms ease-in-out forwards;
+  animation: grow-horiz 0.8s forwards;
+  animation-timing-function: cubic-bezier(0, 1.11, 1, 0.99);
+}
+
+.wc-hidden {
+  opacity: 0;
 }
 
 @keyframes wc-welcome-text-in {
