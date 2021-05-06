@@ -1,5 +1,6 @@
 :root {
   --gray: #b3b3b3;
+  --opacity-gray: #b3b3b34f;
   --ok-dark-gray: #666666;
   --dark-gray: #b3b3b31e;
   --lp-dark-gray: #303030;
@@ -9,10 +10,20 @@
   --blue: #007eff;
   --light-blue: #00eaff;
   --dark-blue: #0061c2;
-  --red: #df0025;
-  --blue-grad: linear-gradient(197deg, #007eff 0%, #00eaff 100%);
-  --blue-grad-tilted: linear-gradient(222deg, #007eff 20%, #00eaff 100%);
-  --green-grad-tilted: linear-gradient(222deg, #00eaff 20%, #00ff9d 100%);
+  --red: #ff2626;
+  --orange: #ff8500;
+  --light-green: #00ff9d;
+  --blue-grad: linear-gradient(197deg, var(--blue) 0%, var(--light-blue) 100%);
+  --blue-grad-tilted: linear-gradient(
+    222deg,
+    var(--blue) 20%,
+    var(--light-blue) 100%
+  );
+  --green-grad-tilted: linear-gradient(
+    222deg,
+    var(--light-blue) 20%,
+    var(--light-green) 100%
+  );
   --card-shadow: 0 5px 5px -3px #00000040, 0 8px 5px 1px #00000030,
     0 3px 5px 2px #00000029;
   --card-radius: 10px;
@@ -92,5 +103,13 @@ select:-webkit-autofill:focus {
 } */
 
 .blue-text {
-  color: var(--blue);
+  color: var(--blue) !important;
+}
+
+.red-text {
+  color: var(--red) !important;
+}
+
+.orange-text {
+  color: var(--orange) !important;
 }
