@@ -1,5 +1,4 @@
-import FetchHelper from '../../helpers/FetchHelper';
-import React, { Component, ReactNode, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import './author-box.css';
 
@@ -49,7 +48,7 @@ const AuthorBox: React.FunctionComponent<IAuthorBoxProps> = (props) => {
         setLoading(false);
     }, [])
 
-    let img = <img src={props.imageUrl} className="ab-author-image"></img>;
+    let img = <img src={props.imageUrl} className="ab-author-image" alt="Could not fetch" ></img>;
     if (loading) {
         img = <div className="ab-author-image"></div>;
     }
@@ -77,7 +76,7 @@ const AuthorBox: React.FunctionComponent<IAuthorBoxProps> = (props) => {
                                 key={i}
                                 target="blank"
                             >
-                                <img src={s.imageUrl} />
+                                <img src={s.imageUrl} alt="" />
                             </a>
                         );
                     })}
