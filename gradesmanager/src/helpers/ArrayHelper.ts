@@ -3,7 +3,7 @@ import * as ObjectHelper from './ObjectHelper';
 export const shuffle = (array: Array<any>) => {
     let arr = [...array];
     let currentIndex = arr.length, temporaryValue, randomIndex;
-    while (0 != currentIndex) {
+    while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
         temporaryValue = arr[currentIndex];
@@ -12,6 +12,17 @@ export const shuffle = (array: Array<any>) => {
     }
     return arr;
 }
+
+export const merge = <T1, T2>(arr1: Array<T1>, arr2: Array<T2>): Array<T1 | T2> => {
+    let merged: Array<T1 | T2> = [];
+    for (let i = 0; i < arr1.length; i++) {
+        merged.push(arr1[i]);
+    }
+    for (let i = 0; i < arr2.length; i++) {
+        merged.push(arr2[i]);
+    }
+    return merged;
+};
 
 export const equals = <T>(arr1: Array<T>, arr2: Array<T>): boolean => {
     let _arr1 = arr1;// Object.assign({}, arr1);
