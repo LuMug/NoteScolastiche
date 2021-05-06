@@ -1,12 +1,10 @@
 import './add-subject.css';
 
-interface IAddSubject {
-
+interface IAddSubjectProps {
     onClick: () => void;
 }
 
-function AddSubject(props: IAddSubject) {
-
+const AddSubject: React.FunctionComponent<IAddSubjectProps> = (props: IAddSubjectProps) => {
     return (
         <div className="as-main" onClick={() => props.onClick()}>
             <div className="as-icon noselect">+</div>

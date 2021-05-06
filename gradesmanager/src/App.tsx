@@ -1,22 +1,20 @@
-import AboutPage from './components/AboutPage/AboutPage';
 import AdminPage from './components/AdminPage/AdminPage';
 import Auth from './auth/Auth';
 import AuthorsPage from './components/AuthorsPage/AuthorsPage';
 import HomePage from './components/HomePage/HomePage';
 import LoginPage from './components/LoginPage/LoginPage';
 import ProtectedRoute from './components/protected-route/ProtectedRoute';
-import React, { Component } from 'react';
 import TeacherPage from './components/TeacherPage/TeacherPage';
 import {
-  BrowserRouter,
-  Redirect,
-  RouteComponentProps,
-  RouteProps,
-  Switch
-  } from 'react-router-dom';
-import { IUser } from './@types';
+  ABOUT_ROUTE,
+  ADMIN_ROUTE,
+  HOME_ROUTE,
+  TEACHERS_ROUTE
+  } from './util/constants';
+import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
+import { Component } from 'react';
 import { Route } from 'react-router-dom';
-
+import { UserType } from './@types';
 
 export default class App extends Component<{}> {
 
@@ -25,20 +23,30 @@ export default class App extends Component<{}> {
   }
 
   render() {
+    let uid = (Auth.getUserUid() == null) ? -1 : Auth.getUserUid() as number;
+
     return (
       <div>
         <BrowserRouter>
           <Switch>
             <Route exact path="/login">
-              <LoginPage
-                onLoginSuccess={() => { }}
-              />
+              <LoginPage />
             </Route>
-            <ProtectedRoute exact path="/teachers" render={() => <TeacherPage tuid={3835} />} />
-            <ProtectedRoute exact path="/admins" render={() => <AdminPage uuid={Auth.getUserUid()} />} />
-            <ProtectedRoute exact path="/about" render={() => <AboutPage />} />
-            <ProtectedRoute exact path="/authors" render={() => <AuthorsPage uuid={Auth.getUserUid()} />} />
-            <ProtectedRoute path="/" render={() => <HomePage uuid={Auth.getUserUid()} />} />
+            {/* <ProtectedRoute exact path={TEACHERS_ROUTE} render={() => <TeacherPage tuid={uid} />} /> */}
+            {/* <ProtectedRoute exact path={ADMIN_ROUTE} render={() => <AdminPage uuid={Auth.getUserUid()} />} /> */}
+            <ProtectedRoute exact path={ABOUT_ROUTE} render={() => <AuthorsPage uuid={Auth.getUserUid()} />} />
+            <ProtectedRoute exact path={HOME_ROUTE} render={() => {
+              if (Auth.getUserType() == UserType.STUDENT) {
+                return <HomePage uuid={Auth.getUserUid()} />
+              } else if (Auth.getUserType() == UserType.ADMIN) {
+                return <AdminPage uuid={Auth.getUserUid()} />
+              } else if (Auth.getUserType() == UserType.TEACHER) {
+                return <TeacherPage tuid={uid} />
+              }
+              return <HomePage uuid={Auth.getUserUid()} />
+            }} />
+            {/* Handles 404 */}
+            <Redirect to="/" />
           </Switch>
         </BrowserRouter>
       </div>

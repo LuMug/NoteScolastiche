@@ -1,16 +1,16 @@
 import FetchHelper from '../../helpers/FetchHelper';
 import LoadingPage from '../LoadingPage/LoadingPage';
 import Page from '../Page/Page';
-import React, { useEffect, useState } from 'react';
 import Slider from '../slider/Slider';
 import WelcomeComponent from '../welcome-component/WelcomeComponent';
 import {
   IGroup,
   ITeacher,
   IUser,
-  IUserSubject,
   UserType
   } from '../../@types';
+import { Redirect } from 'react-router';
+import { useEffect, useState } from 'react';
 import './TeacherPage.css';
 
 interface ITeacherPageProps {
@@ -23,9 +23,9 @@ const TeacherPage = (props: ITeacherPageProps) => {
   const [mode, toggleMode] = useState(false);
   const [groups, setGroups] = useState<IGroup[] | null>(null);
   const [groupNames, setGroupNames] = useState<string[]>([]);
-  const [subjects, setSubjects] = useState<number[] | null>(null);
   const [students, setStudents] = useState<IUser[]>([]);
   const [currentCtx, setCurrentCtx] = useState<IGroup | number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetch = async () => {
@@ -34,9 +34,10 @@ const TeacherPage = (props: ITeacherPageProps) => {
         let _groups = await FetchHelper.fetchGroupsFor(props.tuid);
         setTeacher(() => _teacher);
         setGroups(() => _groups);
-        setSubjects(() => [0, 1, 2, 3, 4]);
+        setLoading(false);
       } catch (err) {
         console.error(err);
+        setLoading(false);
         return;
       }
     };
@@ -45,15 +46,17 @@ const TeacherPage = (props: ITeacherPageProps) => {
 
   useEffect(() => {
     if (!currentCtx) {
-      return
+      return;
     }
     const fetch = async () => {
       try {
+        setLoading(true);
         let sts = await FetchHelper.fetchGroupStudents(
           (typeof currentCtx == 'number')
             ? currentCtx
             : currentCtx.uid);
         setStudents(() => sts);
+        setLoading(false);
       } catch (err) {
         console.error(err);
         return;
@@ -90,12 +93,16 @@ const TeacherPage = (props: ITeacherPageProps) => {
     fetch();
   }, [students])
 
-  if (!teacher || !groups && !subjects) {
+  if (!groups || !teacher) {
     return (
       <Page displayPrompt={false} user={null}>
         <LoadingPage />
       </Page>
     );
+  }
+
+  if (!teacher && !loading) {
+    return <Redirect to="/" />
   }
 
   let modeTableContent;
@@ -106,11 +113,13 @@ const TeacherPage = (props: ITeacherPageProps) => {
           <th className="tp-th">Classi</th>
         </tr>
         {groups.map((g, i) => {
-          let cname = (g == currentCtx) ? 'tp-tr tp-tr-current' : 'tp-tr';
+          let cname = (g === currentCtx) ? 'tp-tr tp-tr-current' : 'tp-tr';
           return (
             <tr className={cname} key={i} onClick={() => {
-              setStudents(() => []);
-              setCurrentCtx(() => g);
+              if (!currentCtx || (currentCtx as IGroup).uid !== g.uid) {
+                setStudents(() => []);
+                setCurrentCtx(() => g);
+              }
             }}>
               <td className="tp-td">{g.name}</td>
             </tr>
@@ -128,7 +137,9 @@ const TeacherPage = (props: ITeacherPageProps) => {
     uid: teacher.uid
   }
 
-  let tableWrapper;
+  let groupsTables;
+  let studentsTable;
+
   if (!mode) {
     let studentsBody;
     if (students.length > 0) {
@@ -139,14 +150,21 @@ const TeacherPage = (props: ITeacherPageProps) => {
           <td className="tp-td">{s.uid}</td>
         </tr>;
       });
-    } else if (students.length == 0 && currentCtx) {
-      studentsBody = <tr className="tp-tr">
-        <td className="tp-td-loading" colSpan={3} ></td>
-      </tr>;
+    } else {
+      if (currentCtx && loading) {
+        studentsBody = <tr className="tp-tr">
+          <td className="tp-td tp-td-loading" colSpan={3}></td>
+        </tr>;
+      } else if (currentCtx && !loading) {
+        studentsBody = <tr className="tp-tr">
+          <td className="tp-td tp-td-nodata" colSpan={3}>Nessun allievo di questa classe si e' ancora registrato</td>
+        </tr>;
+      }
     }
-    tableWrapper = <div className="tp-tables-wrapper">
-      <div className="tp-left-table">{modeTableContent}</div>
-      <div className="tp-right-table">
+    studentsTable = null;
+    groupsTables = <div className="tp-tables-wrapper">
+      <div className="tp-table-wrapper">{modeTableContent}</div>
+      <div className="tp-table-wrapper">
         <table className="tp-table">
           <tr className="tp-tr">
             <th className="tp-th">Nome</th>
@@ -173,8 +191,9 @@ const TeacherPage = (props: ITeacherPageProps) => {
         <td className="tp-td-loading" colSpan={4} ></td>
       </tr>;
     }
-    tableWrapper = <div className="tp-tables-wrapper">
-      <div className="tp-left-table">
+    groupsTables = null;
+    studentsTable = <div className="tp-tables-wrapper">
+      <div className="tp-table-wrapper">
         <table className="tp-table">
           <tr className="tp-tr">
             <th className="tp-th">Nome</th>
@@ -203,7 +222,8 @@ const TeacherPage = (props: ITeacherPageProps) => {
           </div>
           <p className="tp-mode">Studenti</p>
         </div>
-        {tableWrapper}
+        {groupsTables}
+        {studentsTable}
       </div>
     </Page>
   );

@@ -1,10 +1,13 @@
+import Auth from '../../auth/Auth';
 import FetchHelper from '../../helpers/FetchHelper';
+import HomePage from '../HomePage/HomePage';
 import LoadingPage from '../LoadingPage/LoadingPage';
 import Page from '../Page/Page';
 import ParamSwitcher from './ParamSwitcher';
 import React, { useEffect, useState } from 'react';
 import WelcomeComponent from '../welcome-component/WelcomeComponent';
-import { IUser, UserType } from '../../@types';
+import { ITeacher, IUser, UserType } from '../../@types';
+import { merge } from '../../helpers/ArrayHelper';
 import './admin-page.css';
 
 interface IAdminPageProps {
@@ -14,10 +17,11 @@ interface IAdminPageProps {
 const AdminPage: React.FunctionComponent<IAdminPageProps> = (props) => {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<IUser | null>(null);
-    const [users, setUsers] = useState<IUser[] | null>(null);
-    const [showTeachers, setShowTeachers] = useState(true);
+    const [users, setUsers] = useState<(IUser | ITeacher)[]>([]);
+    const [filtered, setFiltered] = useState<(IUser | ITeacher)[]>([]);
+    const [showTeachers, setShowTeachers] = useState(false);
     const [showStudents, setShowStudents] = useState(true);
-    const [filtered, setFiltered] = useState<JSX.Element[]>([]);
+    const [showAdmins, setShowAdmins] = useState(false);
 
     useEffect(() => {
         const fetch = async () => {
@@ -25,19 +29,10 @@ const AdminPage: React.FunctionComponent<IAdminPageProps> = (props) => {
                 if (props.uuid !== null) {
                     let user = await FetchHelper.fetchUser(props.uuid);
                     let users = await FetchHelper.fetchAllUsers();
+                    let teachers = await FetchHelper.fetchAllTeachers();
+                    let withTeachers = merge<IUser, ITeacher>(users, teachers);
                     setUser(() => user);
-                    setUsers(() => users);
-                    setFiltered(() => {
-                        return users.map((s, i) => {
-                            return <tr className="tp-tr" key={i}>
-                                <td className="tp-td">{s.name}</td>
-                                <td className="tp-td">{s.surname}</td>
-                                <td className="tp-td"></td>
-                                <td className="tp-td capitalize">{s.type}</td>
-                                <td className="tp-td">{s.uid}</td>
-                            </tr>;
-                        });
-                    });
+                    setUsers(() => withTeachers);
                     setLoading(() => false);
                 }
             } catch (err) {
@@ -49,18 +44,24 @@ const AdminPage: React.FunctionComponent<IAdminPageProps> = (props) => {
     }, []);
 
     useEffect(() => {
-        if (!showStudents) {
-            // DOES NOT WORK
-            setFiltered(() =>
-                filtered.filter(v => v.type != UserType.STUDENT)
-            );
+        let allowed: UserType[] = [];
+        if (showStudents) {
+            allowed.push(UserType.STUDENT);
         }
-        if (!showTeachers) {
-            setFiltered(() =>
-                filtered.filter(v => v.type != UserType.TEACHER)
-            );
+        if (showTeachers) {
+            allowed.push(UserType.TEACHER);
         }
-    }, [showStudents, showTeachers]);
+        if (showAdmins) {
+            allowed.push(UserType.ADMIN);
+        }
+        setFiltered(users.filter(u => {
+            if ((u as IUser).type) {
+                return allowed.includes((u as IUser).type);
+            } else {
+                return allowed.includes(UserType.TEACHER);
+            }
+        }));
+    }, [showStudents, showTeachers, showAdmins, users]);
 
     if (loading || !user || !users) {
         return <Page
@@ -68,6 +69,11 @@ const AdminPage: React.FunctionComponent<IAdminPageProps> = (props) => {
             user={user}>
             <LoadingPage />
         </Page>
+    }
+
+    if (user.type !== UserType.ADMIN) {
+        Auth.setUserType(UserType.STUDENT);
+        return <HomePage uuid={props.uuid} />
     }
 
     return (
@@ -78,25 +84,34 @@ const AdminPage: React.FunctionComponent<IAdminPageProps> = (props) => {
                 <WelcomeComponent name={user.name} />
                 <div className="adp-params-wrapper">
                     <div className="adp-param-wrapper">
-                        <ParamSwitcher label="Docenti" defaultValue={true} onSwitch={() => setShowTeachers(ps => !ps)} />
+                        <ParamSwitcher label="Docenti" defaultValue={showTeachers} onSwitch={() => setShowTeachers(ps => !ps)} />
                     </div>
                     <div className="adp-param-wrapper">
-                        <ParamSwitcher label="Studenti" defaultValue={true} onSwitch={() => setShowStudents(ps => !ps)} />
+                        <ParamSwitcher label="Studenti" defaultValue={showStudents} onSwitch={() => setShowStudents(ps => !ps)} />
+                    </div>
+                    <div className="adp-param-wrapper">
+                        <ParamSwitcher label="Admins" defaultValue={showAdmins} onSwitch={() => setShowAdmins(ps => !ps)} />
                     </div>
                 </div>
-                <div className="tp-tables-wrapper">
-                    <div className="tp-left-table">
-                        <table className="tp-table">
-                            <tr className="tp-tr">
-                                <th className="tp-th">Nome</th>
-                                <th className="tp-th">Cognome</th>
-                                <th className="tp-th">Classe</th>
-                                <th className="tp-th">Tipo</th>
-                                <th className="tp-th">ID</th>
-                            </tr>
-                            {filtered}
-                        </table>
-                    </div>
+                <div className="tp-table-wrapper">
+                    <table className="tp-table">
+                        <tr className="tp-tr">
+                            <th className="tp-th">Nome</th>
+                            <th className="tp-th">Cognome</th>
+                            <th className="tp-th">Tipo</th>
+                            <th className="tp-th">ID</th>
+                            <th className="tp-th tp-th-op">Operazioni</th>
+                        </tr>
+                        {filtered.map((s, i) => {
+                            return <tr className="tp-tr" key={i}>
+                                <td className="tp-td">{s.name}</td>
+                                <td className="tp-td">{s.surname}</td>
+                                <td className="tp-td capitalize">{((s as IUser).type) ? (s as IUser).type : UserType.TEACHER}</td>
+                                <td className="tp-td">{s.uid}</td>
+                                <td className="tp-td tp-td-op">x</td>
+                            </tr>;
+                        })}
+                    </table>
                 </div>
             </div>
         </Page>

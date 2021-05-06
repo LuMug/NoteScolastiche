@@ -1,16 +1,28 @@
 import * as ObjectHelper from './ObjectHelper';
 
 export const shuffle = (array: Array<any>) => {
-    let currentIndex = array.length, temporaryValue, randomIndex;
-    while (0 != currentIndex) {
+    let arr = [...array];
+    let currentIndex = arr.length, temporaryValue, randomIndex;
+    while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
+        temporaryValue = arr[currentIndex];
+        arr[currentIndex] = arr[randomIndex];
+        arr[randomIndex] = temporaryValue;
     }
-    return array;
+    return arr;
 }
+
+export const merge = <T1, T2>(arr1: Array<T1>, arr2: Array<T2>): Array<T1 | T2> => {
+    let merged: Array<T1 | T2> = [];
+    for (let i = 0; i < arr1.length; i++) {
+        merged.push(arr1[i]);
+    }
+    for (let i = 0; i < arr2.length; i++) {
+        merged.push(arr2[i]);
+    }
+    return merged;
+};
 
 export const equals = <T>(arr1: Array<T>, arr2: Array<T>): boolean => {
     let _arr1 = arr1;// Object.assign({}, arr1);

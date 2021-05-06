@@ -1,5 +1,7 @@
+import _ENV from './../env.json';
 import { API_URL } from '../util/constants';
 import {
+    IError,
     IGrade,
     IGroup,
     ITeacher,
@@ -14,22 +16,29 @@ export default class FetchHelper {
     private static URL = API_URL.substr(0, API_URL.length - 1);
 
     public static async fetchGlobal(url: string, method: Methods = 'GET', body?: RequestInit, withToken?: boolean) {
-        withToken = (withToken != undefined) ? false : withToken;
+        let useToken = withToken === undefined ? false : withToken;
         let res;
-        let headers: any;
         let opts: RequestInit = {
             method: method
         };
         if (body) {
             opts.body = JSON.stringify(body);
-            headers = {
+            opts.headers = {
                 'Content-Type': 'application/json'
             }
         }
-        if (withToken) {
-            headers["Authorization"] = process.env.AUTH_TOKEN;
+        if (useToken) {
+            if (_ENV.AUTH_TOKEN) {
+                // blocks code ????
+                // headers['authorization'] = _ENV.AUTH_TOKEN;
+                opts.headers = {
+                    'Content-Type': 'application/json',
+                    'Authorization': _ENV.AUTH_TOKEN
+                };
+            } else {
+                console.error('No Auth token detected. Cannot fetch API!');
+            }
         }
-        opts.headers = headers;
         try {
             res = await fetch(url, opts);
         } catch (err) {
@@ -41,17 +50,39 @@ export default class FetchHelper {
             console.error(data.error.message);
             throw data;
         }
+        if (text.toLowerCase() === 'unauthorized') {
+            console.error('Unauthorized');
+            let err: IError = {
+                error: {
+                    message: 'Unauthorized'
+                }
+            }
+            throw err;
+        }
         return data;
     }
 
     public static async fetch(route: string, method: Methods = 'GET', body?: any) {
-        if (route.charAt(0) != '/') {
-            throw 'Invalid route. Must begin with /';
+        if (route.charAt(0) !== '/') {
+            let err: IError = {
+                error: {
+                    message: 'Invalid route. Must begin with /'
+                }
+            }
+            throw err;
         }
         route = route.replace(FetchHelper.URL, '');
         const url = FetchHelper.URL + route;
         try {
             return await FetchHelper.fetchGlobal(url, method, body, true);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public static async login(username: string, password: string) {
+        try {
+            return await this.fetch('/authentication', 'POST', { username: username, password: password }) as IUser | null;
         } catch (err) {
             throw err;
         }
@@ -84,15 +115,15 @@ export default class FetchHelper {
         } catch (err) {
             throw err;
         }
-        await this.delay(1000);
+        // await this.delay(1000);
         return students;
     }
 
-    private static async delay(time: number) {
-        return new Promise<void>((resolve, reject) => {
-            setTimeout(() => resolve(), time);
-        });
-    }
+    // private static async delay(time: number) {
+    //     return new Promise<void>((resolve, reject) => {
+    //         setTimeout(() => resolve(), time);
+    //     });
+    // }
 
     public static async fetchTeacherStudents(teacher: ITeacher) {
         try {
@@ -104,7 +135,7 @@ export default class FetchHelper {
 
     public static async fetchGroupStudents(groupUid: number) {
         try {
-            return (await this.fetchAllStudents()).filter(v => v.groupId == groupUid);
+            return (await this.fetchAllStudents()).filter(v => v.groupId === groupUid);
         } catch (err) {
             throw err;
         }
@@ -212,7 +243,7 @@ export default class FetchHelper {
             throw err;
         }
         if (!teacher) {
-            return [];
+            throw 'not a teacher';
         }
         let groups: IGroup[] = [];
         for (let i = 0; i < teacher.groupsIds.length; i++) {
@@ -268,7 +299,7 @@ export default class FetchHelper {
         }
     }
 
-    public static async patchSubjectGrade(uuid: number, sIndex: number, gIndex: number, data: Partial<IGrade>) {
+    public static async patchSubjectGrade(uuid: number, sIndex: number, gIndex: number, data: IGrade) {
         try {
             await this.fetch(`/users/${uuid}/subjects/${sIndex}/grades/${gIndex}`, 'PATCH', { grade: data });
         } catch (err) {

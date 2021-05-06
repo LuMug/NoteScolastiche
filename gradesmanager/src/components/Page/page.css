@@ -12,7 +12,6 @@
   /* background-color: #fff; */
   overflow: auto;
   padding: 20px;
-  /* padding-bottom: 0px; */
 }
 
 /* width */
@@ -35,12 +34,27 @@
   background: #555;
 }
 
+.pa-prompt-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.575);
+  transition: all 1s ease-in-out;
+}
+
 .pa-prompt {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pa-toasts {
   position: absolute;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.777);
+  bottom: 10px;
+  right: 10px;
+  height: 60px;
+  min-width: 250px;
 }

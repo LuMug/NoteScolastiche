@@ -7,12 +7,18 @@ import {
     ITeacher,
     IUser,
     UserType
-} from '../@types';
+    } from '../@types';
 import { ILdapOptions } from 'ldap-ts-client-test/lib/ILdapOptions';
 import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
 
+
+/**
+ * Authentication route
+ * this method need for authenticate the users of AD,
+ * create user or teacher if not exists.
+ */
 router.post('/authentication', async (req: Request, res: Response) => {
     let opts: ILdapOptions = {
         bindPath: _JSON.bindPath,
@@ -24,12 +30,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
     let ldap = new LDAPClient(opts);
     let username: string = req.body.username;
     let fullName: string[] = username.split('.');
-    fullName[0] = fullName[0].substr(0, 1).toUpperCase()
-        + fullName[0].substr(1, fullName[0].length - 1);
-    fullName[1] = fullName[1].substr(0, 1).toUpperCase()
-        + fullName[1].substr(1, fullName[1].length - 1);
-    let password: string = req.body.password;
-    if (username.length == 0) {
+    if (username.length === 0 || fullName.length !== 2) {
         let err: IError = {
             error: {
                 message: 'Not a valid username'
@@ -37,6 +38,11 @@ router.post('/authentication', async (req: Request, res: Response) => {
         };
         return res.status(400).json(err);
     }
+    fullName[0] = fullName[0].substr(0, 1).toUpperCase()
+        + fullName[0].substr(1, fullName[0].length - 1);
+    fullName[1] = fullName[1].substr(0, 1).toUpperCase()
+        + fullName[1].substr(1, fullName[1].length - 1);
+    let password: string = req.body.password;
     if (password.length == 0) {
         let err: IError = {
             error: {
@@ -45,14 +51,10 @@ router.post('/authentication', async (req: Request, res: Response) => {
         }
         return res.status(400).json(err);
     };
+    let checkedUser: IUser | null = null;
     try {
         await ldap.start();
-        console.log(username);
-
         let tempPath: string | null = await ldap.getUserPath(username);
-        console.log(tempPath);
-
-
         let userFromPath: ADUser;
         if (tempPath != undefined) {
             userFromPath = PathParser.parse(tempPath);
@@ -62,27 +64,52 @@ router.post('/authentication', async (req: Request, res: Response) => {
                     message: 'Not a valid user'
                 }
             }
-            return res.status(400).json({ error: err });
+            return res.status(400).json(err);
         }
-
         let tempCheck: boolean = await ldap.checkUserCredentials(username, password);
+        await ldap.end();
         if (tempCheck) {
-            let checkedUser: IUser | null = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
-            if (checkedUser != null) {
-                return res.status(200).json(checkedUser);
+            checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
+            if (checkedUser) {
+                let groupName: string;
+                let group: IGroup | null = await MongoHelper.getGroup(checkedUser.groupId);
+                if (userFromPath.group && userFromPath.year) {
+                    groupName = userFromPath.group + userFromPath.year;
+                    if (group && group.name == groupName) {
+                        return res.status(200).json(checkedUser);
+                    } else {
+                        await MongoHelper.addGroup({ name: groupName });
+                        let groupId = await MongoHelper.getGroupByName(groupName);
+                        if (groupId) {
+                            await MongoHelper.updateUser(checkedUser.uid, { groupId: groupId?.uid });
+                        }
+                        return res.status(201).json(checkedUser);
+                    }
+                }
             } else {
                 if (isStudent(userFromPath)) {
                     try {
-                        createUser(userFromPath, fullName);
+                        await createUser(userFromPath, fullName);
                     } catch (err) {
                         return res.status(400).json(err);
                     }
                 } else {
                     try {
-                        createTeacher(fullName);
+                        await createTeacher(fullName);
                     } catch (err) {
                         return res.status(400).json(err);
                     }
+                }
+                checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
+                if (checkedUser) {
+                    return res.status(201).json(checkedUser);
+                } else {
+                    let err: IError = {
+                        error: {
+                            message: 'Could find newly created user'
+                        }
+                    }
+                    return res.status(500).json(err);
                 }
             }
         } else {
@@ -93,12 +120,12 @@ router.post('/authentication', async (req: Request, res: Response) => {
             };
             return res.status(400).json(err);
         }
-        ldap.end();
-
     } catch (err) {
+        if (typeof err === 'string') {
+            return res.status(400).json({ error: { message: err } });
+        }
         return res.status(400).json(err);
     }
-    return res.status(201).json({});
 });
 
 const isStudent = (user: ADUser) => {
@@ -109,6 +136,12 @@ const isStudent = (user: ADUser) => {
     }
 }
 
+/**
+ * Given a full name and a username of user's AD creates an user.
+ * 
+ * @param userFromPath username from path given by LDAPClient
+ * @param fullName full name of the user
+ */
 const createUser = async (userFromPath: ADUser, fullName: string[]) => {
     if (userFromPath.group && userFromPath.year) {
         let iuserFromPath: IUser;
@@ -154,6 +187,11 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
     }
 }
 
+/**
+ * Given a full name of user's AD creates a teacher
+ * 
+ * @param fullName full name of the teacher
+ */
 const createTeacher = async (fullName: string[]) => {
     let iteacherFromPath: ITeacher;
     iteacherFromPath = {

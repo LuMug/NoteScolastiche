@@ -9,6 +9,15 @@ Front end of the project. Uses the REST API.
 
 ## Changelog
 
+### `v0.1.1`
+
+#### Notes
+
+**Home Page**
+
+- The home page is now rendered based on the user type.
+- Welcome message changes based on gender and time of the day
+
 ### `v0.1.0`
 
 #### Notes

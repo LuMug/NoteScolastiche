@@ -1,8 +1,10 @@
 import CircularFadeBorder from '../circular-fade-border/CircularFadeBorder';
 import FetchHelper from '../../helpers/FetchHelper';
 import Grade from './Grade';
-import { Component, ReactNode } from 'react';
+import GradeHelper from '../../helpers/GradeHelper';
 import { IGrade, ITeacher, IUserSubject } from '../../@types';
+import { useEffect } from 'react';
+import { useState } from 'react';
 import './Subject.css';
 
 interface ISubjectProps {
@@ -22,214 +24,188 @@ interface ISubjectProps {
     onTIBDisplay: () => void;
 }
 
-interface ISubjectState {
+const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
+    const [name, setName] = useState<string>(props.subject.name);
+    const [teacherName, setTeacherName] = useState<string>('');
+    const [avg, setAvg] = useState<number>(1);
+    const [isEditing, setIsEditing] = useState(false);
 
-    name: string;
+    useEffect(() => {
+        const fetch = async () => {
+            await setUp();
+        }
+        fetch();
+    }, []);
 
-    teacherName: string;
+    useEffect(() => {
+        setAvg(getAvg());
+    }, [getSubjectAvg(props.subject)])
 
-    avg: number;
+    useEffect(() => {
+        const fetch = async () => {
+            await setUp();
+        }
+        fetch();
+    }, [props.subject.teacherName]);
 
-    isEditing: boolean;
+    useEffect(() => {
+        if (!isEditing) {
+            setName(props.subject.name);
+        }
+    }, [name, props.subject.name, isEditing])
 
-    hasCustomTeacher: boolean;
-}
-
-class Subject extends Component<ISubjectProps, ISubjectState> {
-
-    constructor(props: ISubjectProps) {
-        super(props);
-        this.state = {
-            name: props.subject.name,
-            avg: this.getAvg(),
-            teacherName: '',
-            isEditing: false,
-            hasCustomTeacher: false
-        };
+    const getAvg = (): number => {
+        return getSubjectAvg(props.subject);
     }
 
-    async componentDidMount() {
-        await this.setUp();
-    }
-
-    async componentDidUpdate(prevProps: ISubjectProps, prevState: ISubjectState) {
-        if (prevState.name != this.props.subject.name && !this.state.isEditing) {
-            this.setState({
-                name: this.props.subject.name
-            });
-        }
-        if (this.getAvg() != this.state.avg) {
-            this.setState({
-                avg: this.getAvg()
-            });
-        }
-        if (prevProps.subject.teacherName != this.props.subject.teacherName) {
-            await this.setUp();
-        }
-    }
-
-    private async setUp() {
+    const setUp = async () => {
         let teacher: ITeacher | null = null;
         try {
-            if (this.props.subject.teacherId != undefined) {
-                teacher = await FetchHelper.fetchTeacher(this.props.subject.teacherId);
+            if (props.subject.teacherId !== undefined) {
+                teacher = await FetchHelper.fetchTeacher(props.subject.teacherId);
             }
         } catch (err) {
-            // console.error(err);
+            console.error(err);
             return;
         }
         if (teacher) {
-            this.setState({
-                teacherName: `${teacher.surname} ${teacher.name}`,
-                hasCustomTeacher: false,
-                name: this.props.subject.name
-            });
+            setTeacherName(`${teacher.surname} ${teacher.name}`);
         } else {
-            this.setState({
-                teacherName: this.props.subject.teacherName,
-                hasCustomTeacher: true,
-                name: this.props.subject.name
-            });
+            setTeacherName(props.subject.teacherName);
         }
+        setAvg(getAvg());
     }
 
-    private onEdit() {
-        this.setState({
-            isEditing: true
-        });
-    }
-
-    private async onApply() {
+    const onApply = async () => {
         // SE IL NOME E" REGISTRATO NON ACCETTERA" PIU" NUOVI NOMI
-        let name = this.state.name;
-        let teacher = this.state.teacherName;
+        let _name = name;
+        let teacher = teacherName;
         let hasCustom = false;
-        if (this.state.name.trim() == '') {
-            name = 'Subject';
+        if (name.trim() === '') {
+            _name = 'Materia';
         }
-        let teachers = await FetchHelper.fetchAllTeachers();
-        let t = teachers.filter((t) => {
-            return `${t.surname} ${t.name}` == teacher
-                || `${t.name} ${t.surname}` == teacher;
+        let teachers;
+        try {
+            teachers = await FetchHelper.fetchAllTeachers();
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+        let t = teachers.filter(t => {
+            return `${t.surname} ${t.name}` === teacher
+                || `${t.name} ${t.surname}` === teacher;
         });
         if (t.length >= 1) {
             teacher = `${t[0].surname} ${t[0].name}`;
+            hasCustom = false;
         } else {
             hasCustom = true;
         }
-        if (this.state.teacherName.trim() == '') {
+        if (teacherName.trim() === '') {
             teacher = '?';
+            hasCustom = true;
         }
-        this.setState({
-            isEditing: false,
-            name: name,
-            teacherName: teacher,
-            hasCustomTeacher: hasCustom
-        });
-        let subject = this.props.subject;
+        setIsEditing(false);
+        setName(_name);
+        setTeacherName(teacher);
+        let subject = props.subject;
         subject.name = name;
         subject.teacherName = teacher;
-        this.props.onApply(subject);
-    }
-
-    private onChangeName(name: string) {
-        this.setState({
-            name: name
-        });
-    }
-
-    private async onChangeTeacher(name: string) {
-        this.setState({
-            teacherName: name
-        });
-    }
-
-    public static getSubjectAvg(subject: IUserSubject): number {
-        let avg = 0;
-        for (let g of subject.grades) {
-            avg += g.value * g.weight;
+        if (hasCustom) {
+            delete subject.teacherId;
         }
-        return avg / Math.max(1, subject.grades.length);
+        props.onApply(subject);
     }
 
-    public getAvg(): number {
-        return Subject.getSubjectAvg(this.props.subject);
+    let sData;
+    // let customTeacher = (!hasCustomTeacher)
+    //     ? ''
+    // : <div
+    //     className="s-subject-teacher-warning noselect"
+    //     onClick={() => props.onTIBDisplay()}
+    // ></div>;
+    let customTeacher = !isEditing
+        ? <div
+            className="s-subject-teacher-warning noselect"
+            onClick={() => props.onTIBDisplay()}
+        ></div>
+        : null;
+    if (props.subject.grades.length !== 0) {
+        sData = <div className="s-subject-data">
+            <div className="s-subject-grades">
+                {props.subject.grades.map((g, i) => {
+                    return <div className="s-subject-grade-wrapper" key={i}>
+                        <div className="s-subject-grade-delete noselect" onClick={() => props.onRemoveGrade(g, i)}></div>
+                        <Grade key={i} gradeObj={g} editable={false} />
+                    </div>;
+                })}
+            </div>
+            <CircularFadeBorder>
+                <p className={avg < 4 ? 'orange-text' : ''}>
+                    {avg.toFixed(1)}
+                </p>
+            </CircularFadeBorder>
+        </div>;
     }
 
-    render(): ReactNode {
-        let sData;
-        let customTeacher = (!this.state.hasCustomTeacher)
-            ? ''
-            : <div
-                className="s-subject-teacher-warning noselect"
-                onClick={() => this.props.onTIBDisplay()}
-            ></div>;
-        if (this.props.subject.grades.length != 0) {
-            sData = <div className="s-subject-data">
-                <div className="s-subject-grades">
-                    {this.props.subject.grades.map((g, i) => {
-                        return <div className="s-subject-grade-wrapper" key={i}>
-                            <div className="s-subject-grade-delete noselect" onClick={() => this.props.onRemoveGrade(g, i)}></div>
-                            <Grade key={i} gradeObj={g} editable={false} />
-                        </div>;
-                    })}
-                </div>
-                <CircularFadeBorder>
-                    {this.state.avg.toFixed(1)}
-                </CircularFadeBorder>
-            </div>;
-        }
-
-        return (
-            <div className="hp-card s-subject" >
-                <div className="s-drag-handle-wrapper">
-                    <div className="s-drag-handle"
-                        draggable="true"></div>
-                </div>
-                <div className="s-subject-top">
+    return (
+        <div className="hp-card s-subject" >
+            <div className="s-drag-handle-wrapper">
+                <div className="s-drag-handle"
+                    draggable="true"></div>
+            </div>
+            <div className="s-subject-top">
+                <input
+                    type="text"
+                    className={`editable-p s-subject-title ${(isEditing) ? 's-input-editing' : ''}`}
+                    value={name}
+                    disabled={!isEditing}
+                    onChange={e => setName(e.target.value)}
+                />
+                <div className="s-subject-teacher-wrapper">
                     <input
                         type="text"
-                        className={`editable-p s-subject-title ${(this.state.isEditing) ? 's-input-editing' : ''}`}
-                        value={this.state.name}
-                        disabled={!this.state.isEditing}
-                        onChange={(e) => this.onChangeName(e.target.value)}
+                        className={`editable-p s-subject-teacher ${(isEditing) ? 's-input-editing' : ''}`}
+                        value={teacherName}
+                        disabled={!isEditing}
+                        onChange={e => setTeacherName(e.target.value)}
                     />
-                    <div className="s-subject-teacher-wrapper">
-                        <input
-                            type="text"
-                            className={`editable-p s-subject-teacher ${(this.state.isEditing) ? 's-input-editing' : ''}`}
-                            value={this.state.teacherName}
-                            disabled={!this.state.isEditing}
-                            onChange={(e) => this.onChangeTeacher(e.target.value)}
-                        />
-                        {customTeacher}
-                    </div>
-                    <div className="s-edit-btn-wrapper">
-                        <div className="s-edit-btn noselect"> </div>
-                        <div className="s-edit-btn-content">
-                            <div className="s-edit-btn-el s-edit-btn-el-edit noselect" onClick={() => this.onEdit()}> </div>
-                            <div className="s-edit-btn-el s-edit-btn-el-details noselect" onClick={() => this.props.onDetails()}> </div>
-                            <div className="s-edit-btn-el s-edit-btn-el-trash noselect" onClick={() => this.props.onDelete()}></div>
-                        </div>
+                    {customTeacher}
+                </div>
+                <div className="s-edit-btn-wrapper">
+                    <div className="s-edit-btn noselect"> </div>
+                    <div className="s-edit-btn-content">
+                        <div className="s-edit-btn-el s-edit-btn-el-edit noselect" onClick={() => setIsEditing(true)}> </div>
+                        <div className="s-edit-btn-el s-edit-btn-el-details noselect" onClick={() => props.onDetails()}> </div>
+                        <div className="s-edit-btn-el s-edit-btn-el-trash noselect" onClick={() => props.onDelete()}></div>
                     </div>
                 </div>
-                <div className="s-subject-separator"></div>
-                { sData}
-                <div className={`${this.state.isEditing ? 's-subject-apply-wrapper noselect' : 's-subject-add-grade-wrapper noselect'}`}>
-                    <div
-                        className={`${this.state.isEditing ? 's-subject-apply noselect' : 's-subject-add-grade noselect'}`}
-                        onClick={() => {
-                            if (this.state.isEditing) {
-                                this.onApply();
-                            } else {
-                                this.props.onAddGrade();
-                            }
-                        }}
-                    >+</div>
-                </div>
-            </div >
-        );
-    }
+            </div>
+            <div className="s-subject-separator"></div>
+            { sData}
+            <div className={`${isEditing ? 's-subject-apply-wrapper noselect' : 's-subject-add-grade-wrapper noselect'}`}>
+                <div
+                    className={`${isEditing ? 's-subject-apply noselect' : 's-subject-add-grade noselect'}`}
+                    onClick={() => {
+                        if (isEditing) {
+                            onApply();
+                        } else {
+                            props.onAddGrade();
+                        }
+                    }}
+                >+</div>
+            </div>
+        </div >
+    );
 }
 
 export default Subject;
+
+export const getSubjectAvg = (subject: IUserSubject): number => {
+    if (subject.grades.length == 0) {
+        return 0;
+    }
+    let sum = subject.grades.map(g => g.value * g.weight).reduce((p, c) => p + c);
+    let weightSum = subject.grades.map(g => g.weight).reduce((p, c) => p + c);
+    return sum / Math.max(1, weightSum);
+}

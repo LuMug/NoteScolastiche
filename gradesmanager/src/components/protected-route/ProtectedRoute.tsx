@@ -1,10 +1,10 @@
 import Auth from '../../auth/Auth';
-import React, { Component } from 'react';
 import { Redirect, Route, RouteProps } from 'react-router';
 
 interface IProtectedRouteProps extends RouteProps { }
 
-function ProtectedRoute(props: IProtectedRouteProps) {
+const ProtectedRoute: React.FunctionComponent<IProtectedRouteProps> = (props: IProtectedRouteProps) => {
+    // could add custom condition
     if (!Auth.isLoggedIn()) {
         return <Redirect to='/login' />
     }
