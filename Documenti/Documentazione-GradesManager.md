@@ -247,11 +247,11 @@ per la realizzazione del prodotto.
   Dopo aver pianificato e progettato tutto possiamo passare all'implementazione. In gran modo possiamo suddividere tutto il lavoro in 3 grandi sezioni:
 
   - **LDAP**, ovvero tutto ciò che concerne la connessione e l'elaborazione degli utenti affinché si possa fare il login
-  - **API**, tutto quello che concerne il back-end dell'applicazione, che interagisce con il database e l'LDAP.
+  - **REST API**, tutto quello che concerne il back-end dell'applicazione, che interagisce con il database e l'LDAP.
   - **React**, tutto ciò che concerne la creazione delle pagine (Typescript, CSS, HTML)
 
 ##### ldap-ts
-  Uno degli obbiettivi del progetto è permettere che tutti gli allievi e i docenti presenti nell'Active Directory della possano utilizzare il sito. Dopo diverse ricerche abbiamo costatato che la libreria ``LDAPJS`` era la più indicata per il nostro lavoro. Tuttavia questa libreria era abbastanza base e non possedeva tutte le funzionalità che avevamo bisogni, il ché ci ha portati a dover creare una nostra libreria che utilizzasse ``LDAPJS`` e in più le funzionalità di cui avevamo bisogno. Queste sono le parti di codice più importanti della nostra libreria ``ldap-ts``:
+  Uno degli obbiettivi del progetto è permettere che tutti gli allievi e i docenti presenti nell'Active Directory della possano utilizzare il sito. Dopo diverse ricerche abbiamo costatato che la libreria ``LDAPJS`` era la più indicata per il nostro lavoro. Tuttavia questa libreria era abbastanza base e non possedeva tutte le funzionalità che avevamo bisogni, il che ci ha portati a dover creare una nostra libreria che utilizzasse ``LDAPJS`` e in più le funzionalità di cui avevamo bisogno. Queste sono le parti di codice più importanti della nostra libreria ``ldap-ts``:
   - **Binding**: Prima di capire le parti più interessanti del codice occorre capire le fasi di una connessione tramite LDAP. La fase di binding si tratta di un tunnel di comunicazione tra il client e l'Active Directory utilizzato per richiedere e confrontare informazioni. Nella nostra libreria abbiamo fatto il binding in questo modo:
 
   ![BindCode](./assets/bind.png)
@@ -279,8 +279,23 @@ per la realizzazione del prodotto.
 
   Il metodo accetta il nome e la password. Semplicemente se il nome e la password corrispondono a quelle dell'AD, ritorna true, altrimenti false. Questo metodo è un po' una fusione delle altre funzionalità che abbiamo sviluppato, dato che per arrivare a sviluppare questo metodo, abbiamo avuto bisogno di partire da quelli menzionati in precedenza.
 
+---
+##### REST API
+
+Per la parte backend del nostro progetto abbiamo pensato di sviluppare una REST API la quale serve per gestire il database, creato con MongoDB, e la connessione tramide ``ldpajs`` all'AD DS(Active Directory Domain Services) della scuola.
+Una REST API si basa sulla creazione di un server e di una app che gestisce le richieste da parte del front end.
+Nel nostro progetto abbiamo utilizzato due librerie npm: ``morgan`` e ``express``, le quali si preoccupano di creare rispettivamente il server della REST API e l'app incaricata di gestire le richieste.
+- **App**
+![API_App](./assets/ApiAPP.png)
+
+- **Server**
+![API_Server](./assets/ApiServer.png)
+
+Per un utilizzo corretto di una REST API bisogna utilizzare delle route, link diretti al server creato in precedenza le quali eseguono delle funzioni specificate all'interno del codice sorgente. Esse possono avvenire con alcune specifiche e differenti funzioni: ``GET``, ``POST``, ``PATCH``, ``DELETE``, ``PUT``.
+Ogni route viene specificata tramite la creazione di un router dalla libreria express ``express.Router()``.
 
 
+---
 
 
 In questo capitolo dovrà essere mostrato come è stato realizzato il
@@ -411,6 +426,7 @@ ripetibile alle stesse condizioni.
 - https://infograph.venngage.com/, *Venngage Graphic Creator*, 02-03-2021
 - https://www.serverplan.com/blog/node-js/#gref, *Server plan - NodeJS*, 02-03-2021
 - https://it.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol, *Wikipedia*, 09-03-2021
+-https://www.npmjs.com, *npm*
 
 
 ## Allegati
