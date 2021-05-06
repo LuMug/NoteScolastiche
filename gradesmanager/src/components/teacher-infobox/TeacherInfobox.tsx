@@ -1,5 +1,4 @@
-import FetchHelper from '../../helpers/FetchHelper';
-import React, { useEffect } from 'react';
+import React from 'react';
 import SearchBar from '../search-bar/SearchBar';
 import { ITeacher } from '../../@types';
 import { useState } from 'react';
@@ -15,7 +14,7 @@ interface ITeacherInfoboxProps {
 }
 
 const TeacherInfobox: React.FunctionComponent<ITeacherInfoboxProps> = (props) => {
-    const [filtered, setFiltered] = useState<ITeacher[]>([]);
+    const [filtered] = useState<ITeacher[]>(props.teachers);
     const [query, setQuery] = useState<string>('');
 
     const onQueryChange = (text: string) => {
@@ -26,17 +25,13 @@ const TeacherInfobox: React.FunctionComponent<ITeacherInfoboxProps> = (props) =>
         teachers.sort((a, b) => {
             let aName = `${a.surname} ${a.name}`;
             let bName = `${b.surname} ${b.name}`;
-            return (aName > bName) ? 1 : (aName == bName) ? 0 : -1;
+            return (aName > bName) ? 1 : (aName === bName) ? 0 : -1;
         });
     }
 
-    useEffect(() => {
-        setFiltered(props.teachers);
-    }, [])
-
-    let loading = (filtered.length != 0) ? '' : <div className="tib-loading"><div></div></div>;
+    let loading = (filtered.length !== 0) ? '' : <div className="tib-loading"><div></div></div>;
     let content;
-    if (filtered.length != 0) {
+    if (filtered.length !== 0) {
         let teachers: ITeacher[] = [];
         if (query) {
             filtered.forEach((v) => {
