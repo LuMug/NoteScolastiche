@@ -8,7 +8,7 @@ interface ICircularFadeBorderProps {
 const CircularFadeBorder: React.FunctionComponent<ICircularFadeBorderProps> = (props) => {
     let cname;
     if (props.fontSize) {
-        cname = (props.fontSize == 'medium') ? '' : '';
+        cname = (props.fontSize === 'medium') ? '' : '';
     } else {
         cname = 'cfb-medium-font';
     }
