@@ -1,3 +1,4 @@
+import GradeHelper from '../../helpers/GradeHelper';
 import { IGrade } from '../../@types';
 
 interface IGradeProps {
@@ -8,7 +9,6 @@ interface IGradeProps {
 }
 
 const Grade: React.FunctionComponent<IGradeProps> = (props: IGradeProps) => {
-
     return (
         <input
             type="number"

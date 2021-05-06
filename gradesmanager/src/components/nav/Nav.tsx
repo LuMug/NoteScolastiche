@@ -22,11 +22,11 @@ const Nav: React.FunctionComponent<INavProps> = (props) => {
                         className="n-ruote-wrapper"
                         key={i}
                         onClick={() => {
-                            if (r.name == 'Logout') {
+                            if (r.name === 'Logout') {
                                 Auth.logout();
                             }
                         }}>
-                        <p className="n-route-el noselect">{r.name}</p>
+                        <p className={`n-route-el noselect n-route-el-${r.path.replace('/', '')}`}>{r.name}</p>
                     </Link>
                 );
             })}

@@ -13,7 +13,7 @@ const GradeOptions: React.FunctionComponent<IGradeOptionsProps> = (props: IGrade
                     key={i}
                     className="gp-option-wrapper noselect"
                     onClick={() => props.onOptionClick(i)}>
-                    <div className={`gp-option ${(i == 1) ? 'gp-option-delete' : ''}`}></div>
+                    <div className={`gp-option ${(i === 1) ? 'gp-option-delete' : ''}`}></div>
                 </div>
             })}
         </div>

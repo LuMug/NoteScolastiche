@@ -1,4 +1,3 @@
-import { Component, ReactNode } from 'react';
 import './slider.css';
 
 interface ISliderProps {
