@@ -1,14 +1,14 @@
 .sp-main-content {
   position: relative;
-  width: 70%;
-  min-width: 500px;
+  width: 100%;
+  min-width: 900px;
   max-width: 1000px;
   /* min-height: 448px; */
-  min-height: 338px;
-  max-height: 95%;
+  min-height: 390px;
+  max-height: 75vh;
   display: flex;
   flex-flow: column nowrap;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   margin: auto;
   border-radius: 6px;
@@ -50,7 +50,7 @@
 .sp-top-top {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
   /* height: 100%; */
@@ -93,7 +93,7 @@
   width: 100%;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .sp-details-data p {
@@ -128,12 +128,11 @@
   position: relative;
   width: 100%;
   height: 100%;
-  /* min-height: 224px; */
+  min-height: 224px;
   background-color: var(--card-gray);
   border-radius: 10px;
   padding: 0.8rem 2rem 12px;
   box-shadow: 0px 0px 10px 8px #00000081;
-  z-index: 11;
   overflow-y: scroll;
 }
 
@@ -242,7 +241,7 @@
 
 .sp-grade {
   text-align: center;
-  color: #007eff !important;
+  color: var(--blue) !important;
   font-size: 3rem;
   margin: auto;
   padding: 0 !important;
@@ -257,15 +256,16 @@
   justify-content: center;
 }
 
-.sp-prompt {
-  position: absolute;
+/* .sp-prompt {
+  position: fixed;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 999;
-}
+  background-color: rgba(0, 0, 0, 0.575);
+  z-index: 5;
+} */
 
 @keyframes sp-slide-in {
   100% {
