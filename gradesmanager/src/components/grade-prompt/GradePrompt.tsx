@@ -1,5 +1,5 @@
 import SimpleTextInput from '../simple-text-input/SimpleTextInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './grade-prompt.css';
 
 interface IGradePromptProps {
@@ -9,12 +9,24 @@ interface IGradePromptProps {
     onAbort: () => void;
 
     title: string;
+
+    value?: number;
+
+    weight?: number;
+
+    date?: Date;
 }
 
 const GradePrompt: React.FunctionComponent<IGradePromptProps> = (props) => {
-    const [value, setValue] = useState<number>(4.5);
-    const [weight, setWeight] = useState<number>(1);
-    const [date, setDate] = useState<Date>(new Date());
+    const [value, setValue] = useState<number>(props.value ? props.value : 4.5);
+    const [weight, setWeight] = useState<number>(props.weight ? props.weight : 1);
+    const [date, setDate] = useState<Date>(props.date ? props.date : new Date());
+
+    const reset = () => {
+        setValue(4.5);
+        setWeight(1);
+        setDate(new Date());
+    }
 
     const onChangeGrade = (value: number) => {
         setValue(Math.min(6, Math.max(1, value)));
@@ -29,12 +41,13 @@ const GradePrompt: React.FunctionComponent<IGradePromptProps> = (props) => {
     }
 
     const onAbort = () => {
-        // this.setState({
-        //     value: 4.5,
-        //     weight: 1,
-        //     date: new Date()
-        // });
+        reset();
         props.onAbort();
+    }
+
+    const onSubmit = (value: number, weight: number, date: Date) => {
+        reset();
+        props.onSubmit(value, weight, date);
     }
 
     let okBtnCName;
@@ -81,14 +94,11 @@ const GradePrompt: React.FunctionComponent<IGradePromptProps> = (props) => {
                     </div>
                 </div>
                 <div className={`gp-ok-btn ${okBtnCName} noselect`} onClick={() => {
-                    props.onSubmit(
+                    onSubmit(
                         value as number,
                         weight as number,
                         date as Date
                     );
-                    setTimeout(() => {
-                        props.onAbort();
-                    }, 80);
                 }}>OK</div>
             </div>
         </div>
