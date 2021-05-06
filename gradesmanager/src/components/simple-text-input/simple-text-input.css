@@ -37,7 +37,7 @@
   bottom: -1px;
   height: 100%;
   width: 100%;
-  border-bottom: 1px solid #007eff;
+  border-bottom: 1px solid var(--blue);
   transform: translateX(-100%);
   transition: all 120ms ease-in-out;
 }
