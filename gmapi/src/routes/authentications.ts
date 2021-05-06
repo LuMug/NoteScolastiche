@@ -13,6 +13,12 @@ import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
 
+
+/**
+ * Authentication route
+ * this method need for authenticate the users of AD,
+ * create user or teacher if not exists.
+ */
 router.post('/authentication', async (req: Request, res: Response) => {
     let opts: ILdapOptions = {
         bindPath: _JSON.bindPath,
@@ -65,7 +71,21 @@ router.post('/authentication', async (req: Request, res: Response) => {
         if (tempCheck) {
             checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
             if (checkedUser) {
-                return res.status(200).json(checkedUser);
+                let groupName: string;
+                let group: IGroup | null = await MongoHelper.getGroup(checkedUser.groupId);
+                if (userFromPath.group && userFromPath.year) {
+                    groupName = userFromPath.group + userFromPath.year;
+                    if (group && group.name == groupName) {
+                        return res.status(200).json(checkedUser);
+                    } else {
+                        await MongoHelper.addGroup({ name: groupName });
+                        let groupId = await MongoHelper.getGroupByName(groupName);
+                        if (groupId) {
+                            await MongoHelper.updateUser(checkedUser.uid, { groupId: groupId?.uid });
+                        }
+                        return res.status(201).json(checkedUser);
+                    }
+                }
             } else {
                 if (isStudent(userFromPath)) {
                     try {
@@ -116,6 +136,12 @@ const isStudent = (user: ADUser) => {
     }
 }
 
+/**
+ * Given a full name and a username of user's AD creates an user.
+ * 
+ * @param userFromPath username from path given by LDAPClient
+ * @param fullName full name of the user
+ */
 const createUser = async (userFromPath: ADUser, fullName: string[]) => {
     if (userFromPath.group && userFromPath.year) {
         let iuserFromPath: IUser;
@@ -161,6 +187,11 @@ const createUser = async (userFromPath: ADUser, fullName: string[]) => {
     }
 }
 
+/**
+ * Given a full name of user's AD creates a teacher
+ * 
+ * @param fullName full name of the teacher
+ */
 const createTeacher = async (fullName: string[]) => {
     let iteacherFromPath: ITeacher;
     iteacherFromPath = {

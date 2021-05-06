@@ -4,11 +4,19 @@ import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
 
+/**
+ * Gets all groups.
+ */
 router.get('/groups', async (req: Request, res: Response) => {
   let arr = await MongoHelper.asArray(MongoHelper.getGroups());
   res.status(200).json(arr);
 });
 
+/**
+ * Gets a group.
+ * 
+ * @param uid the unique id of the group
+*/
 router.get('/groups/:uid', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
@@ -31,7 +39,9 @@ router.get('/groups/:uid', async (req: Request, res: Response) => {
 });
 
 
-//NON AGGIUNGE IL NOME NEL group
+/**
+ * Adds a group to the mongoDB's collection.
+ */
 router.post('/groups', async (req: Request, res: Response) => {
   if (!MongoHelper.isGroup(req.body.group)) {
     let err: IError = {
@@ -50,6 +60,11 @@ router.post('/groups', async (req: Request, res: Response) => {
   res.status(201).json(group);
 });
 
+/**
+ * Updates a group.
+ * 
+ * @param uid the unique id of the group
+ */
 router.patch('/groups/:uid', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   let group: Partial<Omit<IGroup, 'uid'>> = req.body.group;
