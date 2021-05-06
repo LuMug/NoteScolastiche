@@ -1,8 +1,10 @@
 import Auth from '../../auth/Auth';
 import GradientButton from '../gradient-button/GradientButton';
+import LoadingPage from '../LoadingPage/LoadingPage';
+import React, { useState } from 'react';
 import TextInput from '../text-input/TextInput';
+import { IUser } from '../../@types';
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
 import './LoginPage.css';
 
 interface ILoginPageProps {
@@ -13,25 +15,61 @@ interface ILoginPageProps {
 const LoginPage = (props: ILoginPageProps) => {
   const [username, setUsername] = useState('');
   const [pw, setPw] = useState('');
-  const [showErrors, setShowErrors] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const attemptLogin = async () => {
-    let uid = await Auth.login(username, pw);
-    if (uid) {
+    setShowError(false);
+    setError('');
+    if (username.trim() === '' || pw.trim() === '') {
+      setShowError(true);
+      setError('Riempi tutti i campi');
+      return;
+    }
+    setLoading(true);
+    let user: IUser | null = null;
+    try {
+      user = await Auth.login(username, pw);
+    } catch (err) {
+      setLoading(false);
+      setShowError(true);
+      let errMsg = err.error?.message.includes('incorrect')
+        ? 'Nome utente o password errati'
+        : err.error?.message.includes('valid username')
+          ? 'Nome utente invalido'
+          : err.error?.message || 'Internal error';
+      setError(errMsg);
+      return;
+    }
+    if (user) {
       if (props.onLoginSuccess) {
-        props.onLoginSuccess(uid);
+        props.onLoginSuccess(user.uid);
       }
       history.push('/');
+    } else {
+      setShowError(true);
+      setError('Username o password invalidi');
     }
+    setLoading(false);
   }
 
   const onKeyPressed = (key: string) => {
-    console.warn('A');
     if (key == 'Enter') {
       attemptLogin();
     }
   }
+
+  let loader = loading
+    ? <div className="lp-loading-icon"></div>
+    : null;
+
+  let errWrapper = showError
+    ? <div className="lp-left-error-wrapper">
+      <p className="lp-left-error">{error}</p>
+    </div>
+    : null;
 
   return (
     <div className="lp-page">
@@ -55,9 +93,12 @@ const LoginPage = (props: ILoginPageProps) => {
               toolTipText="Inserisci la password di scuola"
               onChange={(text) => setPw(text)}
               onKeyPress={key => onKeyPressed(key)} />
+            {errWrapper}
           </div>
           <div className="lp-left-botbot">
-            <GradientButton onClick={() => attemptLogin()} />
+            {!loading
+              ? <GradientButton message="Login" onClick={() => attemptLogin()} />
+              : loader}
           </div>
         </div>
         <div className="lp-right-section">
