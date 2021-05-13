@@ -1,0 +1,23 @@
+{
+  "name": "logger",
+  "version": "0.0.1",
+  "description": "Simple logger",
+  "main": "out/index.ts",
+  "types": "out/index.d.ts",
+  "scripts": {
+    "start": "ts-node ./src/index.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "Ismael Trentin",
+  "license": "ISC",
+  "files": [
+    "out/**/*",
+    "README.MD"
+  ],
+  "devDependencies": {
+    "@types/node": "^15.0.3",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
