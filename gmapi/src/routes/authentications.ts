@@ -8,11 +8,10 @@ import {
     IUser,
     UserType
     } from '../@types';
-import { ILdapOptions } from 'ldap-ts-client-test/lib/ILdapOptions';
+import { ILdapOptions } from 'ldap-ts-client-test';
 import { MongoHelper } from '../helpers/MongoHelper';
 
 const router: Router = express.Router();
-
 
 /**
  * Authentication route
