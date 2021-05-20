@@ -98,32 +98,6 @@ Moltissime app offrono già la possibilità di organizzare le proprie note scola
   | Req - 7 | Filtri | 1 | 1.0 | |
   | Req - 7.1 | In base alle materie (allievi) | 1 | 1.0||
   | Req - 7.2 | In base agli allievi (docenti) | 1 | 1.0 |
-  
-
-
-
-**Spiegazione elementi tabella dei requisiti:**
-
-**ID**: identificativo univoco del requisito
-
-**Nome**: breve descrizione del requisito
-
-**Priorità**: indica l’importanza di un requisito nell’insieme del
-progetto, definita assieme al committente. Ad esempio poter disporre di
-report con colonne di colori diversi ha priorità minore rispetto al
-fatto di avere un database con gli elementi al suo interno. Solitamente
-si definiscono al massimo di 2-3 livelli di priorità.
-
-**Versione**: indica la versione del requisito. Ogni modifica del
-requisito avrà una versione aggiornata.
-
-Sulla documentazione apparirà solamente l’ultima versione, mentre le
-vecchie dovranno essere inserite nei diari.
-
-**Note**: eventuali osservazioni importanti o riferimenti ad altri
-requisiti.
-
-**Sotto requisiti**: elementi che compongono il requisito.
 
 
 ### Use case
@@ -192,18 +166,9 @@ requisiti.
   Sostanzialmente, l'applicazione Web raccoglie i dati inseriti dall'utente (ad esempio il login o le operazioni che esegue all'interno della pagina web) e vengono passati all'API che si occuperebbe a sua volta di interrogare il server AD e di inserire i dati nel database.
 
 
-
-  Questo capitolo descrive esaustivamente come deve essere realizzato il
-  prodotto fin nei suoi dettagli. Una buona progettazione permette
-  all'esecutore di evitare fraintendimenti e imprecisioni
-  nell'implementazione del prodotto.
-
 ### Design dei dati e database
 
   In modo da gestire i dati delle materie, dei professori e delle note abbiamo utilizzato un database MongoDB. MongoDB è un database document-based. MongoDB si allontana dalla struttura di db tradizionale basata sulle relazioni tra tabelle, in favore ai documenti in stile JSON con schema dinamico. Utilizzare questo sistema rende in certi casi l'integrazione di dati di alcuni tipi di applicazione più facile e veloce. Dato che abbiamo utilizzato un sistema basato su Javascript, MongoDB calza a pennello con le nostre esigenze.
-
-  Descrizione delle strutture di dati utilizzate dal programma in base
-  agli attributi e le relazioni degli oggetti in uso.
 
 ### Schema E-R, schema logico e descrizione.
 
@@ -226,21 +191,6 @@ requisiti.
   
   Essendo l'architettura del nostro sistema abbastanza complessa e suddivisa tra front-end e back-and, abbiamo optato per scegliere questo linguaggio. Tuttavia, avere un sito programmato in Typescript e senza nessun tipo di framework non ci sembrava un sistema consistente e quindi abbiamo deciso di utilizzare le librerie di React. React è un web framework utilizzato per la creazione di interfacce utente. Il framework permette di costruire le interfacce utente dinamiche molto complesse, rimanendo comunque semplice e intuitivo da utilizzare.
 
-Descrive i concetti dettagliati dell’architettura/sviluppo utilizzando
-ad esempio:
-
--   Diagrammi di flusso e Nassi.
-
--   Tabelle.
-
--   Classi e metodi.
-
--   Tabelle di routing
-
--   Diritti di accesso a condivisioni …
-
-Questi documenti permetteranno di rappresentare i dettagli procedurali
-per la realizzazione del prodotto.
 
 ## Implementazione
 
@@ -327,6 +277,7 @@ La prima pagina realizzata è stata quella di Login, dove sono bastati pochi com
 Successivamente sono state create la pagina Home, pagina dei docenti e pagina degli amministratori. La pagina Home e' stata quella piu' articolata siccome deve mostrare tutti i dati di un allievo tra i quali, materie, note, andamento, media, ecc. La sfida piu' grande nel realizzare questa pagina e' stata l'aggiornamento dei dati. Siccome viene usata una REST API per ottenere i dati degli utenti e di conseguenza l'ottenimento di essi e' asincrono, React per essere performante gestisce gli update dei dati asincroni in modo differente. Inizialmente si e' adottata la tecnica dello stato dei componenti, scomoda siccome bisognava aggiornare spesso i dati. Per finire si sono usate le props cosi che React gestisse tutto in modo autonomo.
 
 ---
+
 ## Test
 
 ### Protocollo di test
@@ -540,12 +491,6 @@ page, abbiamo riciclato il componente per fare le ultime due pagine (Teacher e A
 
 ## Conclusioni
   Il prodotto finale lo reputiamo molto utile. Per un allievo è molto importante tenere conto del suo andamento scolastico, ma potrebbe essere anche un'operazione abbastanza tediosa. Il nostro prodotto riesce a rendere le azioni che potrebbero essere più difficili da tenere conto, in un processo molto più semplice e visivo. Il fatto di possedere un grafico che evidenzi il tuo andamento è anche quello una funzionalità molto utile per un allievo. D'altra parte ci sono anche i docenti, che grazie al nostro prodotto potranno avere una concezione più precisa dell'andamento di ogni allievo, focalizzando tutto su un sistema unico. Un altro punto forte della soluzione è il fatto che sia un applicativo web e come tutti sappiamo, un applicativo web è molto versatile in diversi aspetti. Uno di questi è che vi si può accedere da ovunque, da ogni dispositivo. Pensiamo veramente che sia uno strumento molto utile per la nostra scuola e che ha il potenziale di essere pubblicato e reso disponibili effettivamente. Tuttavia i risultati che abbiamo ottenuti sono fatti a misura per il nostro ambiente e rispettando, ma si potrebbe anche generalizzare per tutte le scuole.
-
-  Quali sono le implicazioni della mia soluzione? Che impatto avrà?
-  Cambierà il mondo? È un successo importante? È solo un aggiunta
-  marginale o è semplicemente servita per scoprire che questo percorso è
-  stato una perdita di tempo? I risultati ottenuti sono generali,
-  facilmente generalizzabili o sono specifici di un caso particolare? ecc
 
 ### Sviluppi futuri
   Ci sono diverse funzionalità che abbiamo pensato potessero essere interessanti per il nostro progetto, ma che per diversi motivi non sono state implementate:
