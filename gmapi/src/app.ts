@@ -8,10 +8,13 @@ import StudentsRoute from './routes/students';
 import TeachersRoute from './routes/teachers';
 import UsersRoute from './routes/users';
 import { MongoHelper } from './helpers/MongoHelper';
+import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
 // import SubjectsRoute from './routes/subjects';
 
 const MAIN_ROUTE: string = '/api/v1';
 const app = express();
+const dirPath = './logs';
+let logger = new Logger(dirPath);
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -67,5 +70,12 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
     );
 });
 
+const timeId = setInterval(() => {
+    logger = new Logger(dirPath);
+}, 60 * 60);
+
+export const getLogger = () => {
+    return logger;
+}
 
 export default app;
