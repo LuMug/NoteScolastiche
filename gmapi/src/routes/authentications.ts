@@ -7,14 +7,14 @@ import {
     ITeacher,
     IUser,
     UserType
-    } from '../@types';
+} from '../@types';
 import { ILdapOptions } from 'ldap-ts-client-test';
-import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
 import { MongoHelper } from '../helpers/MongoHelper';
+import { getLogger } from '../app';
+import { LoggingCategory } from 'gradesmanager_test_logger';
 
-const dirPath = "./logs";
 const router: Router = express.Router();
-const log: Logger = new Logger(dirPath);
+const logger = getLogger();
 
 /**
  * Authentication route
@@ -78,7 +78,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
                 if (userFromPath.group && userFromPath.year) {
                     groupName = userFromPath.group + userFromPath.year;
                     if (group && group.name == groupName) {
-                        log.log("Login success.", LoggingCategory.SUCCESS);
+                        logger.log("Login success.", LoggingCategory.SUCCESS);
                         return res.status(200).json(checkedUser);
                     } else {
                         await MongoHelper.addGroup({ name: groupName });
@@ -86,7 +86,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
                         if (groupId) {
                             await MongoHelper.updateUser(checkedUser.uid, { groupId: groupId?.uid });
                         }
-                        log.log("Login success, group update.", LoggingCategory.SUCCESS);
+                        logger.log("Login success, group update.", LoggingCategory.SUCCESS);
                         return res.status(201).json(checkedUser);
                     }
                 }
@@ -95,20 +95,20 @@ router.post('/authentication', async (req: Request, res: Response) => {
                     try {
                         await createUser(userFromPath, fullName);
                     } catch (err) {
-                        log.log("Impossible create user.", LoggingCategory.ERROR);
+                        logger.log("Impossible create user.", LoggingCategory.ERROR);
                         return res.status(400).json(err);
                     }
                 } else {
                     try {
                         await createTeacher(fullName);
                     } catch (err) {
-                        log.log("Impossible create teacher.", LoggingCategory.ERROR);
+                        logger.log("Impossible create teacher.", LoggingCategory.ERROR);
                         return res.status(400).json(err);
                     }
                 }
                 checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
                 if (checkedUser) {
-                    log.log("Login success.", LoggingCategory.SUCCESS);
+                    logger.log("Login success.", LoggingCategory.SUCCESS);
                     return res.status(201).json(checkedUser);
                 } else {
                     let err: IError = {
@@ -116,7 +116,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
                             message: 'Couldnt find newly created user'
                         }
                     }
-                    log.log("Couldnt find newly created user.", LoggingCategory.ERROR);
+                    logger.log("Couldnt find newly created user.", LoggingCategory.ERROR);
                     return res.status(500).json(err);
                 }
             }
@@ -132,7 +132,7 @@ router.post('/authentication', async (req: Request, res: Response) => {
         if (typeof err === 'string') {
             return res.status(400).json({ error: { message: err } });
         }
-        log.log("Error in authentication route.", LoggingCategory.ERROR);
+        logger.log("Error in authentication route.", LoggingCategory.ERROR);
         return res.status(400).json(err);
     }
 });
