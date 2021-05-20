@@ -7,6 +7,7 @@
   --bg-gray: #181818;
   --card-gray: #1f1f1f;
   --bg-nav: #111;
+  --shadow-black: #00000030;
   --blue: #007eff;
   --light-blue: #00eaff;
   --dark-blue: #0061c2;
@@ -25,7 +26,7 @@
     var(--light-green) 100%
   );
   --card-shadow: 0 5px 5px -3px #00000040, 0 8px 5px 1px #00000030,
-    0 3px 5px 2px #00000029;
+    0 3px 5px 2px #00000030;
   --card-radius: 10px;
   --fade-border-thickness: 0.11rem;
   --ab-border-color: #141414;
@@ -52,6 +53,10 @@ body {
 h1 {
   color: #fff;
   margin: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 .noselect {
@@ -112,4 +117,22 @@ select:-webkit-autofill:focus {
 
 .orange-text {
   color: var(--orange) !important;
+}
+
+.dark-gray-text {
+  color: var(--ok-dark-gray) !important;
+}
+
+@keyframes opacity-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.013);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
