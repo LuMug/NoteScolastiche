@@ -134,20 +134,18 @@ const AuthorsPage: React.FunctionComponent<IAuthorsPageProps> = (props) => {
     return (
         <Page
             user={user}
-            displayPrompt={false}>
+            displayPrompt={false}
+            passiveNav={true}>
             <div className="aup-main-content" >
                 {panels.map((p, i) => {
                     return (
-                        <div
-                            className="aup-author-panel"
-                            key={i}
-                        >
+                        <div className="aup-author-panel" key={i}>
                             {p}
                         </div>
                     );
                 })}
             </div>
-        </Page>
+        </Page >
     );
 }
 export default AuthorsPage;
