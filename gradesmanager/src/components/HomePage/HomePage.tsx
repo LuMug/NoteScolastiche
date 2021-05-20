@@ -341,7 +341,8 @@ const HomePage: React.FunctionComponent<IHomePageProps> = (props) => {
       displayPrompt={dispPrompt}
       user={user}
       promptElement={activePrompt}
-      onListSubjectClick={(us) => onListSubjectClick(us)}>
+      onListSubjectClick={(us) => onListSubjectClick(us)}
+      passiveNav={false}>
       <div className="hp-main-content">
         <div className="hp-content-page">
           <div className="hp-welcome-panel">
@@ -391,7 +392,7 @@ const HomePage: React.FunctionComponent<IHomePageProps> = (props) => {
           <div className="hp-search-bar">
             <SearchBar
               onChange={text => setQuery(text)}
-              placeholder="Materia o docente"
+              placeholder="Cerca materia o docente"
             />
           </div>
           <div className="hp-subjects">

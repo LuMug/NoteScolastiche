@@ -18,6 +18,7 @@
   opacity: 0;
   transform: scale(0);
   animation: promp-wrapper-in 300ms 100ms forwards;
+  /* animation: opacity-bounce-in 300ms 100ms forwards; */
 }
 
 .prom-header {

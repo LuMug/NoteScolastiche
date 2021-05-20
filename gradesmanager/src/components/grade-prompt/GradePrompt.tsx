@@ -1,3 +1,4 @@
+import AbortX from '../abort-x/AbortX';
 import SimpleTextInput from '../simple-text-input/SimpleTextInput';
 import { useEffect, useState } from 'react';
 import './grade-prompt.css';
@@ -58,7 +59,9 @@ const GradePrompt: React.FunctionComponent<IGradePromptProps> = (props) => {
         <div className="gp-main">
             <div className="gp-content">
                 <h1 className="gp-title">{props.title}</h1>
-                <div className="gp-abort noselect" onClick={() => onAbort()}></div>
+                <div className="gp-abort noselect" onClick={() => onAbort()}>
+                    <AbortX />
+                </div>
                 <div className="gp-inputs">
                     <div className="gp-input">
                         <SimpleTextInput

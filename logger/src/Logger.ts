@@ -26,7 +26,7 @@ export enum LoggingCategory {
  * @author Ismael Trentin
  * @version 2021.05.13
  */
-export default class Logger {
+export class Logger {
 
     /**
      * The log file path where the logger will write all the logs.

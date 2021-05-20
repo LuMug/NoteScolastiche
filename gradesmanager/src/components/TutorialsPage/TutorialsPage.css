@@ -1,0 +1,11 @@
+.tupa-main-content {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.tupa-panel {
+  margin: 0.5rem;
+}

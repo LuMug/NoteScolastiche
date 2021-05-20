@@ -1,3 +1,4 @@
+import AbortX from '../abort-x/AbortX';
 import AddGradeButton from '../add-grade-btn/AddGradeButton';
 import CircularFadeBorder from '../circular-fade-border/CircularFadeBorder';
 import FetchHelper from '../../helpers/FetchHelper';
@@ -30,6 +31,7 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
     const [teacherFullname, setTeacherFullname] = useState<string | null>(null);
     const [displayPrompt, setDisplayPrompt] = useState(false);
     const [prompt, setPrompt] = useState<JSX.Element>();
+    const [grades, setGrades] = useState<IGrade[]>(props.subject.grades);
 
     const setUp = async () => {
         if (props.subject.teacherId) {
@@ -63,6 +65,7 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
             await setUp();
         }
         fetch();
+        setGrades(GradeHelper.getSortedByDate(props.subject.grades));
     }, []);
 
     useEffect(() => {
@@ -72,18 +75,24 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
         fetch();
     }, [props.subject]);
 
+    useEffect(() => {
+        setGrades(GradeHelper.getSortedByDate(props.subject.grades));
+    }, [props]);
+
     if (loading || !props.subject || (!teacher && !teacherFullname)) {
         return <h1>loading</h1>
     }
-    let grades = props.subject.grades;
     let avg = getSubjectAvg(props.subject);
+    // BAD hardcoded loc string
     let testPlural = (grades.length > 1) ? 'he' : 'a';
     let gradePrompt = (displayPrompt)
         ? <div className="pa-prompt" >{prompt}</div>
         : null;
     return (
         <div className="sp-main-content">
-            <div className="sp-abort noselect" onClick={() => props.onAbort()}></div>
+            <div className="sp-abort noselect" onClick={() => props.onAbort()}>
+                <AbortX />
+            </div>
             <div className="sp-top">
                 <div className="sp-top-top">
                     <div className="sp-avg-wrapper">
@@ -116,7 +125,7 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                             <th className="sp-th"><p>Weight</p></th>
                             <th className="sp-th"><p>Options</p></th>
                         </tr>
-                        {props.subject.grades.map((g, i) => {
+                        {grades.map((g, i) => {
                             return <tr className="sp-tr" key={i}>
                                 <td className={`sp-td sp-grade ${getColorClassName(g.value)}`}>{GradeHelper.valueToString(g)}</td>
                                 <td className="sp-td">{GradeHelper.getDate(g)}</td>
@@ -138,7 +147,8 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                                                                 weight: w,
                                                                 date: d.toISOString()
                                                             }
-                                                            return props.onEditGrade ? props.onEditGrade(newGrade, i) : null;
+                                                            let index = props.subject.grades.indexOf(g);
+                                                            return props.onEditGrade ? props.onEditGrade(newGrade, index) : null;
                                                         }}
                                                         value={g.value}
                                                         weight={g.weight}
@@ -146,7 +156,8 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                                                     />);
                                                     setDisplayPrompt(ps => !ps);
                                                 } else if (oi == 1) {
-                                                    return props.onRemoveGrade ? props.onRemoveGrade(g, i) : null;
+                                                    let index = props.subject.grades.indexOf(g);
+                                                    return props.onRemoveGrade ? props.onRemoveGrade(g, index) : null;
                                                 }
                                             }}
                                         />
@@ -174,7 +185,7 @@ const SubjectPage: React.FunctionComponent<ISubjectPageProps> = (props) => {
                     }} />
                 </div>
             </div>
-            { displayPrompt ? <div className="pa-prompt-overlay"></div> : null}
+            <div className={`pa-prompt-overlay${displayPrompt ? '' : '-hidden'}`}></div>
             {gradePrompt}
         </div >
     );

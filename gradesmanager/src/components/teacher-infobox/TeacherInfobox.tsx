@@ -1,3 +1,4 @@
+import AbortX from '../abort-x/AbortX';
 import React from 'react';
 import SearchBar from '../search-bar/SearchBar';
 import { ITeacher } from '../../@types';
@@ -62,7 +63,9 @@ const TeacherInfobox: React.FunctionComponent<ITeacherInfoboxProps> = (props) =>
         content = '';
     }
     return <div className="tib-main tib-slide-in">
-        <div className="tib-abort noselect" onClick={() => props.onAbort()}></div>
+        <div className="tib-abort noselect" onClick={() => props.onAbort()}>
+            <AbortX />
+        </div>
         <div className="tib-head">Seleziona un docente dalla <span>lista della scuola</span></div>
         <SearchBar onChange={text => onQueryChange(text)} />
         {content}

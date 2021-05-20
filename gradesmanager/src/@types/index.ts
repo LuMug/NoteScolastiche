@@ -177,3 +177,12 @@ export interface IRouteDescritor {
 
     iconURL?: string;
 }
+
+export interface ITutorialPanelData {
+
+    title: string;
+
+    image: string;
+
+    content: string;
+}

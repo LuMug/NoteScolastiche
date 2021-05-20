@@ -136,6 +136,56 @@
   width: 25px;
 }
 
+.n-redirect-btn-wrapper {
+  opacity: 0;
+  animation: opacity-bounce-in 300ms 150ms forwards;
+}
+
+.n-redirect-btn {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 99%;
+  min-width: 90px;
+  max-width: 190px;
+  height: 40px;
+  margin: 0 auto;
+  background-color: #242424;
+  border-radius: 3px;
+  padding: 5px;
+  transition: all 80ms ease-in-out;
+}
+
+.n-redirect-btn::before {
+  content: url('./../../public/svg/back_gray.svg');
+  fill: #b3b3b3;
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+}
+
+.n-redirect-btn:hover {
+  cursor: pointer;
+}
+
+.n-redirect-btn:active {
+  transform: scale(0.98);
+  background-color: #202020;
+}
+
+.n-redirect-btn:active::before {
+  content: url('./../../public/svg/back_blue.svg');
+}
+
+.n-redirect-btn-text {
+  margin-left: 5px;
+}
+
+.n-redirect-btn-text span {
+  margin: 0 2px;
+}
+
 @keyframes n-subject-wrap-slide-in {
   0% {
     transform: translateX(-150%);
