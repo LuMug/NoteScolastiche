@@ -10,6 +10,8 @@ export const TEACHERS_ROUTE = '/teachers';
 
 export const ABOUT_ROUTE = '/about';
 
+export const TUTORIALS_ROUTE = '/tutorials';
+
 export const LOGIN_ROUTE = '/login';
 
 export const ROUTES: IRouteDescritor[] = [
@@ -26,3 +28,5 @@ export const ROUTES: IRouteDescritor[] = [
         path: LOGIN_ROUTE
     }
 ];
+
+export const TUTORIALS_DATA_PATH = 'data/tutorials.json';

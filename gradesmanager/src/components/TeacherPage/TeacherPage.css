@@ -43,7 +43,7 @@
   background-color: var(--bg-nav);
   border-radius: 4px;
   margin: 0.6rem;
-  animation: tp-table-wrapper-bounce-in 400ms forwards;
+  animation: opacity-bounce-in 400ms forwards;
 }
 
 /* width */
@@ -155,20 +155,6 @@
 .tp-td-nodata {
   cursor: auto;
   text-align: center;
-}
-
-@keyframes tp-table-wrapper-bounce-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  50% {
-    transform: scale(1.013);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
 }
 
 @keyframes tp-td-in {
