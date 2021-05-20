@@ -38,7 +38,7 @@
 Nessuno
 
 ## Punto della situazione rispetto alla pianificazione
-Siamo giusti rispetto alla pianificazione
+Siamo giusti rispetto alla pianificazione   
 
 ## Programma di massima per la prossima giornata di lavoro
 
