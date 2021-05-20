@@ -1,10 +1,11 @@
 import express, { Request, Response, Router } from 'express';
 import { IError, IGroup, ITeacher } from '../@types';
-import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+import { LoggingCategory } from 'gradesmanager_test_logger';
 import { MongoHelper } from '../helpers/MongoHelper';
+import { getLogger } from '../app';
 
-const dirPath = "./logs";
-const log: Logger = new Logger(dirPath);
+
+const logger = getLogger();
 const router: Router = express.Router();
 
 /**
@@ -12,7 +13,7 @@ const router: Router = express.Router();
  */
 router.get('/teachers', async (req: Request, res: Response) => {
   let arr = await MongoHelper.asArray(MongoHelper.getTeachers());
-  log.log(`Return teachers successful`, LoggingCategory.SUCCESS);
+  logger.log(`Return teachers successful`, LoggingCategory.SUCCESS);
   res.status(200).json(arr);
 });
 
@@ -32,10 +33,10 @@ router.get('/teachers/:uid', async (req: Request, res: Response) => {
   }
   let teacher: ITeacher | null = await MongoHelper.getTeacher(uid);
   if (teacher) {
-    log.log(`Return teacher with ${uid} successful`, LoggingCategory.SUCCESS);
+    logger.log(`Return teacher with ${uid} successful`, LoggingCategory.SUCCESS);
     return res.status(200).json(teacher);
   } else {
-    log.log(`Can't find teacher with ${uid}`, LoggingCategory.ERROR);
+    logger.log(`Can't find teacher with ${uid}`, LoggingCategory.ERROR);
     res.status(400).json({
       error: {
         message: `No teacher with id: ${uid}`
@@ -62,7 +63,7 @@ router.get('/teachers/:uid/groupsIds', async (req: Request, res: Response) => {
   try {
     let teacher: ITeacher | null = await MongoHelper.getTeacher(uid);
     if (teacher) {
-      log.log(`Return teacher's groupsIds with ${uid} successful.`, LoggingCategory.SUCCESS);
+      logger.log(`Return teacher's groupsIds with ${uid} successful.`, LoggingCategory.SUCCESS);
       return res.status(200).json(teacher.groupsIds)
     } else {
       let err: IError = {
@@ -70,11 +71,11 @@ router.get('/teachers/:uid/groupsIds', async (req: Request, res: Response) => {
           message: 'Not an existing teacher id.'
         }
       };
-      log.log(`Can't find teacher's groupsIds with ${uid}.`, LoggingCategory.ERROR);
+      logger.log(`Can't find teacher's groupsIds with ${uid}.`, LoggingCategory.ERROR);
       return res.status(500).json(err);
     }
   } catch (err) {
-    log.log(`Can't get teacher's groupsIds with ${uid} from db.`, LoggingCategory.ERROR);
+    logger.log(`Can't get teacher's groupsIds with ${uid} from db.`, LoggingCategory.ERROR);
     return res.status(500).json(err);
   }
 });
@@ -109,11 +110,11 @@ router.get('/teachers/:uid/groups', async (req: Request, res: Response) => {
               message: 'Not an existing group id.'
             }
           };
-          log.log(`Can't find teacher's groups with ${uid}`, LoggingCategory.ERROR);
+          logger.log(`Can't find teacher's groups with ${uid}`, LoggingCategory.ERROR);
           return res.status(500).json(err);
         }
       }
-      log.log(`Return teacher's groups with ${uid} successful`, LoggingCategory.SUCCESS);
+      logger.log(`Return teacher's groups with ${uid} successful`, LoggingCategory.SUCCESS);
       return res.status(200).json(groups);
     } else {
       let err: IError = {
@@ -124,7 +125,7 @@ router.get('/teachers/:uid/groups', async (req: Request, res: Response) => {
       return res.status(500).json(err);
     }
   } catch (err) {
-    log.log(`Can't get teacher's groups with ${uid} from db.`, LoggingCategory.ERROR);
+    logger.log(`Can't get teacher's groups with ${uid} from db.`, LoggingCategory.ERROR);
     return res.status(500).json(err);
   }
 });
@@ -152,10 +153,10 @@ router.delete('/teachers/:uid', async (req: Request, res: Response) => {
         message: err
       }
     };
-    log.log(`Can't delete teacher with ${uid}.`, LoggingCategory.ERROR);
+    logger.log(`Can't delete teacher with ${uid}.`, LoggingCategory.ERROR);
     return res.status(400).json(error);
   }
-  log.log(`Delete teacher with ${uid} successful.`, LoggingCategory.SUCCESS);
+  logger.log(`Delete teacher with ${uid} successful.`, LoggingCategory.SUCCESS);
   return res.status(200).json({});
 });
 
@@ -175,10 +176,10 @@ router.post('/teachers', async (req: Request, res: Response) => {
   try {
     await MongoHelper.addTeacher(teacher);
   } catch (err) {
-    log.log(`Can't add new teacher.`, LoggingCategory.ERROR);
+    logger.log(`Can't add new teacher.`, LoggingCategory.ERROR);
     return res.status(400).json(err);
   }
-  log.log(`Add new teacher successful.`, LoggingCategory.SUCCESS);
+  logger.log(`Add new teacher successful.`, LoggingCategory.SUCCESS);
   res.status(201).json(teacher);
 });
 
@@ -203,14 +204,14 @@ router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) =>
     try {
       await MongoHelper.addSubjectId(uid, ...input);
     } catch (err) {
-      log.log(`Can't add subjectId to teacher with ${uid}.`, LoggingCategory.ERROR);
+      logger.log(`Can't add subjectId to teacher with ${uid}.`, LoggingCategory.ERROR);
       return res.status(500).json({ error: { message: err } });
     }
   } else if (!isNaN(parseInt(input))) {
     try {
       await MongoHelper.addSubjectId(uid, input);
     } catch (err) {
-      log.log(`Can't add subjectId to teacher with ${uid}.`, LoggingCategory.ERROR);
+      logger.log(`Can't add subjectId to teacher with ${uid}.`, LoggingCategory.ERROR);
       return res.status(500).json({ error: { message: err } });
     }
   } else {
@@ -221,7 +222,7 @@ router.post('/teachers/:uid/subjectsIds', async (req: Request, res: Response) =>
     }
     return res.status(400).json({ error: err });
   }
-  log.log(`Add new subjectId to teacher with ${uid} successful.`, LoggingCategory.SUCCESS);
+  logger.log(`Add new subjectId to teacher with ${uid} successful.`, LoggingCategory.SUCCESS);
   return res.status(201).json();
 });
 
@@ -254,10 +255,10 @@ router.patch('/teachers/:uid', async (req: Request, res: Response) => {
     } else {
       error = err;
     }
-    log.log(`Can't update teacher with ${uid}.`, LoggingCategory.ERROR);
+    logger.log(`Can't update teacher with ${uid}.`, LoggingCategory.ERROR);
     return res.status(400).json(error);
   }
-  log.log(`Update teacher with ${uid} successful.`, LoggingCategory.SUCCESS);
+  logger.log(`Update teacher with ${uid} successful.`, LoggingCategory.SUCCESS);
   return res.status(204).json();
 });
 

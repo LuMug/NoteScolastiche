@@ -1,10 +1,10 @@
 import express, { Request, Response, Router } from 'express';
 import { IError, IGroup } from '../@types';
-import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+import { getLogger } from '../app';
+import { LoggingCategory } from 'gradesmanager_test_logger';
 import { MongoHelper } from '../helpers/MongoHelper';
 
-const dirPath = "./logs";
-const log: Logger = new Logger(dirPath);
+const logger = getLogger();
 const router: Router = express.Router();
 
 /**
@@ -12,7 +12,7 @@ const router: Router = express.Router();
  */
 router.get('/groups', async (req: Request, res: Response) => {
   let arr = await MongoHelper.asArray(MongoHelper.getGroups());
-  log.log('Groups return successfully.', LoggingCategory.SUCCESS);
+  logger.log('Groups return successfully.', LoggingCategory.SUCCESS);
   res.status(200).json(arr);
 });
 
@@ -24,7 +24,7 @@ router.get('/groups', async (req: Request, res: Response) => {
 router.get('/groups/:uid', async (req: Request, res: Response) => {
   let uid: number = parseInt(req.params.uid);
   if (isNaN(uid)) {
-    log.log('Not a valid user id.', LoggingCategory.ERROR);
+    logger.log('Not a valid user id.', LoggingCategory.ERROR);
     return res.status(400).json({
       error: {
         message: 'Not a valid user id.'
@@ -33,10 +33,10 @@ router.get('/groups/:uid', async (req: Request, res: Response) => {
   }
   let group: IGroup | null = await MongoHelper.getGroup(uid);
   if (group) {
-    log.log(`Group return successfully.`, LoggingCategory.SUCCESS);
+    logger.log(`Group return successfully.`, LoggingCategory.SUCCESS);
     return res.status(200).json(group);
   } else {
-    log.log(`Groups with uid: ${uid} doesn't exist.`, LoggingCategory.ERROR);
+    logger.log(`Groups with uid: ${uid} doesn't exist.`, LoggingCategory.ERROR);
     res.status(400).json({
       error: {
         message: `No group with id: ${uid}`
@@ -56,17 +56,17 @@ router.post('/groups', async (req: Request, res: Response) => {
         message: 'Bad JSON.'
       }
     };
-    log.log(`Not a valid group.`, LoggingCategory.ERROR);
+    logger.log(`Not a valid group.`, LoggingCategory.ERROR);
     return res.status(400).json({ error: err });
   }
   let group: IGroup = req.body.group;
   try {
     await MongoHelper.addGroup(group);
   } catch (err) {
-    log.log(`Can't add group to db.`, LoggingCategory.ERROR);
+    logger.log(`Can't add group to db.`, LoggingCategory.ERROR);
     return res.status(500).json(err);
   }
-  log.log(`Create group successful.`, LoggingCategory.SUCCESS);
+  logger.log(`Create group successful.`, LoggingCategory.SUCCESS);
   res.status(201).json(group);
 });
 
@@ -84,7 +84,7 @@ router.patch('/groups/:uid', async (req: Request, res: Response) => {
         message: 'Invalid uid.'
       }
     }
-    log.log(`Not a valid uid.`, LoggingCategory.WARNING);
+    logger.log(`Not a valid uid.`, LoggingCategory.WARNING);
     return res.status(400).json(err);
   }
   try {
@@ -100,10 +100,10 @@ router.patch('/groups/:uid', async (req: Request, res: Response) => {
     } else {
       error = err;
     }
-    log.log(`Can't update the group.`, LoggingCategory.ERROR);
+    logger.log(`Can't update the group.`, LoggingCategory.ERROR);
     return res.status(400).json(error);
   }
-  log.log(`Update group successful.`, LoggingCategory.SUCCESS);
+  logger.log(`Update group successful.`, LoggingCategory.SUCCESS);
   return res.status(204).json();
 });
 

@@ -1,10 +1,11 @@
 import express, { Request, Response, Router } from 'express';
-import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+import { LoggingCategory } from 'gradesmanager_test_logger';
 import { MongoHelper } from '../helpers/MongoHelper';
 import { UserType } from '../@types';
+import { getLogger } from '../app';
 
-const dirPath = "./logs";
-const log: Logger = new Logger(dirPath);
+
+const logger = getLogger();
 const router: Router = express.Router();
 
 /**
@@ -12,7 +13,7 @@ const router: Router = express.Router();
  */
 router.get('/students', async (req: Request, res: Response) => {
     let arr = await MongoHelper.asArray(MongoHelper.getUsers());
-    log.log(`Return students successful`, LoggingCategory.SUCCESS);
+    logger.log(`Return students successful`, LoggingCategory.SUCCESS);
     res.status(200).json(arr.filter(v => v.type === UserType.STUDENT));
 });
 

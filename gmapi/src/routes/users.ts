@@ -1,16 +1,16 @@
 import express, { Request, Response, Router } from 'express';
 import {
-    IError,
-    IGrade,
-    ITeacher,
-    IUser,
-    IUserSubject
-    } from '../@types';
-import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+	IError,
+	IGrade,
+	ITeacher,
+	IUser,
+	IUserSubject
+} from '../@types';
+import { LoggingCategory } from 'gradesmanager_test_logger';
 import { MongoHelper } from '../helpers/MongoHelper';
+import { getLogger } from '../app';
 
-const dirPath = "./logs";
-const log: Logger = new Logger(dirPath);
+const logger = getLogger();
 const router: Router = express.Router();
 
 /**
@@ -18,7 +18,7 @@ const router: Router = express.Router();
  */
 router.get('/users', async (req: Request, res: Response) => {
 	let arr = await MongoHelper.asArray(MongoHelper.getUsers());
-	log.log(`Return users successful`, LoggingCategory.SUCCESS);
+	logger.log(`Return users successful`, LoggingCategory.SUCCESS);
 	res.status(200).json(arr);
 });
 
@@ -38,10 +38,10 @@ router.get('/users/:uid', async (req: Request, res: Response) => {
 	}
 	let user: IUser | null = await MongoHelper.getUser(uid);
 	if (user) {
-		log.log(`Return user with ${uid} successful`, LoggingCategory.SUCCESS);
+		logger.log(`Return user with ${uid} successful`, LoggingCategory.SUCCESS);
 		return res.status(200).json(user);
 	} else {
-		log.log(`Can't find user with ${uid}`, LoggingCategory.ERROR);
+		logger.log(`Can't find user with ${uid}`, LoggingCategory.ERROR);
 		res.status(404).json({
 			error: {
 				message: `No user with id: ${uid}`
@@ -67,10 +67,10 @@ router.get('/users/:uid/subjects', async (req: Request, res: Response) => {
 	try {
 		let user: IUser | null = await MongoHelper.getUser(uid);
 		if (user) {
-			log.log(`Return user's subjects successful.`, LoggingCategory.SUCCESS);
+			logger.log(`Return user's subjects successful.`, LoggingCategory.SUCCESS);
 			return res.status(200).json(user.subjects);
 		} else {
-			log.log(`Can't find user with ${uid}`, LoggingCategory.ERROR);
+			logger.log(`Can't find user with ${uid}`, LoggingCategory.ERROR);
 			res.status(400).json({
 				error: {
 					message: `No user with id: ${uid}`
@@ -78,7 +78,7 @@ router.get('/users/:uid/subjects', async (req: Request, res: Response) => {
 			});
 		}
 	} catch (err) {
-		log.log(`Can't get user with ${uid} from db`, LoggingCategory.ERROR);
+		logger.log(`Can't get user with ${uid} from db`, LoggingCategory.ERROR);
 		res.status(500).json({
 			error: {
 				message: `Can't get user with uid: ${uid}`
@@ -115,17 +115,17 @@ router.get('/users/:uid/subjects/:suid', async (req: Request, res: Response) => 
 	if (user) {
 		let len = user.subjects.length;
 		if (suid < len) {
-			log.log(`Return user's subject successful.`, LoggingCategory.SUCCESS);
+			logger.log(`Return user's subject successful.`, LoggingCategory.SUCCESS);
 			return res.status(200).json(user.subjects[suid]);
 		}
-		log.log(`Can't find user with ${uid}.`, LoggingCategory.ERROR);
+		logger.log(`Can't find user with ${uid}.`, LoggingCategory.ERROR);
 		return res.status(400).json({
 			error: {
 				message: `Not a valid subject id. Out of bounds for length ${len}`
 			}
 		});
 	} else {
-		log.log(`Can't get user with ${uid} from db`, LoggingCategory.ERROR);
+		logger.log(`Can't get user with ${uid} from db`, LoggingCategory.ERROR);
 		res.status(400).json({
 			error: {
 				message: `No user with id: ${uid}`
@@ -150,10 +150,10 @@ router.post('/users', async (req: Request, res: Response) => {
 	try {
 		await MongoHelper.addUser(user);
 	} catch (err) {
-		log.log(`Can't add user`, LoggingCategory.ERROR);
+		logger.log(`Can't add user`, LoggingCategory.ERROR);
 		return res.status(500).json(err);
 	}
-	log.log(`Add new user successful`, LoggingCategory.SUCCESS);
+	logger.log(`Add new user successful`, LoggingCategory.SUCCESS);
 	res.status(201).json(user);
 });
 
@@ -181,10 +181,10 @@ router.patch('/users/:uid', async (req: Request, res: Response) => {
 				message: err
 			}
 		};
-		log.log(`Can't update user with ${uid}.`, LoggingCategory.ERROR);
+		logger.log(`Can't update user with ${uid}.`, LoggingCategory.ERROR);
 		return res.status(400).json(error);
 	}
-	log.log(`Update user with uid ${uid} successful`, LoggingCategory.SUCCESS);
+	logger.log(`Update user with uid ${uid} successful`, LoggingCategory.SUCCESS);
 	return res.status(204).json({});
 });
 
@@ -210,14 +210,14 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 		try {
 			await MongoHelper.addSubjectId(uid, ...input);
 		} catch (err) {
-			log.log(`Can't add subjects to user with ${uid}.`, LoggingCategory.ERROR);
+			logger.log(`Can't add subjects to user with ${uid}.`, LoggingCategory.ERROR);
 			return res.status(500).json({ error: { message: err } });
 		}
 	} else if (!isNaN(parseInt(input))) {
 		try {
 			await MongoHelper.addSubjectId(uid, input);
 		} catch (err) {
-			log.log(`Can't add subject to user with ${uid}.`, LoggingCategory.ERROR);
+			logger.log(`Can't add subject to user with ${uid}.`, LoggingCategory.ERROR);
 			return res.status(500).json({ error: { message: err } });
 		}
 	} else {
@@ -228,7 +228,7 @@ router.post('/users/:uid/subjectsIds', async (req: Request, res: Response) => {
 		}
 		return res.status(400).json({ error: err });
 	}
-	log.log(`Add subjects to user successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Add subjects to user successful.`, LoggingCategory.SUCCESS);
 	return res.status(201).json({});
 });
 
@@ -282,10 +282,10 @@ router.post('/users/:uid/subjects', async (req: Request, res: Response) => {
 		}
 		await MongoHelper.addUserSubject(uid, input);
 	} catch (err) {
-		log.log(`Can't add UserSubject to user with ${uid}.`, LoggingCategory.ERROR);
+		logger.log(`Can't add UserSubject to user with ${uid}.`, LoggingCategory.ERROR);
 		return res.status(400).json({ error: { message: err } });
 	}
-	log.log(`Add UserSubject to user with ${uid} successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Add UserSubject to user with ${uid} successful.`, LoggingCategory.SUCCESS);
 	return res.status(201).json({});
 });
 
@@ -330,10 +330,10 @@ router.patch('/users/:uuid/subjects/:suid', async (req: Request, res: Response) 
 		} else {
 			error = err;
 		}
-		log.log(`Can't update user's UserSubject.`, LoggingCategory.ERROR);
+		logger.log(`Can't update user's UserSubject.`, LoggingCategory.ERROR);
 		return res.status(400).json(error);
 	}
-	log.log(`Update user's UserSubject successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Update user's UserSubject successful.`, LoggingCategory.SUCCESS);
 	return res.status(204).json({});
 });
 
@@ -377,10 +377,10 @@ router.post('/users/:uuid/subjects/:suid/grades', async (req: Request, res: Resp
 			error = err;
 		}
 		console.log(err);
-		log.log(`Can't add grades to user with uid ${uuid}.`, LoggingCategory.ERROR);
+		logger.log(`Can't add grades to user with uid ${uuid}.`, LoggingCategory.ERROR);
 		return res.status(400).json(error);
 	}
-	log.log(`Add grades to user with ${uuid} successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Add grades to user with ${uuid} successful.`, LoggingCategory.SUCCESS);
 	return res.status(201).json({});
 });
 
@@ -434,10 +434,10 @@ router.patch('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, re
 			error = err;
 		}
 		console.log(err);
-		log.log(`Can't update user's grades.`, LoggingCategory.ERROR);
+		logger.log(`Can't update user's grades.`, LoggingCategory.ERROR);
 		return res.status(400).json(error);
 	}
-	log.log(`Update user's UserSubject successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Update user's UserSubject successful.`, LoggingCategory.SUCCESS);
 	return res.status(204).json({});
 });
 
@@ -485,10 +485,10 @@ router.delete('/users/:uuid/subjects/:suid/grades/:guid', async (req: Request, r
 				message: err
 			}
 		};
-		log.log(`Can't delete user's grades from db.`, LoggingCategory.ERROR);
+		logger.log(`Can't delete user's grades from db.`, LoggingCategory.ERROR);
 		return res.status(400).json(error);
 	}
-	log.log(`Delete user's grades successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Delete user's grades successful.`, LoggingCategory.SUCCESS);
 	return res.status(200).json({});
 });
 
@@ -515,10 +515,10 @@ router.delete('/users/:uid', async (req: Request, res: Response) => {
 				message: err
 			}
 		};
-		log.log(`Can't delete user.`, LoggingCategory.ERROR);
+		logger.log(`Can't delete user.`, LoggingCategory.ERROR);
 		return res.status(400).json(error);
 	}
-	log.log(`Delete user successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Delete user successful.`, LoggingCategory.SUCCESS);
 	return res.status(200).json({});
 });
 
@@ -555,10 +555,10 @@ router.delete('/users/:uid/subjects/:suid', async (req: Request, res: Response) 
 				message: err
 			}
 		};
-		log.log(`Can't delete user's UserSubject from db.`, LoggingCategory.ERROR);
+		logger.log(`Can't delete user's UserSubject from db.`, LoggingCategory.ERROR);
 		return res.status(400).json(error);
 	}
-	log.log(`Delete user's UserSubject successful.`, LoggingCategory.SUCCESS);
+	logger.log(`Delete user's UserSubject successful.`, LoggingCategory.SUCCESS);
 	return res.status(200).json({});
 });
 
@@ -577,10 +577,10 @@ router.patch('/users', async (req: Request, res: Response) => {
 						message: err
 					}
 				};
-				log.log(`Can't set hasReadWelcomeMsg to users.`, LoggingCategory.ERROR);
+				logger.log(`Can't set hasReadWelcomeMsg to users.`, LoggingCategory.ERROR);
 				return res.status(400).json(error);
 			}
-			log.log(`Set hasReadWelcomeMsg to users successful.`, LoggingCategory.SUCCESS);
+			logger.log(`Set hasReadWelcomeMsg to users successful.`, LoggingCategory.SUCCESS);
 			return res.status(200).json({});
 		}
 	} else {
