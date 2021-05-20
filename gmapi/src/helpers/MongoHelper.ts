@@ -9,7 +9,7 @@ import {
 	IUser,
 	IUserSubject,
 	UserType
-	} from '../@types';
+} from '../@types';
 import { sha256 } from 'js-sha256';
 
 const DB_NAME: string = 'gradesmanager';
@@ -158,7 +158,7 @@ export class MongoHelper {
 	 * @param input the object input
 	 */
 	public static isUser(input: any): boolean {
-		return this.is(input, { name: '', groupId: -1, subjects: [], surname: '', type: UserType.STUDENT });
+		return this.is(input, { name: '', groupId: -1, subjects: [], surname: '', type: UserType.STUDENT, hasReadWelcomeMsg: false });
 	}
 
 	/**
@@ -728,5 +728,15 @@ export class MongoHelper {
 		} catch (err) {
 			throw (err);
 		}
+	}
+
+	/**
+	 * Set hasReadWelcomeMsg of a user.
+	 * 
+	 * @param set false or true to hasReadWelcomeMsg
+	 * @param uid the unique id of the user
+	 */
+	public static async setHasReadWelcomeMsg(set: boolean, uid: number) {
+		this.getUsers().updateOne({ 'uid': uid }, { $set: { 'hasReadWelcomeMsg': set } });
 	}
 }
