@@ -34,14 +34,21 @@
   background: #555;
 }
 
-.pa-prompt-overlay {
+.pa-prompt-overlay,
+.pa-prompt-overlay-hidden {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.575);
-  transition: all 1s ease-in-out;
+  transition: all 160ms ease-in-out;
+  pointer-events: all;
+}
+
+.pa-prompt-overlay-hidden {
+  background-color: transparent;
+  pointer-events: none;
 }
 
 .pa-prompt {

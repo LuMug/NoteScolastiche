@@ -1,9 +1,7 @@
 import Nav from '../nav/Nav';
-import React, { useEffect, useState } from 'react';
-import Toast from '../toast/Toast';
+import React from 'react';
 import { IUser, IUserSubject } from '../../@types';
 import { ROUTES } from './../../util/constants';
-import { toast } from 'react-toastify';
 import './page.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,6 +12,8 @@ interface IPageProps {
     displayPrompt: boolean;
 
     promptElement?: JSX.Element;
+
+    passiveNav?: boolean;
 
     onListSubjectClick?: (us: IUserSubject, index: number) => void;
 }
@@ -27,6 +27,7 @@ const Page: React.FunctionComponent<IPageProps> = (props) => {
             <Nav
                 routes={ROUTES}
                 entries={(props.user) ? props.user.subjects.map(s => s.name) : []}
+                displayRedirect={props.passiveNav}
                 onEntryClick={(i) => {
                     if (props.onListSubjectClick && props.user) {
                         props.onListSubjectClick(props.user.subjects[i], i);
@@ -36,7 +37,7 @@ const Page: React.FunctionComponent<IPageProps> = (props) => {
             <div className="pa-content-page">
                 {props.children}
             </div>
-            { props.displayPrompt && props.promptElement ? <div className="pa-prompt-overlay"></div> : null}
+            <div className={`pa-prompt-overlay${props.displayPrompt && props.promptElement ? '' : '-hidden'}`}></div>
             {prompt}
         </div>
     );
