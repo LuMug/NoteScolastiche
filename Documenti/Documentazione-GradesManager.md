@@ -97,7 +97,7 @@ Moltissime app offrono già la possibilità di organizzare le proprie note scola
   | Req - 6 | Aggiungere note con la relativa data | 1 | 1.0||
   | Req - 7 | Filtri | 1 | 1.0 | |
   | Req - 7.1 | In base alle materie (allievi) | 1 | 1.0||
-  | Req - 7.2 | In base agli allievi (docenti) | 1 | 1.0 ||
+  | Req - 7.2 | In base agli allievi (docenti) | 1 | 1.0 |
   
 
 
@@ -128,19 +128,19 @@ requisiti.
 
 ### Use case
 
- ![Gannt](./assets/UseCase.jpg)
+ ![Gantt](./assets/UseCase.jpg)
 
 ### Pianificazione
 
   Prima di iniziare in maniera effettiva a lavorare sulla parte pratica del progetto, tutto il gruppo ha svolta una sorta di riunione che ha permesso a tutti i partecipanti di discutere su varie metodologie per gestire al meglio lo sviluppo del progetto.
   Il gruppo ha quindi deciso di utilizzare diverse metodologie per pianificare al meglio lo svolgimento del progetto.
-  La pianificazione del progetto è stata quindi fatta utilizzando un diagramma di Gannt, che permette di suddividere il progetto in fasi, con diverse importanze e priorità.
+  La pianificazione del progetto è stata quindi fatta utilizzando un diagramma di Gantt, che permette di suddividere il progetto in fasi, con diverse importanze e priorità.
   Il secondo strumento che il gruppo ha deciso di utilizzare è l'applicativo web Trello, che  permette di suddividere in più fasi tutto ciò che bisogna fare sul arco del progetto, assegnandoli delle etichette, delle categorie, degli utenti e delle cartelle.
 
-  ![Gannt](./assets/GanntIniziale.jpg)
+  ![Gantt](./assets/GanttIniziale.jpg)
   Questa è stata la nostra progettazione iniziale. A sinistra possiamo vedere le attività nelle rispettive fasi e a destra i tempi previsti.
 
-  ![Gannt](./assets/Trello.jpg)
+  ![Trello](./assets/Trello.jpg)
   Abbiamo provveduto ad utilizzare Trello così da poter gestire il progetto in maniera più dinamica, così da avere tutti un riferimento rispetto ai tempi.
   Inoltre, ad ogni attività abbiamo assegnato il rispettivo responsabile all'interno del gruppo.
 
@@ -152,7 +152,7 @@ requisiti.
   - Postman (v8.0.7) - Utilizzato per il testing delle API
   - MongoDB (v4.4.4) - Utilizzato come DBMS per salvare i dati
 
-  Librerie:
+  Librerie e package:
   - React
   - LDAPJS
   - Express
@@ -167,7 +167,7 @@ requisiti.
 
 
 ### Design dell’architettura del sistema
-  Come prima cosa abbiamo pensato di programmare una Web Application. Questo ci avrebbe permesso di poter allocare il sito in un server a scuola, e perciò averlo sempre disponibile. Un altro punto che abbiamo considerato, è che essendo un'applicazione abbastanza semplice da utilizzare, sarebbe stato ottimale poterlo utilizzare anche da telefono.
+  Come prima cosa abbiamo pensato di programmare una Web Application. Questo ci avrebbe permesso di poter allocare il sito in un server a scuola, e perciò averlo sempre disponibile. Un altro punto che abbiamo considerato, è che essendo un'applicazione abbastanza semplice da utilizzare, sarebbe stato ottimale poterlo utilizzare anche su altri dispositivi (tablet, smartphone, ecc.).
   Dopo qualche discussione con il nostro gruppo, siamo arrivati alla conclusione che Javascript (più precisamente NodeJS) sarebbe stato il linguaggio adatto alla situazione per diversi motivi.
   Prima di spiegare come abbiamo progettato l'applicazione e tutto il resto del progetto, occorre conoscere diverse nozioni di base sui sistemi che abbiamo utilizzato.
   NodeJS è un runtime costruito sul motore Javascript, che permette di progettare applicazioni di rete scalabili. Il runtime è maggiormente legata ad eventi asincroni, e viene utilizzata per scrivere applicazioni lato server.
@@ -180,7 +180,7 @@ requisiti.
 
   L'API quindi funge da elemento di intermediazione tra gli utenti, i clienti e le risorse che intendono ottenere. In poche parole, viene programmata a lato server, e tramite le route (ovvero le rotte che condurranno ai dati) è possibile andare a pescare le informazioni.
   I motivi principali per cui abbiamo utilizzato questa architettura sono:
-  1. Pur essendo un'architettura abbastanza complessa, la separazione tra client e server consente di trattare indipendentemente l'evoluzione delle diverse componenti. La separazione tra client e server si traduce anche in una migliore scalabilità del sistema stesso.
+  1. Pur essendo un'architettura abbastanza complessa, la separazione tra client e server consente di trattare indipendentemente l'evoluzione dei diversi componenti. La separazione tra client e server si traduce anche in una migliore scalabilità del sistema stesso.
   2. Rende il codice più pulito da leggere, senza query inserite direttamente nel programma e con metodi apposta per  le richieste
   3. Dato che i dati non vengono presi in chiaro, ma tramite una richiesta, il sistema diventa più sicuro grazie ai sistemi di sicurezza implementati nella stessa.
 
@@ -256,10 +256,10 @@ per la realizzazione del prodotto.
 
   ![BindCode](./assets/bind.png)
   
-  Sostanzialmente quello che svolge questo metodo è svolgere il bind utilizzando un percorso di un utente presente nell'Active Directory con lasua password. Infatti per fare un bind bisogna avere le credenziali di un utente all'interno dell'AD che abbia i permessi per svolgere il bind.
+  Sostanzialmente quello che svolge questo metodo è svolgere il bind utilizzando un percorso di un utente presente nell'Active Directory con la sua password. Infatti per fare un bind bisogna avere le credenziali di un utente all'interno dell'AD che abbia i permessi per svolgere il bind.
   
   - **Cercare utente nell'AD**
-  Una volta fatto il bind con il server possiamo già iniziare a fare diverse richieste LDAP. In questo caso ci interessa sapere se un utente esiste nell'ActiveDirectory. Per fare ciò abbiamo sviluppato questo metodo:
+  Una volta fatto il bind con il server possiamo già iniziare a fare diverse richieste LDAP. In questo caso ci interessa sapere se un utente esiste nell'Active Directory. Per fare ciò abbiamo sviluppato questo metodo:
 
   ![QueryAD](./assets/queryAD.png)
 
@@ -277,47 +277,34 @@ per la realizzazione del prodotto.
 
   ![CheckUserCredentials](./assets/checkUserCredentials.png)
 
-  Il metodo accetta il nome e la password. Semplicemente se il nome e la password corrispondono a quelle dell'AD, ritorna true, altrimenti false. Questo metodo è un po' una fusione delle altre funzionalità che abbiamo sviluppato, dato che per arrivare a sviluppare questo metodo, abbiamo avuto bisogno di partire da quelli menzionati in precedenza.
+  Il metodo accetta il nome e la password. Semplicemente se il nome e la password corrispondono a quelle dell'AD, ritorna true, altrimenti false. Questo metodo è un pò una fusione delle altre funzionalità che abbiamo sviluppato, dato che per arrivare a sviluppare questo metodo, abbiamo avuto bisogno di partire da quelli menzionati in precedenza.
 
 ---
 ##### REST API
 
-Per la parte backend del nostro progetto abbiamo pensato di sviluppare una REST API la quale serve per gestire il database, creato con MongoDB, e la connessione tramide ``ldpajs`` all'AD DS(Active Directory Domain Services) della scuola.
-Una REST API si basa sulla creazione di un server e di una app che gestisce le richieste da parte del front end.
-Nel nostro progetto abbiamo utilizzato due librerie npm: ``morgan`` e ``express``, le quali si preoccupano di creare rispettivamente il server della REST API e l'app incaricata di gestire le richieste.
+Per la parte back-end del nostro progetto abbiamo pensato di sviluppare una REST API la quale serve per gestire il database, creato con MongoDB, e la connessione tramite `ldap` all'AD DS (Active Directory Domain Services) della scuola.
+Una REST API si basa sulla creazione di un server e di una app che gestisce le richieste da parte del front-end.
+Nel nostro progetto abbiamo utilizzato la libreria npm: `express`, la quale si preoccupa di creare il server della REST API e l'app incaricata di gestire le richieste.
+
 - **App**
 ![API_App](./assets/ApiAPP.png)
 
 - **Server**
 ![API_Server](./assets/ApiServer.png)
 
-Per un utilizzo corretto di una REST API bisogna utilizzare delle route, link diretti al server creato in precedenza le quali eseguono delle funzioni specificate all'interno del codice sorgente. Esse possono avvenire con alcune specifiche e differenti funzioni: ``GET``, ``POST``, ``PATCH``, ``DELETE``, ``PUT``.
-Ogni route viene specificata tramite la creazione di un router dalla libreria express ``express.Router()``.
+Per un utilizzo corretto di una REST API bisogna utilizzare delle route, link diretti al server creato in precedenza le quali eseguono delle funzioni specificate all'interno del codice sorgente. Esse possono avvenire con alcune specifiche e differenti funzioni: `GET`, ``POST``, ``PATCH``, ``DELETE``, ``PUT``.
+Ogni route viene specificata tramite la creazione di un router dalla libreria express `express.Router()`.
 
+La REST API si basa sul funzionamento di `http` è quindi ovvio che le route create tramite express vengano basate su di esso (es. Request, Response, status code, ecc.).
+
+Subito dopo aver creato il server e l'app con express, abbiamo creato delle interfaccie con le quale abbiamo specificato e creato dei tipi di variabili con attributi, utilizzabili e molto simili alle classi in `Java` o `C#`. Esse sono stati create in base alla struttura pensata per il salvataggio di dati nel database.
+
+-  **Route**
+![API_Route](./assets/getUsers.png)
+
+Molte delle route utilizzano l'accesso al database MongoDB e le sue funzionalità, per ovviare a troppe ripitizioni nelle route e di renderle troppo complicate sia da scrivere che da capire abbiamo deciso di creare un helper con tutti i metodi di cui avevamo bisogno che ci permettono di utilizzare le funzionalità di MongoDB.
 
 ---
-
-
-In questo capitolo dovrà essere mostrato come è stato realizzato il
-lavoro. Questa parte può differenziarsi dalla progettazione in quanto il
-risultato ottenuto non per forza può essere come era stato progettato.
-
-Sulla base di queste informazioni il lavoro svolto dovrà essere
-riproducibile.
-
-
-
-In questa parte è richiesto l’inserimento di codice sorgente/print
-screen di maschere solamente per quei passaggi particolarmente
-significativi e/o critici.
-
-Inoltre dovranno essere descritte eventuali varianti di soluzione o
-scelte di prodotti con motivazione delle scelte.
-
-Non deve apparire nessuna forma di guida d’uso di librerie o di
-componenti utilizzati. Eventualmente questa va allegata.
-
-Per eventuali dettagli si possono inserire riferimenti ai diari.
 
 ## Test
 
@@ -344,60 +331,112 @@ Per eventuali dettagli si possono inserire riferimenti ai diari.
   |**Descrizione**|Accedere al sistema utilizzando un utente con il ruolo di allievo, uno con il riolo di docente e infine col ruolo di admin.|
   |**Risultati attesi** | Riesce a riconoscere prima di tutto se esistono, e dopodiché riconosce che ruolo possiedono.  |
 
+  |Test Case      | TC-004                              |
+  |---------------|--------------------------------------|
+  |**Nome**       | Creazione automatica di un utente quando esso effettua il login |
+  |**Riferimento**| *                              |
+  |**Descrizione**| Chiamare la route API `authentication` e vedere se crea l'utente correttamente |
+  |**Risultati attesi** | Crea l'utente autonomamente nella maniera corretta  |
 
+  |Test Case      | TC-005                              |
+  |---------------|--------------------------------------|
+  |**Nome**       |  Route `GET` per gli utenti, docenti, gruppi |
+  |**Riferimento**| *                            |
+  |**Descrizione**| Chiamare la route API `getUsers`, `getTeachers`, `getGroups` e vedere se ritorna gli utenti, i docenti, i gruppi correttamente |
+  |**Risultati attesi** | Ritorna in un array tutti gli utenti, docenti, gruppi del db  |
 
+  |Test Case      | TC-006                              |
+  |---------------|--------------------------------------|
+  |**Nome**       |  Route `POST` per gli utenti, docenti, gruppi |
+  |**Riferimento**| *                            |
+  |**Descrizione**| Chiamare la route API `createUsers`, `createTeachers`, `createGroups` e vedere se crea l'utente, il docente, il gruppo correttamente |
+  |**Risultati attesi** | Crea un utente, un docente, un gruppo con i parametri giusti passati tramite body della richiesta  |
 
+  |Test Case      | TC-007                              |
+  |---------------|--------------------------------------|
+  |**Nome**       |  Route `PATCH` per gli utenti, docenti, gruppi |
+  |**Riferimento**| *                            |
+  |**Descrizione**| Chiamare la route API `updateUser`, `updateTeachers`, `updateGroups` e vedere se modifica l'utente, il docente, il gruppo correttamente |
+  |**Risultati attesi** | Modifica l'utente, il docente, il gruppo con i parametri giusti passati tramite body della richiesta  |
 
-Definire in modo accurato tutti i test che devono essere realizzati per
-garantire l’adempimento delle richieste formulate nei requisiti. I test
-fungono da garanzia di qualità del prodotto. Ogni test deve essere
-ripetibile alle stesse condizioni.
-
-
-|Test Case      | TC-001                               |
-|---------------|--------------------------------------|
-|**Nome**       |Import a card, but not shown with the GUI |
-|**Riferimento**|REQ-012                               |
-|**Descrizione**|Import a card with KIC, KID and KIK keys with no obfuscation, but not shown with the GUI |
-|**Prerequisiti**|Store on local PC: Profile\_1.2.001.xml (appendix n\_n) and Cards\_1.2.001.txt (appendix n\_n) |
-|**Procedura**     | - Go to “Cards manager” menu, in main page click “Import Profiles” link, Select the “1.2.001.xml” file, Import the Profile - Go to “Cards manager” menu, in main page click “Import Cards” link, Select the “1.2.001.txt” file, Delete the cards, Select the “1.2.001.txt” file, Import the cards |
-|**Risultati attesi** |Keys visible in the DB (OtaCardKey) but not visible in the GUI (Card details) |
+  |Test Case      | TC-008                              |
+  |---------------|--------------------------------------|
+  |**Nome**       |  Route `DELETE` per gli utenti, docenti, gruppi |
+  |**Riferimento**| *                            |
+  |**Descrizione**| Chiamare la route API `deleteUser`, `deleteTeachers`, `deleteGroups` e vedere se elimina l'utente, il docente, il gruppo correttamente |
+  |**Risultati attesi** | Elimina l'utente, il docente, il gruppo  |
+  
+  *nota: nessun riferimento siccome il sistema sta alla base del progetto e fa riferimento a tutti, o quasi, i requisiti
+  I test case 005, 006, 007, 008 sono stati generalizzati
 
 
 ### Risultati test
 
-|Test Case      | TC-001                               |
-|---------------|--------------------------------------|
-|**Nome**       |Binding |
-|**Descrizione**|Il sistema è riuscito a svolgere il binding con successo.|
-|**Passato**|✔                     |
+  |Test Case      | TC-001                               |
+  |---------------|--------------------------------------|
+  |**Nome**       |Binding |
+  |**Descrizione**|Il sistema è riuscito a svolgere il binding con successo.|
+  |**Passato**|✔                     |
+
+  |Test Case      | TC-002                               |
+  |---------------|--------------------------------------|
+  |**Nome**       |Accesso con nome utente o password sbagliate |
+  |**Descrizione**| Quando si passano nomi o password diverse il sistema non accede e invia un messaggio di errore all'utente.|
+  |**Passato**|✔                     |
 
 
-|Test Case      | TC-002                               |
-|---------------|--------------------------------------|
-|**Nome**       |Accesso con nome utente o password sbagliate |
-|**Descrizione**| Quando si passano nomi o password diverse il sistema non accede e invia un messaggio di errore all'utente.|
-|**Passato**|✔                     |
+  |Test Case      | TC-003                               |
+  |---------------|--------------------------------------|
+  |**Nome**       |Accesso con utente allievo, docente e admin. Riesce a riconoscere il suo ruolo |
+  |**Descrizione**| Il sistema riconosce il ruolo dell'utente. |
+  |**Passato**|✔                     |
 
+  |Test Case      | TC-004                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Creazione automatica di un utente quando esso effettua il login |
+  |**Descrizione**| La route crea l'utente correttamente |
+  |**Passato**|✔    
 
-|Test Case      | TC-003                               |
-|---------------|--------------------------------------|
-|**Nome**       |Accesso con utente allievo, docente e admin. Riesce a riconoscere il suo ruolo |
-|**Descrizione**| Il sistema riconosce il ruolo dell'utente. |
-|**Passato**|✔                     |
+  |Test Case      | TC-005                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Route `GET` per gli utenti, docenti, gruppi |
+  |**Descrizione**| La route crea ritorna correttamente gli utenti, i docenti, i gruppi |
+  |**Passato**|✔   
+
+  |Test Case      | TC-006                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Route `POST` per gli utenti, docenti, gruppi |
+  |**Descrizione**| La route crea correttamente l'utente, il docente, il gruppo con i parametri corretti |
+  |**Passato**|✔    
+
+  |Test Case      | TC-007                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Route `PATCH` per gli utenti, docenti, gruppi |
+  |**Descrizione**| La route modifica correttamente l'utente, il docente, il gruppo con i parametri corretti |
+  |**Passato**|✔ 
+
+  |Test Case      | TC-008                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Route `DELETE` per gli utenti, docenti, gruppi |
+  |**Descrizione**| La route elimina correttamente l'utente, il docente, il gruppo |
+  |**Passato**|✔ 
 
 ### Mancanze/limitazioni conosciute
 
-  Descrizione con motivazione di eventuali elementi mancanti o non
-  completamente implementati, al di fuori dei test case. Non devono essere
-  riportati gli errori e i problemi riscontrati e poi risolti durante il
-  progetto.
+  Alla fine del nostro progetto ci siamo resi conto di avere alcune mancanze, non influenti sull'utilizzo del prodotto finale.
+  *Categorie*: discutendo insieme al professore abbiamo costatato che le categorie non erano definite correttamente, di conseguenza non abbiamo potuto implementarle.
+  *Divisione in semestre*: durante l'analisi avevamo pensato di poter suddividere le materie in semestre, ma siccome era un requisito extra l'abbiamo lasciato per la fine dell'implementazione, alla fine però non siamo riusciti ad implementarmi per mancanza di tempo.
+  *Ordinare elementi nella tabelle dei docenti e degli admin*: non è possibile fare in modo che si possano ordinare in un determinato modo, voluto dall'utente, gli elementi delle tabelle.
+  *Ordinare note nelle tabelle dei docenti*: non è possibile filtrare e ordinare le note in base al loro valore o al loro peso, è però possibile ordinarle tramite la data.
+  *Ordinare le materie nella pagina home*: lo studente non ha la possibilità di ordinare in maniera personale le proprie materie, bensì rimangono ordinate a seconda di come vengono create.
 
 ## Consuntivo
 
-  Consuntivo del tempo di lavoro effettivo e considerazioni riguardo le
-  differenze rispetto alla pianificazione (cap 1.7) (ad esempio Gannt
-  consuntivo).
+  ![GanttConsuntivo](./assets/GanttConsuntivo.png) 
+  Questo è il nostro Gantt consuntivo. Come possiamo vedere il Gantt consuntivo è cambiato molto rispetto a quello iniziale.
+Rispetto a quanto previsto, abbiamo avuto bisogno di più tempo per progettare l'architettura del prodotto in modo che fosse chiaro per tutti i membri del gruppo.
+In quanto all'implementazione, abbiamo lavorato molto per la User Page in modo da farla al meglio. Dato che utilizziamo React, una volta fatto il componente della user
+page, abbiamo riciclato il componente per fare le ultime due pagine (Teacher e Admin), e questo ci ha fatto risparmiare qualche ora di lavoro
 
 ## Conclusioni
   Il prodotto finale lo reputiamo molto utile. Per un allievo è molto importante tenere conto del suo andamento scolastico, ma potrebbe essere anche un'operazione abbastanza tediosa. Il nostro prodotto riesce a rendere le azioni che potrebbero essere più difficili da tenere conto, in un processo molto più semplice e visivo. Il fatto di possedere un grafico che evidenzi il tuo andamento è anche quello una funzionalità molto utile per un allievo. D'altra parte ci sono anche i docenti, che grazie al nostro prodotto potranno avere una concezione più precisa dell'andamento di ogni allievo, focalizzando tutto su un sistema unico. Un altro punto forte della soluzione è il fatto che sia un applicativo web e come tutti sappiamo, un applicativo web è molto versatile in diversi aspetti. Uno di questi è che vi si può accedere da ovunque, da ogni dispositivo. Pensiamo veramente che sia uno strumento molto utile per la nostra scuola e che ha il potenziale di essere pubblicato e reso disponibili effettivamente. Tuttavia i risultati che abbiamo ottenuti sono fatti a misura per il nostro ambiente e rispettando, ma si potrebbe anche generalizzare per tutte le scuole.
@@ -418,7 +457,29 @@ ripetibile alle stesse condizioni.
   - Sviluppare una breve guida per il collegamento del sito alla home (Android e IOS)
 
 ### Considerazioni personali
-  Cosa ho imparato in questo progetto? ecc 
+- **Aris Previtali**
+  Da questo progetto credo di aver imparato molto, ho utilizzato un nuovo linguaggio di programmazzione lato server per la realizzazzione del progetto: TypeScript basato su JavaScript, con il quale ho lavorato però solo lato web.
+  Ho creato, con l'aiuto dei miei compagni, una REST API partendo solo da un'idea vaga di essa e ora capendone il significato e come realizzarla.
+  Rispetto al progetto del primo semestro, dove ho lavorato singolarmente, in questo progetto eravamo un team, ho quindi imparato e adattato il mio modo di lavorare. Siamo riusciti a suddividerci bene il lavoro e mi sono trovato bene con il team.
+  Credo che questo progetto mi abbia aiutato molto a migliorare le mie capacità di lavoro in team.
+- **Francisco Viola**
+  In questo progetto ho imparato a vedere più da vicino Typescript, occupandomi io della parte di LDAP del progetto
+  (fatta in Typescript). Svolgendo il progetto a gruppi ho anche imparato a gestirmi meglio in un team, e soprattutto
+  a utilizzare la piattaforma Github come si deve. Ho capito l'importanza di una buona organizzazione per svolgere
+  il progetto al meglio possibile. Inoltre ho approfondito il funzionamento del protocollo LDAP, assieme alla strutture e ai componenti
+  di una Active Directory Forest. Sono anche contento di come abbiamo gestito la documentazione, aggiornandola man mano che andavamo avanti col progetto, e non
+  documentare tutto all'ultimo. Rispetto a un progetto individuale, svolgerlo a gruppi mi è sembrato più leggero all'ora di lavorare p
+- **Nicola Ambrosetti**
+  Grazie a questo progetto sono riuscito a migliorare il mio lavorare in gruppo, permettendomi di apprendere nuove nozioni
+  fornite dai miei compagni per rendere l'ambiente di lavoro più sereno e tranquillo possibile.
+  Siccome abbiamo deciso di utilizzare typescript ho imparato delle nuove nozioni per quel che concerne questo linguaggio.
+  React è stata una svolta, che mi ha permesso di semplificarmi notevolmente la mia parte di lavoro.
+  Infine tutto quel che concerne l'AD scolastico è stato utile per rinfrescare le mie nozioni lato Active directory, nonostante il mio lavoro non sia stato
+  incentrato sulla parte di estraolazione dei dati dal server.
+  In conclusione posso dire di aver svolto con molto piacere questo progetto, in quanto mi ha dato molte soddisfazioni e nuove nozioni.
+
+- **Ismael Trentin**
+  Grazie a questo progetto ho imparato molte nuove cose di React.  Anche se il progetto non sfrutta al meglio tutte le sue funzionalita' (di React), mi ha permesso di capire cosa non bisogna fare e per il prossimo progetto potro' evitare di fare gli stessi errori. Inoltre, ho capito l'importanza della progettazione siccome, avendo un progetto abbastanza sostanzioso, sarebbe stato un disastro se avessimo iniziato subito a scrivere codice. Anche se preferisco di gran lunga lavorare da solo, questa volta mi e' piaciuto lavorare in gruppo siccome siamo riusciti a divderci bene il lavoro.
 
 ## Sitografia
 - http://ldapjs.org/, *LDAP JS*, 20-1-2021
@@ -426,7 +487,8 @@ ripetibile alle stesse condizioni.
 - https://infograph.venngage.com/, *Venngage Graphic Creator*, 02-03-2021
 - https://www.serverplan.com/blog/node-js/#gref, *Server plan - NodeJS*, 02-03-2021
 - https://it.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol, *Wikipedia*, 09-03-2021
--https://www.npmjs.com, *npm*
+- https://www.npmjs.com, *npm*
+- https://carbon.now.sh/, *carbon*
 
 
 ## Allegati
