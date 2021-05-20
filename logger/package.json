@@ -1,8 +1,8 @@
 {
   "name": "gradesmanager_test_logger",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Simple logger",
-  "main": "out/index.ts",
+  "main": "out/index.js",
   "types": "out/index.d.ts",
   "scripts": {
     "start": "ts-node ./src/index.ts",
