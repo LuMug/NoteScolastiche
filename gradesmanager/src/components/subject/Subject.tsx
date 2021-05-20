@@ -29,30 +29,7 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
     const [teacherName, setTeacherName] = useState<string>('');
     const [avg, setAvg] = useState<number>(1);
     const [isEditing, setIsEditing] = useState(false);
-
-    useEffect(() => {
-        const fetch = async () => {
-            await setUp();
-        }
-        fetch();
-    }, []);
-
-    useEffect(() => {
-        setAvg(getAvg());
-    }, [getSubjectAvg(props.subject)])
-
-    useEffect(() => {
-        const fetch = async () => {
-            await setUp();
-        }
-        fetch();
-    }, [props.subject.teacherName]);
-
-    useEffect(() => {
-        if (!isEditing) {
-            setName(props.subject.name);
-        }
-    }, [name, props.subject.name, isEditing])
+    const [grades, setGrades] = useState<IGrade[]>(props.subject.grades);
 
     const getAvg = (): number => {
         return getSubjectAvg(props.subject);
@@ -77,11 +54,11 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
     }
 
     const onApply = async () => {
-        // SE IL NOME E" REGISTRATO NON ACCETTERA" PIU" NUOVI NOMI
         let _name = name;
         let teacher = teacherName;
         let hasCustom = false;
         if (name.trim() === '') {
+            // BAD harcoded loc string
             _name = 'Materia';
         }
         let teachers;
@@ -117,6 +94,38 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
         props.onApply(subject);
     }
 
+    useEffect(() => {
+        const fetch = async () => {
+            await setUp();
+        }
+        fetch();
+        setGrades(GradeHelper.getSortedByDate(props.subject.grades));
+    }, []);
+
+    useEffect(() => {
+        setAvg(getAvg());
+    }, [getSubjectAvg(props.subject)]);
+
+    useEffect(() => {
+        const fetch = async () => {
+            await setUp();
+        }
+        fetch();
+    }, [props.subject.teacherName]);
+
+    useEffect(() => {
+        if (!isEditing) {
+            setName(props.subject.name);
+        }
+    }, [name, props.subject.name, isEditing]);
+
+    useEffect(() => {
+        // Sorting like this is super stupid and really resource intensive
+        // but i am bad at react and can't detect when only grades change.
+        // Add `grades` prop to `ISubjectProps` ???
+        setGrades(GradeHelper.getSortedByDate(props.subject.grades));
+    }, [props]);
+
     let sData;
     // let customTeacher = (!hasCustomTeacher)
     //     ? ''
@@ -130,12 +139,12 @@ const Subject: React.FunctionComponent<ISubjectProps> = (props) => {
             onClick={() => props.onTIBDisplay()}
         ></div>
         : null;
-    if (props.subject.grades.length !== 0) {
+    if (grades.length !== 0) {
         sData = <div className="s-subject-data">
             <div className="s-subject-grades">
-                {props.subject.grades.map((g, i) => {
+                {grades.map((g, i) => {
                     return <div className="s-subject-grade-wrapper" key={i}>
-                        <div className="s-subject-grade-delete noselect" onClick={() => props.onRemoveGrade(g, i)}></div>
+                        <div className="s-subject-grade-delete noselect" onClick={() => props.onRemoveGrade(g, props.subject.grades.indexOf(g))}></div>
                         <Grade key={i} gradeObj={g} editable={false} />
                     </div>;
                 })}
