@@ -283,8 +283,7 @@ per la realizzazione del prodotto.
 ##### REST API
 
 Per la parte back-end del nostro progetto abbiamo pensato di sviluppare una REST API la quale serve per gestire il database, creato con MongoDB, e la connessione tramite `ldap` all'AD DS (Active Directory Domain Services) della scuola.
-Una REST API si basa sulla creazione di un server e di una app che gestisce le richieste da parte del front-end.
-Nel nostro progetto abbiamo utilizzato la libreria npm: `express`, la quale si preoccupa di creare il server della REST API e l'app incaricata di gestire le richieste.
+Nel nostro progetto abbiamo utilizzato la libreria npm: `express`, la quale si preoccupa di creare il server che gestisce le richieste.
 
 - **App**
 ![API_App](./assets/ApiAPP.png)
@@ -365,6 +364,49 @@ Molte delle route utilizzano l'accesso al database MongoDB e le sue funzionalit�
   |**Riferimento**| *                            |
   |**Descrizione**| Chiamare la route API `deleteUser`, `deleteTeachers`, `deleteGroups` e vedere se elimina l'utente, il docente, il gruppo correttamente |
   |**Risultati attesi** | Elimina l'utente, il docente, il gruppo  |
+
+  
+  |Test Case      | TC-009                              |
+  |---------------|--------------------------------------|
+  |**Nome**       |  Slider Button |
+  |**Riferimento**| 3.1                            |
+  |**Descrizione**| Deve cambiare l'impostazione della pagina docente|
+  |**Risultati attesi** | Cambiamento dei dati nella pagina  |
+
+  |Test Case      | TC-010                              |
+  |---------------|--------------------------------------|
+  |**Nome**       |  Pagina d'andamento |
+  |**Riferimento**|  Req-2.1                             |
+  |**Descrizione**| L'utente visualizza nella maniera corretta la sua pagina d'andamento|
+  |**Risultati attesi** | Cambiamento dei dati nella pagina  |
+
+  |Test Case      | TC-011                              |
+  |---------------|--------------------------------------|
+  |**Nome**       |  Gestione utenti|
+  |**Riferimento**|  Req-4.1                             |
+  |**Descrizione**| L'amministratore può vedere e gestire gli utenti|
+  |**Risultati attesi** | L'amministratore può gestire gli utenti  |
+
+   |Test Case      | TC-012                              |
+  |---------------|--------------------------------------|
+  |**Nome**       | Aggiungere materie|
+  |**Riferimento**|  Req-5                             |
+  |**Descrizione**| L'utente può aggiungere delle materie a suo piacimento|
+  |**Risultati attesi** | L'utente aggiunge delle materie  |
+
+  |Test Case      | TC-013                              |
+  |---------------|--------------------------------------|
+  |**Nome**       | Aggiungere note|
+  |**Riferimento**|  Req-6                             |
+  |**Descrizione**| L'utente può aggiungere delle note con la relativa data|
+  |**Risultati attesi** | L'utente aggiunge delle note  |
+
+   |Test Case      | TC-014                              |
+  |---------------|--------------------------------------|
+  |**Nome**       | Filtrare le note|
+  |**Riferimento**|  Req-7                             |
+  |**Descrizione**| L'utente può filtrare le note|
+  |**Risultati attesi** | L'utente filtra le note  |
   
   *nota: nessun riferimento siccome il sistema sta alla base del progetto e fa riferimento a tutti, o quasi, i requisiti
   I test case 005, 006, 007, 008 sono stati generalizzati
@@ -420,6 +462,42 @@ Molte delle route utilizzano l'accesso al database MongoDB e le sue funzionalit�
   |**Nome**       | Route `DELETE` per gli utenti, docenti, gruppi |
   |**Descrizione**| La route elimina correttamente l'utente, il docente, il gruppo |
   |**Passato**|✔ 
+
+   |Test Case      | TC-009                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Slider Button |
+  |**Descrizione**| Il bottone esegue correttamente il suo comando |
+  |**Passato**|✔ 
+
+   |Test Case      | TC-010                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Pagina d'andamento |
+  |**Descrizione**| La pagina viene visualizzata nella maniera corretta |
+  |**Passato**|✔ 
+
+  |Test Case      | TC-011                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Gestione utenti |
+  |**Descrizione**| Gli utenti non possono essere gestiti |
+  |**Passato**|X 
+
+  |Test Case      | TC-012                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Aggiungere materie |
+  |**Descrizione**| Gli utenti possono aggiungere materie |
+  |**Passato**|✔  
+
+  |Test Case      | TC-013                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Aggiungere note |
+  |**Descrizione**| Gli utenti possono aggiungere note |
+  |**Passato**|✔  
+
+  |Test Case      | TC-014                               |
+  |---------------|-------------------------------------- |
+  |**Nome**       | Filtrare le note tramite data |
+  |**Descrizione**| Le note possono essere filtrate tramite la data |
+  |**Passato**|✔  
 
 ### Mancanze/limitazioni conosciute
 
