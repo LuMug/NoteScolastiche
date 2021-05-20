@@ -305,6 +305,28 @@ Molte delle route utilizzano l'accesso al database MongoDB e le sue funzionalit�
 
 ---
 
+##### REACT
+L'interfaccia grafica e' stata realizzata con React, una libreria in JS sviluppata da Facebook per la creazione di UI interattive. E' stato scelto di utilizzare React siccome velocizza nettamente il workflow grazie ai suoi componenti. In breve, un componente e' come un tag di html, di cui si puo' scegliere il nome, con all'interno altri tag html o anche altri componenti. Esempio:
+
+``` JSX
+<MyButton>
+  <p>My custom button</p>
+</MyButton>
+
+```
+
+Come per i tag html, anche ai componenti React si possono aggiungere degli attributi. Gli attributi di un componente sono definiti, solitamente, tramite un interfaccia di TypeScript.
+
+![Comp1](./assets/redirect_btn_comp.png)
+![Comp2](./assets/textinput_comp.png)
+
+La prima pagina realizzata è stata quella di Login, dove sono bastati pochi componenti e un mese per renderla il più ottimale e funzionale possibile. Nella Login page è stato sufficente inserire 2 TextBox e un bottone, poi con l'aiuto di LDAP, si e' stabilito un collegamento presso la rete scolastica.
+
+![LoginPage](./assets/loginPage.png)
+
+Successivamente sono state create la pagina Home, pagina dei docenti e pagina degli amministratori. La pagina Home e' stata quella piu' articolata siccome deve mostrare tutti i dati di un allievo tra i quali, materie, note, andamento, media, ecc. La sfida piu' grande nel realizzare questa pagina e' stata l'aggiornamento dei dati. Siccome viene usata una REST API per ottenere i dati degli utenti e di conseguenza l'ottenimento di essi e' asincrono, React per essere performante gestisce gli update dei dati asincroni in modo differente. Inizialmente si e' adottata la tecnica dello stato dei componenti, scomoda siccome bisognava aggiornare spesso i dati. Per finire si sono usate le props cosi che React gestisse tutto in modo autonomo.
+
+---
 ## Test
 
 ### Protocollo di test
