@@ -71,7 +71,11 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 const timeId = setInterval(() => {
-    logger = new Logger(dirPath);
+    let date = new Date();
+    if (date.getHours() === 0 && date.getMinutes() === 0) {
+        logger = new Logger(dirPath);
+        logger.logNoWrite('Created new logger');
+    }
 }, 60 * 60);
 
 export const getLogger = () => {
