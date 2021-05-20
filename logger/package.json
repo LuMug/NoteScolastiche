@@ -1,6 +1,6 @@
 {
-  "name": "logger",
-  "version": "0.0.1",
+  "name": "gradesmanager_test_logger",
+  "version": "0.0.3",
   "description": "Simple logger",
   "main": "out/index.ts",
   "types": "out/index.d.ts",
