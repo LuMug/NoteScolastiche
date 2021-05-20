@@ -1,15 +1,15 @@
 import express, { Request, Response, Router } from 'express';
 import {
-	IError,
-	IGrade,
-	ITeacher,
-	IUser,
-	IUserSubject
-} from '../@types';
-import { MongoHelper } from '../helpers/MongoHelper';
+    IError,
+    IGrade,
+    ITeacher,
+    IUser,
+    IUserSubject
+    } from '../@types';
 import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+import { MongoHelper } from '../helpers/MongoHelper';
 
-const dirPath = "./../../Log";
+const dirPath = "./logs";
 const log: Logger = new Logger(dirPath);
 const router: Router = express.Router();
 
@@ -18,7 +18,7 @@ const router: Router = express.Router();
  */
 router.get('/users', async (req: Request, res: Response) => {
 	let arr = await MongoHelper.asArray(MongoHelper.getUsers());
-  log.log(`Return users successful`, LoggingCategory.SUCCESS);
+	log.log(`Return users successful`, LoggingCategory.SUCCESS);
 	res.status(200).json(arr);
 });
 

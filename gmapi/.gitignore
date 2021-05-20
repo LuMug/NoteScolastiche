@@ -5,3 +5,4 @@ lib
 .rest
 .vscode
 src/temp.json
+logs

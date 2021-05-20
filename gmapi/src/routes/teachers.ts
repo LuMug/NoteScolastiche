@@ -1,9 +1,9 @@
 import express, { Request, Response, Router } from 'express';
 import { IError, IGroup, ITeacher } from '../@types';
-import { MongoHelper } from '../helpers/MongoHelper';
 import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+import { MongoHelper } from '../helpers/MongoHelper';
 
-const dirPath = "./../../Log";
+const dirPath = "./logs";
 const log: Logger = new Logger(dirPath);
 const router: Router = express.Router();
 

@@ -9,10 +9,10 @@ import {
     UserType
     } from '../@types';
 import { ILdapOptions } from 'ldap-ts-client-test';
-import { MongoHelper } from '../helpers/MongoHelper';
 import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+import { MongoHelper } from '../helpers/MongoHelper';
 
-const dirPath = "./../../Log";
+const dirPath = "./logs";
 const router: Router = express.Router();
 const log: Logger = new Logger(dirPath);
 
