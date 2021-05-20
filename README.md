@@ -4,11 +4,15 @@
 | :------------- | :------------------------------------------------------------------------- | :-------------------------- | --------------- | ---------------- |
 | Grades Manager | Aris Previtali,<br> Francisco Viola,<br> Ismael Trentin, Nicola Ambrosetti | Luca Muggiasca, Geo Petrini | 14 gennaio 2021 | 17 dicembre 2021 |
 
+![DemoScreenshoot](./Documenti/assets/demoscreenshot.PNG)
+
 ## Descrizione del progetto
 
-Produrre un applicativo WEB capace di registrare le proprie note scolastiche, in base alla sua materia, utilizzando un login. L'applicativo dovrà collegarsi all'Active Directory della scuola in modo da avere un'account per ogni allievo. Inoltre ci dovranno essere 3 livelli di utenti: allievo, docente e amministratore.
-<br>
-Foto
+Produrre un applicativo WEB capace di registrare le proprie note scolastiche, in base alla sua materia, utilizzando un login. L'applicativo dovrà collegarsi all'Active Directory della scuola in modo da avere un account per ogni allievo. Inoltre ci dovranno essere 3 livelli di utenti: allievo, docente e amministratore.
+
+
+
+
 
 ## Svolgimento del progetto
 
