@@ -38,8 +38,8 @@
 Nessuno
 
 ## Punto della situazione rispetto alla pianificazione
-Siamo giusti rispetto alla pianfiicazione
+Siamo giusti rispetto alla pianificazione
 
 ## Programma di massima per la prossima giornata di lavoro
 
-Terminare la docuemntazione e prepararsi per la presentazione
+Terminare la documentazione e prepararsi per la presentazione
