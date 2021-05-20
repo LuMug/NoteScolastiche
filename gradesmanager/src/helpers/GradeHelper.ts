@@ -104,4 +104,15 @@ export default class GradeHelper {
         let weightsSum = Math.max(grades.map(g => g.weight).reduce((p, c) => p + c), 1);
         return grades.map(g => g.value * g.weight).reduce((p, c) => p + c) / weightsSum;
     }
+
+    public static getSortedByDate(grades: IGrade[]) {
+        let arr = [...grades];
+        return arr.sort((a, b) => {
+            return a.date > b.date
+                ? 1
+                : a.date < b.date
+                    ? -1
+                    : 0;
+        });
+    }
 }
