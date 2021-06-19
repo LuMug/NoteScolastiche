@@ -15,7 +15,7 @@ import './TeacherPage.css';
 
 interface ITeacherPageProps {
 
-  tuid: number;
+  tuid: number | null;
 }
 
 const TeacherPage = (props: ITeacherPageProps) => {
@@ -30,8 +30,8 @@ const TeacherPage = (props: ITeacherPageProps) => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        let _teacher = await FetchHelper.fetchTeacher(props.tuid);
-        let _groups = await FetchHelper.fetchGroupsFor(props.tuid);
+        let _teacher = await FetchHelper.fetchTeacher(props.tuid == null ? -1 : props.tuid);
+        let _groups = await FetchHelper.fetchGroupsFor(props.tuid == null ? -1 : props.tuid);
         setTeacher(() => _teacher);
         setGroups(() => _groups);
         setLoading(false);

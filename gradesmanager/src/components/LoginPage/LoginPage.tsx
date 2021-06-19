@@ -126,7 +126,7 @@ const LoginPage = (props: ILoginPageProps) => {
               <p className="lp-le-bullet">•</p>
               <div className="lp-le-content">
                 <span className="lp-le-content-lowa">Clicca su </span>Login
-            </div>
+              </div>
             </div>
           </div>
           <div>

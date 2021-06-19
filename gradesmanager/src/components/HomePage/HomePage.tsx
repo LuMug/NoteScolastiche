@@ -1,4 +1,5 @@
 import AddSubject from '../add-subject/AddSubject';
+import Auth from '../../auth/Auth';
 import AvgChart from '../avg-chart/AvgChart';
 import CircularFadeBorder from '../circular-fade-border/CircularFadeBorder';
 import FetchHelper from '../../helpers/FetchHelper';
@@ -227,25 +228,28 @@ const HomePage: React.FunctionComponent<IHomePageProps> = (props) => {
 
   useEffect(() => {
     const fetch = async () => {
-      let data: IUser;
+      let data: IUser | null;
       let teachers: ITeacher[];
       try {
-        if (props.uuid !== null) {
-          data = await FetchHelper.fetchUser(props.uuid);
+        data = await Auth.getUser();
+        if (data) {
+          setLoading(false);
+          setUser(data);
+          setSubjects(data.subjects);
+          setDisplayMessage(!data.hasReadWelcomeMsg);
+          teachers = await FetchHelper.fetchAllTeachers();
+          setTeachersCache(teachers);
         } else {
-          data = await FetchHelper.fetchUser(-1);
+          setUnavailable(true);
+          setUser(null);
+          return;
         }
-        teachers = await FetchHelper.fetchAllTeachers();
-      } catch {
+      } catch (error) {
+        console.error(error);
         setUnavailable(true);
         setUser(null);
         return;
       }
-      setLoading(false);
-      setUser(data);
-      setSubjects(data.subjects);
-      setTeachersCache(teachers);
-      setDisplayMessage(!data.hasReadWelcomeMsg);
     };
     fetch();
   }, [])
@@ -281,6 +285,9 @@ const HomePage: React.FunctionComponent<IHomePageProps> = (props) => {
       setSubjects(user.subjects);
     }
   }, [user]);
+
+  console.log('loading', loading);
+  console.log('user', user);
 
   if (loading || user == null) {
     return (

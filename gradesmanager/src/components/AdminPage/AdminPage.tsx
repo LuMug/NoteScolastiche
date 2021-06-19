@@ -1,4 +1,3 @@
-import Auth from '../../auth/Auth';
 import FetchHelper from '../../helpers/FetchHelper';
 import HomePage from '../HomePage/HomePage';
 import LoadingPage from '../LoadingPage/LoadingPage';
@@ -72,7 +71,6 @@ const AdminPage: React.FunctionComponent<IAdminPageProps> = (props) => {
     }
 
     if (user.type !== UserType.ADMIN) {
-        Auth.setUserType(UserType.STUDENT);
         return <HomePage uuid={props.uuid} />
     }
 
