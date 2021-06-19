@@ -7,14 +7,16 @@ import morgan from 'morgan';
 import StudentsRoute from './routes/students';
 import TeachersRoute from './routes/teachers';
 import UsersRoute from './routes/users';
-import { MongoHelper } from './helpers/MongoHelper';
 import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
+import { MongoHelper } from './helpers/MongoHelper';
 // import SubjectsRoute from './routes/subjects';
 
 const MAIN_ROUTE: string = '/api/v1';
 const app = express();
 const dirPath = './logs';
-let logger = new Logger(dirPath);
+export let logger = new Logger(dirPath);
+
+console.log('DEV mode: ' + process.env.DEV || 'no dev');
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -77,9 +79,5 @@ const timeId = setInterval(() => {
         logger.logNoWrite('Created new logger');
     }
 }, 60 * 60);
-
-export const getLogger = () => {
-    return logger;
-}
 
 export default app;
