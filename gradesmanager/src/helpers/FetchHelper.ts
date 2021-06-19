@@ -1,6 +1,7 @@
 import _ENV from './../env.json';
 import { API_URL } from '../util/constants';
 import {
+    AuthData,
     IError,
     IGrade,
     IGroup,
@@ -82,7 +83,7 @@ export default class FetchHelper {
 
     public static async login(username: string, password: string) {
         try {
-            return await this.fetch('/authentication', 'POST', { username: username, password: password }) as IUser | null;
+            return await this.fetch('/authentication', 'POST', { username: username, password: password }) as AuthData | null;
         } catch (err) {
             throw err;
         }
