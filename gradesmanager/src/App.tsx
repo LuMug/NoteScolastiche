@@ -1,6 +1,7 @@
 import AdminPage from './components/AdminPage/AdminPage';
 import Auth from './auth/Auth';
 import AuthorsPage from './components/AuthorsPage/AuthorsPage';
+import FetchHelper from './helpers/FetchHelper';
 import HomePage from './components/HomePage/HomePage';
 import LoginPage from './components/LoginPage/LoginPage';
 import ProtectedRoute from './components/protected-route/ProtectedRoute';
@@ -14,42 +15,47 @@ import {
   TUTORIALS_ROUTE
   } from './util/constants';
 import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
-import { Component } from 'react';
+import { Component, useState } from 'react';
 import { Route } from 'react-router-dom';
+import { useEffect } from 'react';
 import { UserType } from './@types';
 
-export default class App extends Component<{}> {
+interface AppState {
 
-  constructor(props: {}) {
-    super(props);
-  }
+  uuid: number | null;
 
-  render() {
-    let uid = (Auth.getUserUid() == null) ? -1 : Auth.getUserUid() as number;
-    return (
-      <div>
-        <BrowserRouter>
-          <Switch>
-            <Route exact path="/login">
-              <LoginPage />
-            </Route>
-            <ProtectedRoute exact path={ABOUT_ROUTE} render={() => <AuthorsPage uuid={Auth.getUserUid()} />} />
-            <ProtectedRoute exact path={TUTORIALS_ROUTE} render={() => <TutorialsPage uuid={Auth.getUserUid()} />} />
-            <ProtectedRoute exact path={HOME_ROUTE} render={() => {
-              if (Auth.getUserType() == UserType.STUDENT) {
-                return <HomePage uuid={Auth.getUserUid()} />
-              } else if (Auth.getUserType() == UserType.ADMIN) {
-                return <AdminPage uuid={Auth.getUserUid()} />
-              } else if (Auth.getUserType() == UserType.TEACHER) {
-                return <TeacherPage tuid={uid} />
-              }
-              return <HomePage uuid={Auth.getUserUid()} />
+  userType: UserType | null;
+}
+
+export default () => {
+  const [uuid, setUuid] = useState<number | null>(null);
+  const [userType, setUserType] = useState<UserType | null>(null);
+
+  return (
+    <div>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/login">
+            <LoginPage onLoginSuccess={uid => {
+              setUuid(uid);
             }} />
-            {/* Handles 404 */}
-            <Redirect to="/" />
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
+          </Route>
+          <ProtectedRoute exact path={ABOUT_ROUTE} render={() => <AuthorsPage uuid={uuid} />} />
+          <ProtectedRoute exact path={TUTORIALS_ROUTE} render={() => <TutorialsPage uuid={uuid} />} />
+          <ProtectedRoute exact path={HOME_ROUTE} render={() => {
+            if (userType == UserType.STUDENT) {
+              return <HomePage uuid={uuid} />
+            } else if (userType == UserType.ADMIN) {
+              return <AdminPage uuid={uuid} />
+            } else if (userType == UserType.TEACHER) {
+              return <TeacherPage tuid={uuid} />
+            }
+            return <HomePage uuid={uuid} />
+          }} />
+          {/* Handles 404 */}
+          <Redirect to="/" />
+        </Switch>
+      </BrowserRouter>
+    </div>
+  );
 }
