@@ -186,3 +186,8 @@ export interface ITutorialPanelData {
 
     content: string;
 }
+
+export type AuthData = {
+    sid: string,
+    user: IUser
+};
