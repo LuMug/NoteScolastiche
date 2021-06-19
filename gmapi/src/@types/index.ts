@@ -169,6 +169,13 @@ export interface IError {
     }
 }
 
+export interface AuthData {
+
+    sid: string;
+
+    user: IUser;
+}
+
 export type Collections = 'users' | 'teachers' | 'groups';
 
 export type CollectionTypes = IUser | ITeacher | IGroup;
