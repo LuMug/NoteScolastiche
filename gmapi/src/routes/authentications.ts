@@ -1,20 +1,47 @@
 import * as _JSON from './../temp.json';
+import AuthManager from '../AuthManager';
 import express, { Request, Response, Router } from 'express';
 import { ADUser, LDAPClient, PathParser } from './../../../ldap-ts/lib';
 import {
+    AuthData,
     IError,
     IGroup,
     ITeacher,
     IUser,
     UserType
-} from '../@types';
+    } from '../@types';
 import { ILdapOptions } from 'ldap-ts-client-test';
+import { logger as getLogger } from '../app';
+import { Logger, LoggingCategory } from 'gradesmanager_test_logger';
 import { MongoHelper } from '../helpers/MongoHelper';
-import { getLogger } from '../app';
-import { LoggingCategory } from 'gradesmanager_test_logger';
 
 const router: Router = express.Router();
-const logger = getLogger();
+const logger: Logger = getLogger;
+
+router.get('/auth/:sid', async (req: Request, res: Response) => {
+    let sid = req.params.sid;
+    return res.status(200).json(await AuthManager.getUserData(sid));
+});
+
+router.get('/auth/_/:sid', (req: Request, res: Response) => {
+    let sid = req.params.sid;
+    return res.status(200).json(AuthManager.map.has(sid));
+});
+
+router.get('/auth/logout/:sid', (req: Request, res: Response) => {
+    let sid = req.params.sid;
+    if (AuthManager.map.has(sid)) {
+        AuthManager.map.delete(sid);
+        return res.status(200).json();
+    } else {
+        let err: IError = {
+            error: {
+                message: `No session with id ${sid}`
+            }
+        };
+        return res.status(404).json(err);
+    }
+});
 
 /**
  * Authentication route
@@ -28,9 +55,8 @@ router.post('/authentication', async (req: Request, res: Response) => {
         bindURL: _JSON.bindURL,
         possiblePaths: _JSON.possiblePaths
     };
-
-    let ldap = new LDAPClient(opts);
     let username: string = req.body.username;
+    let password: string = req.body.password;
     let fullName: string[] = username.split('.');
     if (username.length === 0 || fullName.length !== 2) {
         let err: IError = {
@@ -40,11 +66,6 @@ router.post('/authentication', async (req: Request, res: Response) => {
         };
         return res.status(400).json(err);
     }
-    fullName[0] = fullName[0].substr(0, 1).toUpperCase()
-        + fullName[0].substr(1, fullName[0].length - 1);
-    fullName[1] = fullName[1].substr(0, 1).toUpperCase()
-        + fullName[1].substr(1, fullName[1].length - 1);
-    let password: string = req.body.password;
     if (password.length == 0) {
         let err: IError = {
             error: {
@@ -53,23 +74,35 @@ router.post('/authentication', async (req: Request, res: Response) => {
         }
         return res.status(400).json(err);
     };
+    fullName[0] = fullName[0].substr(0, 1).toUpperCase()
+        + fullName[0].substr(1, fullName[0].length - 1);
+    fullName[1] = fullName[1].substr(0, 1).toUpperCase()
+        + fullName[1].substr(1, fullName[1].length - 1);
     let checkedUser: IUser | null = null;
     try {
-        await ldap.start();
-        let tempPath: string | null = await ldap.getUserPath(username);
-        let userFromPath: ADUser;
-        if (tempPath != undefined) {
-            userFromPath = PathParser.parse(tempPath);
-        } else {
-            let err: IError = {
-                error: {
-                    message: 'Not a valid user.'
+        let tempPath: string | null;
+        let userFromPath: ADUser = {
+            name: fullName[0],
+            surname: fullName[1]
+        };
+        let tempCheck: boolean = true;
+        if (!process.env.DEV) {
+            let ldap = new LDAPClient(opts);
+            await ldap.start();
+            tempPath = await ldap.getUserPath(username);
+            if (tempPath != undefined) {
+                userFromPath = PathParser.parse(tempPath);
+            } else {
+                let err: IError = {
+                    error: {
+                        message: 'Not a valid user.'
+                    }
                 }
+                return res.status(400).json(err);
             }
-            return res.status(400).json(err);
+            tempCheck = await ldap.checkUserCredentials(username, password);
+            await ldap.end();
         }
-        let tempCheck: boolean = await ldap.checkUserCredentials(username, password);
-        await ldap.end();
         if (tempCheck) {
             checkedUser = await MongoHelper.getUserByFullName(fullName[0], fullName[1]);
             if (checkedUser) {
@@ -77,9 +110,10 @@ router.post('/authentication', async (req: Request, res: Response) => {
                 let group: IGroup | null = await MongoHelper.getGroup(checkedUser.groupId);
                 if (userFromPath.group && userFromPath.year) {
                     groupName = userFromPath.group + userFromPath.year;
+                    let returnCode;
                     if (group && group.name == groupName) {
                         logger.log("Login success.", LoggingCategory.SUCCESS);
-                        return res.status(200).json(checkedUser);
+                        returnCode = 200;
                     } else {
                         await MongoHelper.addGroup({ name: groupName });
                         let groupId = await MongoHelper.getGroupByName(groupName);
@@ -87,8 +121,22 @@ router.post('/authentication', async (req: Request, res: Response) => {
                             await MongoHelper.updateUser(checkedUser.uid, { groupId: groupId?.uid });
                         }
                         logger.log("Login success, group update.", LoggingCategory.SUCCESS);
-                        return res.status(201).json(checkedUser);
+                        returnCode = 201;
                     }
+                    let data: AuthData = {
+                        sid: AuthManager.addEntry(checkedUser.uid),
+                        user: checkedUser
+                    };
+                    return res.status(returnCode).json(data);
+                } else if (!userFromPath.group && !userFromPath.year && process.env.DEV) {
+                    let data: AuthData = {
+                        sid: AuthManager.addEntry(checkedUser.uid),
+                        user: checkedUser
+                    };
+                    return res.status(200).json(data);
+                }
+                else {
+                    return res.status(500).json({});
                 }
             } else {
                 if (isStudent(userFromPath)) {
